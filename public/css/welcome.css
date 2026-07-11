@@ -251,7 +251,7 @@
         }
         .nav-links {
             display: flex;
-            gap: 2.8rem;
+            gap: 1.5vw;
             list-style: none;
             font-weight: 500;
         }
@@ -260,6 +260,7 @@
             color: var(--text-main);
             transition: color 0.2s;
             font-size: 1.05rem;
+            white-space: nowrap;
         }
         .nav-links a:hover {
             color: var(--primary);
@@ -463,7 +464,7 @@
             justify-content: flex-end;
             background: #0f172a;
         }
-        .story-card img {
+        .story-card img, .story-card video {
             position: absolute;
             inset: 0;
             width: 100%;
@@ -472,7 +473,7 @@
             transition: transform 0.8s;
             z-index: 0;
         }
-        .story-card:hover img {
+        .story-card:hover img, .story-card:hover video {
             transform: scale(1.07);
         }
         .story-overlay {

@@ -70,8 +70,7 @@
                         <span><i class="fas fa-check-circle" style="color: var(--success);"></i> 200+ templates</span>
                         <span><i class="fas fa-check-circle" style="color: var(--success);"></i> AI writer</span>
                         <span><i class="fas fa-check-circle" style="color: var(--success);"></i> Shareable links</span>
-                        <span><i class="fas fa-check-circle" style="color: var(--success);"></i> WhatsApp, Email & SMS ready</span>
-                        <span><i class="fas fa-check-circle" style="color: var(--success);"></i> Spotify & Apple Music</span>
+                        <span><i class="fas fa-check-circle" style="color: var(--success);"></i> WhatsApp ready</span>
                         <span><i class="fas fa-check-circle" style="color: var(--success);"></i> Free to start</span>
                     </div>
                 </div>
@@ -109,18 +108,24 @@
             <div class="marquee">
                 <div class="marquee-content">
                     <span class="marquee-tag glass"><i class="fas fa-birthday-cake"></i> Birthday</span>
-                    <span class="marquee-tag glass" style="background: var(--primary-light);"><i class="fas fa-ring"></i> Wedding</span>
+                    <span class="marquee-tag glass" style="background: var(--primary-light);"><i class="fas fa-lightbulb"></i> Inspirational</span>
+                    <span class="marquee-tag glass"><i class="fas fa-ring"></i> Wedding Vows</span>
+                    <span class="marquee-tag glass"><i class="fas fa-dove"></i> Condolences</span>
+                    <span class="marquee-tag glass" style="background: var(--primary-light);"><i class="fas fa-hand-holding-medical"></i> Get Well Soon</span>
+                    <span class="marquee-tag glass"><i class="fas fa-hands-clapping"></i> Thank You</span>
+                    <span class="marquee-tag glass"><i class="fas fa-award"></i> Congratulations</span>
+                    <span class="marquee-tag glass" style="background: var(--primary-light);"><i class="fas fa-glass-cheers"></i> Wedding Wishes</span>
                     <span class="marquee-tag glass"><i class="fas fa-heart"></i> Anniversary</span>
-                    <span class="marquee-tag glass"><i class="fas fa-graduation-cap"></i> Graduation</span>
-                    <span class="marquee-tag glass"><i class="fas fa-baby"></i> Newborn</span>
+                    <span class="marquee-tag glass"><i class="fas fa-baby-carriage"></i> New Baby</span>
+                    <span class="marquee-tag glass" style="background: var(--primary-light);"><i class="fas fa-graduation-cap"></i> Graduation</span>
+                    <span class="marquee-tag glass"><i class="fas fa-umbrella-beach"></i> Retirement</span>
                     <span class="marquee-tag glass"><i class="fas fa-briefcase"></i> Promotion</span>
-                    <span class="marquee-tag glass"><i class="fas fa-house-chimney"></i> Housewarming</span>
-                    <span class="marquee-tag glass"><i class="fas fa-holidays"></i> Holidays</span>
-                    <!-- duplicate for infinite -->
-                    <span class="marquee-tag glass"><i class="fas fa-birthday-cake"></i> Birthday</span>
-                    <span class="marquee-tag glass" style="background: var(--primary-light);"><i class="fas fa-ring"></i> Wedding</span>
-                    <span class="marquee-tag glass"><i class="fas fa-heart"></i> Anniversary</span>
-                    <span class="marquee-tag glass"><i class="fas fa-graduation-cap"></i> Graduation</span>
+                    <span class="marquee-tag glass" style="background: var(--primary-light);"><i class="fas fa-champagne-glasses"></i> New Year</span>
+                    <span class="marquee-tag glass"><i class="fas fa-gifts"></i> Holiday</span>
+                    <span class="marquee-tag glass"><i class="fas fa-cloud"></i> Thinking of You</span>
+                    <span class="marquee-tag glass" style="background: var(--primary-light);"><i class="fas fa-face-frown"></i> Apology</span>
+                    <span class="marquee-tag glass"><i class="fas fa-kiss-wink-heart"></i> Romance</span>
+                    <span class="marquee-tag glass"><i class="fas fa-user-group"></i> Friendship</span>
                 </div>
             </div>
         </section>
@@ -269,21 +274,26 @@
                 <span class="badge" style="margin-bottom: 16px;"><i class="fas fa-users"></i> The WISP geniuses</span>
                 <h2 style="font-size: 3rem; font-weight: 700; color: var(--text-main);">Brains behind the brilliance</h2>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 32px; max-width: 900px; margin: 0 auto;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto;">
                 <div class="glass-card" style="padding: 36px; text-align: center;">
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop" alt="Alex Johnson" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 20px;">
-                    <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 6px;">Alex Johnson</h3>
+                    <img src="{{ asset('img/owner.jpeg') }}" alt="Gilbert Asare" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 20px;">
+                    <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 6px;">Gilbert Asare</h3>
                     <p style="color: var(--accent); font-weight: 600; font-size: 0.95rem;">CEO &amp; Founder</p>
                 </div>
                 <div class="glass-card" style="padding: 36px; text-align: center;">
-                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&h=120&fit=crop" alt="Maria Garcia" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 20px;">
-                    <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 6px;">Maria Garcia</h3>
-                    <p style="color: var(--accent); font-weight: 600; font-size: 0.95rem;">Lead Developer</p>
+                    <img src="{{ asset('img/isp1.jpeg') }}" alt="Juliana Asare" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 20px;">
+                    <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 6px;">Juliana Asare</h3>
+                    <p style="color: var(--accent); font-weight: 600; font-size: 0.95rem;">First inspiration &amp; motivator</p>
                 </div>
                 <div class="glass-card" style="padding: 36px; text-align: center;">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop" alt="Sophia Chen" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 20px;">
-                    <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 6px;">Sophia Chen</h3>
-                    <p style="color: var(--accent); font-weight: 600; font-size: 0.95rem;">Design &amp; Joy</p>
+                    <img src="{{ asset('img/isp2.jpeg') }}" alt="Loh" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 20px;">
+                    <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 6px;">Afia</h3>
+                    <p style="color: var(--accent); font-weight: 600; font-size: 0.95rem;">Second inspiration</p>
+                </div>
+                <div class="glass-card" style="padding: 36px; text-align: center;">
+                    <img src="{{ asset('img/isp3.jpeg') }}" alt="Loh" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 20px;">
+                    <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 6px;">Theophilus Yaw</h3>
+                    <p style="color: var(--accent); font-weight: 600; font-size: 0.95rem;">Chief Happiness Officer</p>
                 </div>
             </div>
         </section>
@@ -323,23 +333,23 @@
             </div>
             <div class="story-grid">
                 <div class="story-card glass-card" style="border-radius: 40px;">
-                    <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&q=80&w=800" alt="">
-                    <div class="story-overlay">
-                        <span style="background: rgba(255,255,255,0.2); padding: 6px 16px; border-radius: 30px; font-size: 0.9rem; backdrop-filter: blur(6px);">Alex · CEO</span>
+                    <video src="https://www.w3schools.com/html/mov_bbb.mp4" poster="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&q=80&w=800" controls preload="none"></video>
+                    <div class="story-overlay" style="pointer-events: none;">
+                        <span style="background: rgba(255,255,255,0.2); padding: 6px 16px; border-radius: 30px; font-size: 0.9rem; backdrop-filter: blur(6px);">Gilbert Asare · CEO</span>
                         <h3 style="font-size: 2rem; margin-top: 10px;">"We made wishes wilder"</h3>
                     </div>
                 </div>
                 <div class="story-card glass-card">
-                    <img src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&q=80&w=800" alt="">
-                    <div class="story-overlay">
-                        <span style="background: rgba(255,255,255,0.2); padding: 6px 16px; border-radius: 30px; font-size: 0.9rem; backdrop-filter: blur(6px);">Maria · Lead dev</span>
+                    <video src="https://www.w3schools.com/html/mov_bbb.mp4" poster="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&q=80&w=800" controls preload="none"></video>
+                    <div class="story-overlay" style="pointer-events: none;">
+                        <span style="background: rgba(255,255,255,0.2); padding: 6px 16px; border-radius: 30px; font-size: 0.9rem; backdrop-filter: blur(6px);">Juliana Asare · First inspiration</span>
                         <h3 style="font-size: 2rem; margin-top: 10px;">"From 0 to wish in 12 sec"</h3>
                     </div>
                 </div>
                 <div class="story-card glass-card">
-                    <img src="https://images.unsplash.com/photo-1464349153912-6b4b3a21345d?auto=format&fit=crop&q=80&w=800" alt="">
-                    <div class="story-overlay">
-                        <span style="background: rgba(255,255,255,0.2); padding: 6px 16px; border-radius: 30px; font-size: 0.9rem; backdrop-filter: blur(6px);">Sophia · Joy maker</span>
+                    <video src="https://www.w3schools.com/html/mov_bbb.mp4" poster="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&q=80&w=800" controls preload="none"></video>
+                    <div class="story-overlay" style="pointer-events: none;">
+                        <span style="background: rgba(255,255,255,0.2); padding: 6px 16px; border-radius: 30px; font-size: 0.9rem; backdrop-filter: blur(6px);">Afia · Second inspiration</span>
                         <h3 style="font-size: 2rem; margin-top: 10px;">"We cry happy tears"</h3>
                     </div>
                 </div>

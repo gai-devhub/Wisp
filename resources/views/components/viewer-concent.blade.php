@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ asset('img/logo-circle.png') }}" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <title>{{ isset($pageTitle) ? $pageTitle : 'View message' }}</title>
     <style>
         :root {
-            --card-bg: rgba(255, 255, 255, 0.98);
-            --text: #1e293b;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text: #0f172a;
+            --text-muted: #475569;
             --accent: #6366f1;
+            --accent-hover: #4f46e5;
         }
 
         * {
@@ -24,113 +26,183 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            background-color: #b8d4e8;
-            background-image: url('{{ asset("img/wisp 1.0.png") }}');
-            background-repeat: no-repeat;
-            background-position: center center;
+            background-color: #f6f7ff;
+            background-image: radial-gradient(circle at 10% 15%, rgba(166, 223, 255, 0.9), transparent 28%), radial-gradient(circle at 80% 22%, rgba(255, 181, 213, 0.78), transparent 34%), radial-gradient(circle at 60% 76%, rgba(255, 202, 230, 0.62), transparent 24%), linear-gradient(120deg, #edf4ff 0%, #f9f4ff 48%, #ffe8f2 100%);
             background-attachment: fixed;
-            background-size: cover;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Outfit', system-ui, -apple-system, sans-serif;
             color: var(--text);
             padding: 20px;
+            overflow: hidden; /* Prevent scroll from bouncing elements */
+        }
+
+        /* Bouncing background logos */
+        .logo-container {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .bouncing-logo {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            opacity: 0;
+            animation: floatAround infinite ease-in-out alternate;
+            filter: drop-shadow(0 10px 15px rgba(99, 102, 241, 0.2));
+        }
+
+        .bouncing-logo:nth-child(1) { top: 10%; left: 15%; animation-duration: 12s; animation-delay: 0s; }
+        .bouncing-logo:nth-child(2) { top: 75%; left: 10%; animation-duration: 15s; animation-delay: -3s; }
+        .bouncing-logo:nth-child(3) { top: 35%; left: 80%; animation-duration: 14s; animation-delay: -5s; width: 60px; height: 60px; }
+        .bouncing-logo:nth-child(4) { top: 80%; left: 70%; animation-duration: 18s; animation-delay: -2s; width: 100px; height: 100px; }
+        .bouncing-logo:nth-child(5) { top: 20%; left: 50%; animation-duration: 16s; animation-delay: -7s; width: 50px; height: 50px; }
+        .bouncing-logo:nth-child(6) { top: 60%; left: 40%; animation-duration: 13s; animation-delay: -1s; width: 70px; height: 70px; }
+
+        @keyframes floatAround {
+            0% { transform: translate(0, 0) rotate(0deg) scale(0.8); opacity: 0; }
+            20% { opacity: 0.4; }
+            50% { transform: translate(15vw, 15vh) rotate(180deg) scale(1.1); opacity: 0.6; }
+            80% { opacity: 0.4; }
+            100% { transform: translate(-10vw, 25vh) rotate(360deg) scale(0.9); opacity: 0; }
         }
 
         .container {
             background: var(--card-bg);
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 56px 48px;
-            max-width: 520px;
+            max-width: 480px;
             width: 100%;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            position: relative;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
         h1 {
-            margin: 0 0 16px;
-            font-size: 1.875rem;
+            margin: 0 0 12px;
+            font-size: 1.8rem;
             font-weight: 700;
-            color: #0f172a;
+            color: var(--text);
+            letter-spacing: -0.02em;
         }
 
         p {
             margin: 0 0 32px;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             line-height: 1.6;
-            color: #475569;
+            color: var(--text-muted);
         }
 
         .agree-form {
             margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .agree-form .btn-agree {
-            display: inline-block;
-            padding: 14px 36px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #fff;
-            background: var(--accent);
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 14px rgba(124, 58, 237, 0.45);
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-        }
-
-        .agree-form .btn-agree:hover {
-            background: #6d28d9;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
-        }
-
-        .agree-form .btn-agree:active {
-            transform: translateY(0);
+        .pin-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 24px;
         }
 
         .pin-input {
             width: 100%;
-            max-width: 280px;
-            padding: 14px 20px;
-            margin-bottom: 20px;
-            border: 2px solid #cbd5e1;
-            border-radius: 12px;
-            font-size: 1.05rem;
+            padding: 16px 20px;
+            border: 2px solid transparent;
+            border-radius: 16px;
+            font-size: 1.1rem;
             text-align: center;
             outline: none;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             color: var(--text);
-            background: #f8fafc;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03), 0 0 0 1px rgba(0,0,0,0.05);
+            font-family: inherit;
+            letter-spacing: 0.1em;
+            font-weight: 600;
         }
 
         .pin-input::placeholder {
             color: #94a3b8;
-            font-weight: 500;
+            font-weight: 400;
+            letter-spacing: normal;
         }
 
         .pin-input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15), 0 0 0 1px rgba(99, 102, 241, 0.2);
             background: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .btn-agree {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, var(--accent), #7c3aed);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+        }
+
+        .btn-agree:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 24px -5px rgba(99, 102, 241, 0.5);
+            filter: brightness(1.05);
+        }
+
+        .btn-agree:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 10px -3px rgba(99, 102, 241, 0.4);
         }
 
         .error-message {
             color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 10px 16px;
+            border-radius: 12px;
             font-size: 0.95rem;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             font-weight: 500;
+            width: 100%;
+            max-width: 300px;
         }
 
         @media (max-width: 480px) {
             .container {
                 padding: 40px 24px;
+                border-radius: 20px;
             }
             h1 {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
             }
         }
     </style>
 </head>
 <body>
+    <div class="logo-container">
+        <img src="{{ asset('img/logo-circle.png') }}" class="bouncing-logo" alt="">
+        <img src="{{ asset('img/logo-circle.png') }}" class="bouncing-logo" alt="">
+        <img src="{{ asset('img/logo-circle.png') }}" class="bouncing-logo" alt="">
+        <img src="{{ asset('img/logo-circle.png') }}" class="bouncing-logo" alt="">
+        <img src="{{ asset('img/logo-circle.png') }}" class="bouncing-logo" alt="">
+        <img src="{{ asset('img/logo-circle.png') }}" class="bouncing-logo" alt="">
+    </div>
+
     <div class="container">
         <h1>{{ isset($pageTitle) ? $pageTitle : 'View message' }}</h1>
         <p>{{ $creatorName ?? 'Someone' }} wrote a {{ $messageTypeDisplay ?? 'special' }} message for you this day. Click Agree to view message.</p>
@@ -140,7 +212,7 @@
                 @csrf
                 
                 @if($isVaulted ?? false)
-                    <div>
+                    <div class="pin-wrapper">
                         <input type="password" name="vault_pin" class="pin-input" placeholder="Enter Vault PIN" required>
                     </div>
                 @endif
