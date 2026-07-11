@@ -15,6 +15,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserNotificationsController;
 use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\WishMessagesController;
+use App\Http\Controllers\GuestMessageController;
 use App\Models\WishMessages;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -286,6 +287,10 @@ Route::prefix('templates')->middleware('auth')->group(function () {
 // ===================== PUBLIC TEMPLATE GALLERY (no auth) =====================
 Route::get('/templates', [TemplateGalleryController::class, 'index'])->name('templates.gallery');
 Route::get('/templates/preview/{template}', [TemplateGalleryController::class, 'preview'])->name('templates.gallery.preview')->where('template', '[a-zA-Z0-9\-]+');
+
+// ===================== TRY WISP (Guest creation) =====================
+Route::get('/try', [GuestMessageController::class, 'index'])->name('guest.try');
+Route::post('/try/create', [GuestMessageController::class, 'store'])->name('guest.try.create');
 
 // ===================== PUBLIC =====================
 Route::get('/spotify/connect', [SpotifyPlaybackController::class, 'connect'])->name('spotify.connect');

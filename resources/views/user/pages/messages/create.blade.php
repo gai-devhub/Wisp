@@ -91,6 +91,7 @@
         </form>
     </div>
 
+@push('scripts')
     <script>
         function toggleVaultPin(checkbox) {
             const container = document.getElementById('vault-pin-container');
@@ -133,7 +134,9 @@
             }
         });
     </script>
+@endpush
 
+@push('styles')
     <style>
     .free-msg-counter {
         display: inline-flex; align-items: center; gap: 6px;

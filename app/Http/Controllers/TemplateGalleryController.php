@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\View;
 class TemplateGalleryController extends Controller
 {
     /** @var array Theme name => count */
-    protected const THEMES = [
+    public const THEMES = [
         'aurora' => 14,
         'casual' => 22,
         'confetti' => 12,

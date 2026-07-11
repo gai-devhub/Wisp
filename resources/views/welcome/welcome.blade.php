@@ -63,6 +63,7 @@
                     <p><strong>WISP</strong> is your personal wish studio. From birthdays to “just because” — craft stunning AI‑powered greetings in seconds. Choose templates, add photos and music, share a link or send via WhatsApp. Your moments, elevated.</p>
                     <div class="hero-actions">
                         <a href="{{ route('auth.login') }}?tab=signup" class="btn btn-primary btn-large"><i class="fas fa-wand-magic-sparkles"></i> Create your wish</a>
+                        <a href="{{ route('guest.try') }}" class="btn btn-outline btn-large"><i class="fas fa-magic"></i> Try without account</a>
                         <a href="#about" class="btn btn-outline btn-large"><i class="fas fa-info-circle"></i> About WISP</a>
                         <a href="#stories" class="btn btn-outline btn-large"><i class="fas fa-play"></i> See stories</a>
                     </div>
@@ -512,6 +513,62 @@
         mobileNav.querySelectorAll('.mobile-nav-link').forEach(link => {
             link.addEventListener('click', closeNav);
         });
+
+        // Hero Visual Cards Cycling Animation
+        const heroCards = Array.from(document.querySelectorAll('.hero-visual .floating-card'));
+        if (heroCards.length > 0) {
+            let zIndices = [1, 2, 3];
+            
+            heroCards.forEach((card, index) => {
+                card.style.zIndex = zIndices[index] || 1;
+                card.style.cursor = 'pointer';
+                card.style.transition = 'box-shadow 0.4s ease'; 
+            });
+
+            const bringCardToFront = (clickedIndex) => {
+                const maxZ = Math.max(...zIndices);
+                if (zIndices[clickedIndex] === maxZ) return;
+
+                zIndices[clickedIndex] = maxZ + 1;
+                
+                // Pop effect
+                heroCards[clickedIndex].style.boxShadow = '0 30px 60px rgba(99,102,241,0.3)';
+                setTimeout(() => {
+                    heroCards[clickedIndex].style.boxShadow = '';
+                }, 500);
+
+                const sorted = [...zIndices].sort((a,b) => a - b);
+                zIndices = zIndices.map(z => sorted.indexOf(z) + 1);
+
+                heroCards.forEach((card, i) => {
+                    card.style.zIndex = zIndices[i];
+                });
+            };
+
+            heroCards.forEach((card, index) => {
+                card.addEventListener('click', () => {
+                    bringCardToFront(index);
+                    resetCycle();
+                });
+            });
+
+            let cycleInterval;
+            const startCycle = () => {
+                cycleInterval = setInterval(() => {
+                    // Bring the bottom card to the front
+                    const minZ = Math.min(...zIndices);
+                    const indexToBringFront = zIndices.indexOf(minZ);
+                    bringCardToFront(indexToBringFront);
+                }, 5000);
+            };
+
+            const resetCycle = () => {
+                clearInterval(cycleInterval);
+                startCycle();
+            };
+
+            startCycle();
+        }
     </script>
 </body>
 </html>
