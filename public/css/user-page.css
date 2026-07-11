@@ -1084,7 +1084,7 @@ select.form-control {
 }
 
 .preview-popup-content {
-    background: #f5f4f0;
+    background: #ffffff;
     width: 92vw;
     height: 95vh;
     max-width: 100%;
@@ -1102,8 +1102,15 @@ select.form-control {
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    background: #f5f4f0;
+    background: linear-gradient(90deg, var(--bg-header-start) 0%, var(--bg-header-end) 100%);
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+}
+
+.preview-popup-footer {
+    height: 24px;
+    background: linear-gradient(90deg, var(--bg-header-start) 0%, var(--bg-header-end) 100%);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
     flex-shrink: 0;
 }
 
@@ -1202,7 +1209,7 @@ select.form-control {
 
 .preview-popup-body {
     flex: 1;
-    padding: 0 0 10px 0;
+    padding: 0;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -9221,8 +9228,20 @@ i.fab {
     }
 
     .preview-popup {
+        top: 0 !important;
         left: 0 !important;
-        bottom: var(--bottom-nav-height, 60px) !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        padding: 0 !important;
+        z-index: 100005 !important;
+    }
+
+    .preview-popup-content {
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: none !important;
+        max-height: none !important;
+        border-radius: 0 !important;
     }
 
     /* Layout & Containers - Remove padding so cards can hit the edge */
