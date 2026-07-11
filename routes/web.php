@@ -240,8 +240,6 @@ Route::middleware(['auth', 'user.role', 'require.passcode', 'billing'])->group(f
     Route::post('/settings/notifications', [UserSettingsController::class, 'updateNotificationSettings'])->name('settings.notifications');
     Route::post('/settings/reset', [UserSettingsController::class, 'resetSettings'])->name('settings.reset');
     Route::post('/settings/hub/privacy-theme', [UserSettingsController::class, 'updatePrivacyAndTheme'])->name('settings.hub.privacy_theme');
-    Route::post('/settings/hub/snippets', [UserSettingsController::class, 'storeSnippet'])->name('settings.hub.snippets_store');
-    Route::post('/settings/hub/recurring', [UserSettingsController::class, 'storeRecurringMessage'])->name('settings.hub.recurring_store');
     Route::post('/links/generate', [GeneratedLinksController::class, 'store'])->name('links.generate');
     Route::post('/share-messages/load', [ShareMessagesController::class, 'loadMessage'])->name('share-messages.load');
     Route::get('/share-messages/recent-sends', [ShareMessagesController::class, 'recentSends'])->name('share-messages.recentSends');
@@ -291,8 +289,14 @@ Route::get('/templates/preview/{template}', [TemplateGalleryController::class, '
 // ===================== TRY WISP (Guest creation) =====================
 Route::get('/try', [GuestMessageController::class, 'index'])->name('guest.try');
 Route::post('/try/create', [GuestMessageController::class, 'store'])->name('guest.try.create');
+Route::delete('/try/message/{id}', [GuestMessageController::class, 'destroy'])->name('guest.try.delete');
+Route::get('/try/spotify/search', [\App\Http\Controllers\SpotifyController::class, 'search'])->name('try.spotify.search');
 
 // ===================== PUBLIC =====================
+Route::get('/help', function () {
+    return view('doc.index');
+})->name('help');
+
 Route::get('/spotify/connect', [SpotifyPlaybackController::class, 'connect'])->name('spotify.connect');
 Route::get('/spotify/callback', [SpotifyPlaybackController::class, 'callback'])->name('spotify.callback');
 Route::get('/spotify/token', [SpotifyPlaybackController::class, 'token'])->name('spotify.token');

@@ -25,14 +25,15 @@ class GuestMessageController extends Controller
         
         $guestUser = User::where('email', $guestEmail)->first();
         
-        $messageCount = 0;
+        $messages = collect();
         if ($guestUser) {
-            $messageCount = WishMessages::where('user_id', $guestUser->id)->count();
+            $messages = WishMessages::where('user_id', $guestUser->id)->latest()->get();
+            $messageCount = $messages->count();
         }
 
         $themes = array_merge(['view' => 6], \App\Http\Controllers\TemplateGalleryController::THEMES);
 
-        return view('welcome.try', compact('messageCount', 'themes'));
+        return view('welcome.try', compact('messageCount', 'themes', 'messages'));
     }
 
     /**
@@ -77,6 +78,8 @@ class GuestMessageController extends Controller
             'sender_name' => 'required|string|max:255',
             'template_name' => 'required|string',
             'recipient_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB
+            'background_music' => 'nullable|file|mimes:mp3,wav,ogg,m4a,aac|max:30720', // 30MB
+            'spotify_url' => 'nullable|url',
         ]);
 
         DB::beginTransaction();
@@ -95,7 +98,6 @@ class GuestMessageController extends Controller
                     'recipient_special_name' => $request->recipient_special_name,
                     'greeting' => $request->greeting,
                     'message' => $request->message_body,
-                    'wish_message' => $request->message_body,
                     'last_note' => $request->last_note,
                     'sender_name' => $request->sender_name,
                     'receiving_date' => $request->receiving_date ? Carbon::parse($request->receiving_date) : now(),
@@ -114,26 +116,45 @@ class GuestMessageController extends Controller
                 }
 
                 // Update Media File
-                $mediaFile = MediaFiles::where('wish_message_id', $wishMessage->id)->first();
+                $mediaFile = MediaFiles::firstOrNew([
+                    'wish_message_id' => $wishMessage->id,
+                    'user_id' => $guestUser->id
+                ]);
+                
                 if ($request->hasFile('recipient_image')) {
                     $image = $request->file('recipient_image');
-                    $imagePath = 'media/images/' . time() . '_' . $image->getClientOriginalName();
-                    $image->move(public_path('media/images'), $imagePath);
-                    
-                    if ($mediaFile) {
-                        $mediaFile->update(['recipient_image' => $imagePath]);
-                    } else {
-                        MediaFiles::create([
-                            'user_id' => $guestUser->id,
-                            'wish_message_id' => $wishMessage->id,
-                            'recipient_image' => $imagePath,
-                        ]);
+                    if ($mediaFile->recipient_image) {
+                        \Illuminate\Support\Facades\Storage::disk('public')->delete($mediaFile->recipient_image);
                     }
+                    $mediaFile->recipient_image = $image->store('media/recipient-images', 'public');
                 }
+
+                if ($request->hasFile('background_music')) {
+                    $file = $request->file('background_music');
+                    if ($mediaFile->background_music && !str_starts_with($mediaFile->background_music, 'http')) {
+                        \Illuminate\Support\Facades\Storage::disk('public')->delete($mediaFile->background_music);
+                    }
+                    $mediaFile->background_music = $file->store('media/background-music', 'public');
+                } elseif ($request->filled('spotify_url')) {
+                    $mediaFile->background_music = $request->input('spotify_url');
+                }
+                
+                $mediaFile->save();
 
                 // Fetch existing link
                 $link = GeneratedLinks::where('wish_message_id', $wishMessage->id)->first();
                 $generatedUrl = $link ? $link->generated_url : url('/' . Str::slug($wishMessage->message_type) . '/' . $wishMessage->slug);
+                
+                if (!$link && $request->has('generate_link') && $request->generate_link == 'true') {
+                    $uniqueCode = Str::random(8);
+                    $link = GeneratedLinks::create([
+                        'wish_message_id' => $wishMessage->id,
+                        'generated_url' => $generatedUrl,
+                        'unique_code' => $uniqueCode,
+                        'is_active' => true,
+                        'expires_at' => now()->addHours(24),
+                    ]);
+                }
 
             } else {
                 // Create new message
@@ -147,7 +168,6 @@ class GuestMessageController extends Controller
                     'recipient_special_name' => $request->recipient_special_name,
                     'greeting' => $request->greeting,
                     'message' => $request->message_body,
-                    'wish_message' => $request->message_body,
                     'last_note' => $request->last_note,
                     'sender_name' => $request->sender_name,
                     'receiving_date' => $request->receiving_date ? Carbon::parse($request->receiving_date) : now(),
@@ -162,29 +182,38 @@ class GuestMessageController extends Controller
                     'template_name' => $request->template_name,
                 ]);
 
-                $imagePath = null;
-                if ($request->hasFile('recipient_image')) {
-                    $image = $request->file('recipient_image');
-                    $imagePath = 'media/images/' . time() . '_' . $image->getClientOriginalName();
-                    $image->move(public_path('media/images'), $imagePath);
-                }
-
-                MediaFiles::create([
+                $mediaFile = new MediaFiles([
                     'user_id' => $guestUser->id,
                     'wish_message_id' => $wishMessage->id,
-                    'recipient_image' => $imagePath,
                 ]);
 
-                $uniqueCode = Str::random(8);
+                if ($request->hasFile('recipient_image')) {
+                    $image = $request->file('recipient_image');
+                    $mediaFile->recipient_image = $image->store('media/recipient-images', 'public');
+                }
+                
+                if ($request->hasFile('background_music')) {
+                    $file = $request->file('background_music');
+                    $mediaFile->background_music = $file->store('media/background-music', 'public');
+                } elseif ($request->filled('spotify_url')) {
+                    $mediaFile->background_music = $request->input('spotify_url');
+                }
+
+                $mediaFile->save();
+
                 $generatedUrl = url('/' . Str::slug($wishMessage->message_type) . '/' . $wishMessage->slug);
 
-                GeneratedLinks::create([
-                    'wish_message_id' => $wishMessage->id,
-                    'generated_url' => $generatedUrl,
-                    'unique_code' => $uniqueCode,
-                    'is_active' => true,
-                    'expires_at' => now()->addHours(24),
-                ]);
+                $link = null;
+                if ($request->has('generate_link') && $request->generate_link == 'true') {
+                    $uniqueCode = Str::random(8);
+                    $link = GeneratedLinks::create([
+                        'wish_message_id' => $wishMessage->id,
+                        'generated_url' => $generatedUrl,
+                        'unique_code' => $uniqueCode,
+                        'is_active' => true,
+                        'expires_at' => now()->addHours(24),
+                    ]);
+                }
             }
 
             DB::commit();
@@ -193,7 +222,7 @@ class GuestMessageController extends Controller
                 return response()->json([
                     'success' => true,
                     'message_id' => $wishMessage->id,
-                    'generated_link' => $generatedUrl,
+                    'generated_link' => $link ? $link->generated_url : null,
                     'title' => $wishMessage->title,
                 ]);
             }

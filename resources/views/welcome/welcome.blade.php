@@ -301,7 +301,7 @@
 
         <!-- Recognized by -->
         <section class="container" style="padding: 5rem 0;">
-            <div class="glass-card" style="padding: 50px; text-align: center;">
+            <div class="glass-card" style="padding: clamp(20px, 4vw, 50px); text-align: center;">
                 <span class="badge" style="margin-bottom: 24px;"><i class="fas fa-trophy"></i> Recognized by</span>
                 <div class="awards-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 32px; align-items: start;">
                     <div>
@@ -328,7 +328,7 @@
             <div style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 40px;">
                 <div>
                     <span class="badge"><i class="fas fa-crown"></i> WISP in action</span>
-                    <h2 style="font-size: 3.2rem; font-weight: 700; margin-top: 8px;">Stories & <span style="color: var(--accent);">magic</span></h2>
+                    <h2 style="font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 700; margin-top: 8px; line-height: 1.1;">Stories & <span style="color: var(--accent);">magic</span></h2>
                 </div>
                 <p style="max-width: 380px; color: var(--text-muted);">See how others use WISP to create wishes that get remembered.</p>
             </div>
@@ -432,9 +432,9 @@
 
         <!-- Never miss a wish — Newsletter -->
         <section class="container" style="padding-bottom: 4rem;">
-            <div class="glass-card" style="padding: 60px 50px; background: linear-gradient(145deg, rgba(99,102,241,0.06), rgba(236,72,153,0.06)); border: 1px solid rgba(99,102,241,0.15); text-align: center;">
-                <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 12px;">Never miss a wish</h2>
-                <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 32px;">Get new templates, AI updates and WISP magic.</p>
+            <div class="glass-card" style="padding: clamp(32px, 5vw, 60px) clamp(20px, 4vw, 50px); background: linear-gradient(145deg, rgba(99,102,241,0.06), rgba(236,72,153,0.06)); border: 1px solid rgba(99,102,241,0.15); text-align: center;">
+                <h2 style="font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 700; margin-bottom: 12px;">Never miss a wish</h2>
+                <p style="font-size: clamp(1rem, 3vw, 1.2rem); color: var(--text-muted); margin-bottom: 24px;">Get new templates, AI updates and WISP magic.</p>
                 <form action="#" method="POST" style="display: flex; gap: 12px; max-width: 480px; margin: 0 auto; flex-wrap: wrap; justify-content: center;">
                     @csrf
                     <input type="email" name="email" placeholder="Your email" required style="flex: 1; min-width: 220px; padding: 14px 20px; border: 1px solid var(--border); border-radius: 12px; font-size: 1rem;">
@@ -444,12 +444,12 @@
         </section>
 
         <!-- CTA -->
-        <section class="container" style="padding-bottom: 6rem;">
-            <div class="glass-card" style="padding: 80px 40px; background: linear-gradient(145deg, rgba(99,102,241,0.08), rgba(236,72,153,0.08)); border: 1px solid rgba(99,102,241,0.2); text-align: center;">
-                <img src="{{ asset('img/logo.png') }}" alt="WISP" style="width: 64px; height: 64px; margin-bottom: 20px; object-fit: contain;">
-                <h2 style="font-size: 3.2rem; font-weight: 700; margin-bottom: 24px;">Ready to send wishes with <span class="text-gradient">WISP</span>?</h2>
-                <p style="font-size: 1.35rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 36px;">Join thousands who never miss a moment. Create your first wish in under a minute.</p>
-                <a href="{{ route('auth.login') }}?tab=signup" class="btn btn-primary btn-large" style="padding: 18px 54px; font-size: 1.3rem;"><i class="fas fa-wand-magic-sparkles"></i> Start with WISP</a>
+        <section class="container" style="padding-bottom: 4rem;">
+            <div class="glass-card" style="padding: clamp(40px, 6vw, 80px) clamp(20px, 4vw, 40px); background: linear-gradient(145deg, rgba(99,102,241,0.08), rgba(236,72,153,0.08)); border: 1px solid rgba(99,102,241,0.2); text-align: center;">
+                <img src="{{ asset('img/logo.png') }}" alt="WISP" style="width: clamp(48px, 6vw, 64px); height: auto; margin-bottom: 20px; object-fit: contain;">
+                <h2 style="font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 700; margin-bottom: 20px;">Ready to send wishes with <span class="text-gradient">WISP</span>?</h2>
+                <p style="font-size: clamp(1rem, 3vw, 1.35rem); color: var(--text-muted); max-width: 600px; margin: 0 auto 28px;">Join thousands who never miss a moment. Create your first wish in under a minute.</p>
+                <a href="{{ route('auth.login') }}?tab=signup" class="btn btn-primary btn-large" style="padding: clamp(14px, 3vw, 18px) clamp(32px, 5vw, 54px); font-size: clamp(1.1rem, 3vw, 1.3rem);"><i class="fas fa-wand-magic-sparkles"></i> Start with WISP</a>
                 <div style="margin-top: 30px; color: var(--text-muted);"><i class="fas fa-shield-alt"></i> No credit card. Free to start.</div>
             </div>
         </section>

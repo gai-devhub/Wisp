@@ -12,10 +12,10 @@ class TemplateGalleryController extends Controller
         'aurora' => 14,
         'casual' => 22,
         'confetti' => 12,
-        'minimal' => 18,
-        'garden' => 10,
-        'glitter' => 8,
-        'romance' => 15,
+        // 'minimal' => 18,
+        // 'garden' => 10,
+        // 'glitter' => 8,
+        // 'romance' => 15,
     ];
 
     /**

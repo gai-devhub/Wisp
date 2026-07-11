@@ -84,13 +84,18 @@ class MessageViewController extends Controller
         $template = Template::where('wish_message_id', $message->id)->first();
         $templateName = $template ? $template->template_name : 'template.view.template-1';
         
+        $viewName = null;
         if (preg_match('/^view-([1-6])$/', $templateName, $m) || preg_match('/^view\.view-([1-6])$/', $templateName, $m) || preg_match('/^template\.view\.view-([1-6])$/', $templateName, $m)) {
             $viewName = 'components.template.view.template-' . $m[1];
+        } elseif (preg_match('/^(aurora|casual|confetti|minimal|garden|glitter|romance)-(\d+)$/i', $templateName, $m)) {
+            $theme = ucfirst(strtolower($m[1]));
+            $num = (int) $m[2];
+            $viewName = 'components.template.' . $theme . '.template-' . $num;
         } else {
             $viewName = 'components.' . $templateName;
         }
 
-        if (!View::exists($viewName)) {
+        if (!$viewName || !View::exists($viewName)) {
             $viewName = 'components.template.view.template-1';
         }
 

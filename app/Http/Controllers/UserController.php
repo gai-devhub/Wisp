@@ -386,8 +386,6 @@ class UserController extends Controller
         }
 
         $scheduledSends = [];
-        $recurringMessages = [];
-        $messageSnippets = [];
         $activeSessions = [];
         $searchQuery = $request->query('q');
         $searchResults = [];
@@ -406,27 +404,13 @@ class UserController extends Controller
                 ];
             });
             
-            if (class_exists(\App\Models\RecurringMessage::class)) {
-                $recurringMessages = \App\Models\RecurringMessage::where('user_id', $userId)->get();
-            }
-            if (class_exists(\App\Models\MessageSnippet::class)) {
-                $messageSnippetsQuery = \App\Models\MessageSnippet::where('user_id', $userId)->latest();
-                $messageSnippets = $messageSnippetsQuery->take(10)->get();
-                
-                if ($searchQuery) {
-                    $searchResults['snippets'] = \App\Models\MessageSnippet::where('user_id', $userId)
-                        ->where(function($q) use ($searchQuery) {
-                            $q->where('message_title', 'like', "%{$searchQuery}%")
-                              ->orWhere('snippet_text', 'like', "%{$searchQuery}%");
-                        })->get();
-                        
-                    $searchResults['messages'] = WishMessages::where('user_id', $userId)
-                        ->where(function($q) use ($searchQuery) {
-                            $q->where('title', 'like', "%{$searchQuery}%")
-                              ->orWhere('recipient_name', 'like', "%{$searchQuery}%")
-                              ->orWhere('message', 'like', "%{$searchQuery}%");
-                        })->get();
-                }
+            if ($searchQuery) {
+                $searchResults['messages'] = WishMessages::where('user_id', $userId)
+                    ->where(function($q) use ($searchQuery) {
+                        $q->where('title', 'like', "%{$searchQuery}%")
+                          ->orWhere('recipient_name', 'like', "%{$searchQuery}%")
+                          ->orWhere('message', 'like', "%{$searchQuery}%");
+                    })->get();
             }
             // Active sessions
             try {
@@ -600,7 +584,7 @@ class UserController extends Controller
             'shareMessagesLink', 'shareMessagesRecipientName', 'shareMessagesRecipientPhone', 'shareMessagesMessageText', 'shareMessagesId', 'messagesWithLink',
             'activityTotal', 'activityHasPrev', 'activityHasNext', 'activityPage',
             'imagesSize', 'audioSize',
-            'scheduledSends', 'recurringMessages', 'messageSnippets', 'activeSessions', 'searchQuery', 'searchResults', 'matchedSystemPages',
+            'scheduledSends', 'activeSessions', 'searchQuery', 'searchResults', 'matchedSystemPages',
             'activeAds', 'isPremium'
         ));
     }
@@ -824,13 +808,8 @@ class UserController extends Controller
             if (Schema::hasTable('share_sends')) {
                 ShareSend::where('user_id', $user->id)->delete();
             }
-            if (Schema::hasTable('recurring_messages')) {
-                DB::table('recurring_messages')->where('user_id', $user->id)->delete();
-            }
-            if (Schema::hasTable('message_snippets')) {
-                DB::table('message_snippets')->where('user_id', $user->id)->delete();
-            }
             
+
             // 6. Delete Settings
             if ($userSettings) $userSettings->delete();
 

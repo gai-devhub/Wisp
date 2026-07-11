@@ -19,11 +19,11 @@ class TemplateController extends Controller
             'view' => 6,
             'Aurora' => 14,
             'Casual' => 22,
-            'Confetti' => 12,
-            'Minimal' => 18,
-            'Garden' => 10,
-            'Glitter' => 8,
-            'Romance' => 15,
+            // 'Confetti' => 12,
+            // 'Minimal' => 18,
+            // 'Garden' => 10,
+            // 'Glitter' => 8,
+            // 'Romance' => 15,
         ];
         foreach ($themes as $theme => $count) {
             for ($n = 1; $n <= $count; $n++) {

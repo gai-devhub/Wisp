@@ -118,10 +118,6 @@ class User extends Authenticatable
         return $this->hasMany(MessageViews::class);
     }
 
-    public function whatsappMessage()
-    {
-        return $this->hasMany(WhatsappMessages::class);
-    }
 
     public function generatedLink()
     {

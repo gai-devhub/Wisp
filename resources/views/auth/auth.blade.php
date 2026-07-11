@@ -404,16 +404,31 @@
 
         @media (max-width: 480px) {
             body {
-                padding: 16px;
+                padding: 12px;
+            }
+            
+            .auth-wrap {
+                padding: 24px 20px 28px;
+                border-radius: 16px;
             }
 
             .auth-tabs {
-                margin-bottom: 24px;
+                margin-bottom: 20px;
             }
 
             .auth-tab {
-                padding: 10px 12px;
-                font-size: 0.9rem;
+                padding: 8px 10px;
+                font-size: 0.85rem;
+            }
+            
+            .form-control {
+                padding: 12px 40px 12px 40px;
+                font-size: 0.95rem;
+            }
+            
+            .btn {
+                padding: 12px 16px;
+                font-size: 0.95rem;
             }
         }
 
@@ -489,9 +504,9 @@
                 <img src="{{ asset('img/logo.png') }}" alt="WISP">
                 <span>WISP</span>
             </a>
-            <a href="{{ route('home') }}" class="auth-back">
-                <i class="fas fa-arrow-left"></i> Back to home
-            </a>
+            <button type="button" class="auth-back" id="signup-back-btn" style="display: none; background: transparent; border: none; cursor: pointer; padding: 0; font-family: inherit;" onclick="prevSignupStep()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
         </header>
 
         <div class="auth-main">
@@ -572,67 +587,101 @@
             <div class="auth-content" id="signup-form">
                 <form method="POST" action="{{ route('auth.register') }}">
                     @csrf
-                    <div class="form-group">
-                        <label for="signup-name">Full name</label>
-                        <div class="input-wrap">
-                            <i class="fas fa-user icon"></i>
-                            <input type="text" class="form-control" id="signup-name" name="name" placeholder="Jane Doe"
-                                value="{{ old('name') }}" required autocomplete="name">
+                    <div id="signup-step-1">
+                        <div class="form-group">
+                            <label for="signup-name">Full name</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-user icon"></i>
+                                <input type="text" class="form-control" id="signup-name" name="name" placeholder="Jane Doe"
+                                    value="{{ old('name') }}" required autocomplete="name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-username">Username</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-at icon"></i>
+                                <input type="text" class="form-control" id="signup-username" name="username"
+                                    placeholder="jane_doe" value="{{ old('username') }}" required autocomplete="username"
+                                    minlength="3" maxlength="255" pattern="[a-zA-Z0-9_.-]+"
+                                    title="Letters, numbers, dots, hyphens and underscores only.">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-email">Email</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-envelope icon"></i>
+                                <input type="email" class="form-control" id="signup-email" name="email"
+                                    placeholder="you@example.com" value="{{ old('email') }}" required autocomplete="email">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="nextSignupStep()">Next Step <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></button>
+                    </div>
+
+                    <div id="signup-step-2" style="display: none;">
+                        <div class="form-group">
+                            <label for="signup-password">Password</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-lock icon"></i>
+                                <input type="password" class="form-control" id="signup-password" name="password"
+                                    placeholder="At least 8 characters" required autocomplete="new-password">
+                                <button type="button" class="password-toggle" data-target="signup-password"
+                                    aria-label="Toggle password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <p class="hint">Minimum 8 characters.</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-password-confirm">Confirm password</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-lock icon"></i>
+                                <input type="password" class="form-control" id="signup-password-confirm"
+                                    name="password_confirmation" placeholder="••••••••" required
+                                    autocomplete="new-password">
+                                <button type="button" class="password-toggle" data-target="signup-password-confirm"
+                                    aria-label="Toggle password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-wrap">
+                                <input type="checkbox" name="terms" id="terms-agree" required>
+                                <span>I agree to the <a href="{{ url('/help?tab=terms') }}" target="_blank">Terms of Service</a> and <a href="{{ url('/help?tab=privacy') }}" target="_blank">Privacy
+                                        Policy</a></span>
+                            </label>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Create account</button>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="signup-username">Username</label>
-                        <div class="input-wrap">
-                            <i class="fas fa-at icon"></i>
-                            <input type="text" class="form-control" id="signup-username" name="username"
-                                placeholder="jane_doe" value="{{ old('username') }}" required autocomplete="username"
-                                minlength="3" maxlength="255" pattern="[a-zA-Z0-9_.-]+"
-                                title="Letters, numbers, dots, hyphens and underscores only.">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="signup-email">Email</label>
-                        <div class="input-wrap">
-                            <i class="fas fa-envelope icon"></i>
-                            <input type="email" class="form-control" id="signup-email" name="email"
-                                placeholder="you@example.com" value="{{ old('email') }}" required autocomplete="email">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="signup-password">Password</label>
-                        <div class="input-wrap">
-                            <i class="fas fa-lock icon"></i>
-                            <input type="password" class="form-control" id="signup-password" name="password"
-                                placeholder="At least 8 characters" required autocomplete="new-password">
-                            <button type="button" class="password-toggle" data-target="signup-password"
-                                aria-label="Toggle password">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                        <p class="hint">Minimum 8 characters.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="signup-password-confirm">Confirm password</label>
-                        <div class="input-wrap">
-                            <i class="fas fa-lock icon"></i>
-                            <input type="password" class="form-control" id="signup-password-confirm"
-                                name="password_confirmation" placeholder="••••••••" required
-                                autocomplete="new-password">
-                            <button type="button" class="password-toggle" data-target="signup-password-confirm"
-                                aria-label="Toggle password">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="checkbox-wrap">
-                            <input type="checkbox" name="terms" id="terms-agree" required>
-                            <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy
-                                    Policy</a></span>
-                        </label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Create account</button>
                 </form>
+
+                <script>
+                    function nextSignupStep() {
+                        const step1 = document.getElementById('signup-step-1');
+                        const inputs = step1.querySelectorAll('input');
+                        let valid = true;
+                        for (let input of inputs) {
+                            if (!input.checkValidity()) {
+                                input.reportValidity();
+                                valid = false;
+                                break;
+                            }
+                        }
+                        if (valid) {
+                            step1.style.display = 'none';
+                            document.getElementById('signup-step-2').style.display = 'block';
+                            document.getElementById('signup-back-btn').style.display = 'inline-flex';
+                        }
+                    }
+
+                    function prevSignupStep() {
+                        document.getElementById('signup-step-2').style.display = 'none';
+                        document.getElementById('signup-step-1').style.display = 'block';
+                        document.getElementById('signup-back-btn').style.display = 'none';
+                    }
+                </script>
                 <div class="auth-divider"><span>or sign up with</span></div>
                 <div style="display: flex; gap: 10px;">
                     <a href="{{ route('auth.google') }}" class="btn btn-google"><i class="fab fa-google"></i>
@@ -759,6 +808,13 @@
                 } else {
                     authTabsContainer.classList.remove('hidden');
                     window.history.pushState({ path: '/' + tabId }, '', '/' + tabId);
+                }
+
+                const backBtn = document.getElementById('signup-back-btn');
+                if (tabId === 'signup' && document.getElementById('signup-step-2').style.display === 'block') {
+                    backBtn.style.display = 'inline-flex';
+                } else {
+                    backBtn.style.display = 'none';
                 }
             }
 

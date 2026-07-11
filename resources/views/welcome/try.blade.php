@@ -16,9 +16,31 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Base styles -->
     <link rel="stylesheet" href="{{ asset('css/welcome.css') }}?v={{ filemtime(public_path('css/welcome.css')) }}">
-    
+    <style>
+        .notification-toast { 
+            display: flex; align-items: flex-start; gap: 12px; padding: 16px; background: white; border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-left: 4px solid #10b981; min-width: 300px;
+            transform: translateX(120%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .notification-toast.show { transform: translateX(0); }
+        .notification-toast.success { border-left-color: #10b981; }
+        .notification-toast.error { border-left-color: #ef4444; }
+        .notification-toast.warning { border-left-color: #f59e0b; }
+        .notification-toast.info { border-left-color: #3b82f6; }
+        .notification-toast-icon { font-size: 1.25rem; }
+        .notification-toast.success .notification-toast-icon { color: #10b981; }
+        .notification-toast.error .notification-toast-icon { color: #ef4444; }
+        .notification-toast.warning .notification-toast-icon { color: #f59e0b; }
+        .notification-toast.info .notification-toast-icon { color: #3b82f6; }
+        .notification-toast-content { flex: 1; }
+        .notification-toast-content h4 { margin: 0 0 4px 0; font-size: 0.9rem; font-weight: 600; color: #1e293b; }
+        .notification-toast-content p { margin: 0; font-size: 0.8rem; color: #64748b; line-height: 1.4; }
+        .notification-toast-close { background: none; border: none; font-size: 1rem; color: #94a3b8; cursor: pointer; padding: 4px; }
+        .notification-toast-close:hover { color: #ef4444; }
+    </style>
 </head>
 <body>
+    <div id="notificationContainer" class="fixed top-20 right-5 z-[1100] flex flex-col gap-2 w-80"></div>
 
     <!-- Ambient background -->
     <div class="ambient-grid">
@@ -31,13 +53,13 @@
 
     @include('welcome.components.header')
 
-    <main class="main" style="padding-top: 8rem; padding-bottom: 6rem; min-height: 100vh;">
-        <section class="container" style="max-width: 1400px; margin: 0 auto;">
+    <main class="main pt-6 sm:pt-16 pb-12 md:pt-32 md:pb-24 min-h-screen">
+        <section class="w-[98%] mx-auto px-0 md:w-[95%] md:px-4" style="max-width: 1400px;">
             
             <div style="text-align: center; margin-bottom: 40px;">
                 <span class="badge"><i class="fas fa-magic"></i> Try WISP Free</span>
-                <h1 style="font-size: 3rem; font-weight: 700; margin-top: 16px; margin-bottom: 12px;">Create a magical message</h1>
-                <p style="color: var(--text-muted); font-size: 1.1rem;">Experience the magic of WISP before signing up. You can create up to 2 free messages right here.</p>
+                <h1 class="text-3xl sm:text-4xl md:text-[3rem] font-bold mt-4 mb-3 text-[var(--text-main)] leading-tight">Create a magical message</h1>
+                <p class="text-base sm:text-lg text-[var(--text-muted)]">Experience the magic of WISP before signing up. You can create up to 2 free messages right here.</p>
                 
                 @if($messageCount < 2)
                     <div style="margin-top: 12px; font-size: 0.9rem; color: var(--accent);">
@@ -101,14 +123,14 @@
                             <!-- Message Basics Card -->
                             <div class="glass-card w-full overflow-hidden transition-all duration-500" id="messageAccordionCard">
                                  <!-- Clickable Header -->
-                                 <div class="p-8 cursor-pointer hover:bg-black/5 transition-colors flex items-center justify-between" onclick="toggleMessageAccordion()">
-                                     <div class="flex items-center gap-4">
-                                         <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 text-xl shrink-0">
+                                 <div class="p-5 md:p-8 cursor-pointer hover:bg-black/5 transition-colors flex items-center justify-between" onclick="toggleMessageAccordion()">
+                                     <div class="flex items-center gap-3 md:gap-4">
+                                         <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 text-lg md:text-xl shrink-0">
                                              <i class="fas fa-envelope-open-text"></i>
                                          </div>
                                          <div>
-                                             <h3 class="text-lg font-bold text-[var(--text-main)] mb-1">Message Basics</h3>
-                                             <p class="text-sm text-[var(--text-muted)] m-0" id="messageBasicsSubtitle">The core details of your magical message.</p>
+                                             <h3 class="text-base md:text-lg font-bold text-[var(--text-main)] mb-1">Message Basics</h3>
+                                             <p class="text-xs md:text-sm text-[var(--text-muted)] m-0" id="messageBasicsSubtitle">The core details of your magical message.</p>
                                          </div>
                                      </div>
                                      <div class="flex items-center gap-4">
@@ -118,7 +140,7 @@
 
                                  <!-- Hidden Content -->
                                  <div id="messageAccordionContent" class="hidden border-t border-gray-100 bg-slate-50/30">
-                                     <div class="p-8 pt-6">
+                                     <div class="p-5 md:p-8 pt-6">
                                          <div class="mb-4">
                                              <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">MESSAGE TYPE</label>
                                              <input type="text" name="message_type" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]" placeholder="e.g. Birthday Message" required>
@@ -183,14 +205,14 @@
                             <!-- Appearance & Media Card -->
                              <div class="glass-card w-full overflow-hidden transition-all duration-500" id="mediaAccordionCard">
                                  <!-- Clickable Header -->
-                                 <div class="p-8 cursor-pointer hover:bg-black/5 transition-colors flex items-center justify-between" onclick="toggleMediaAccordion()">
-                                     <div class="flex items-center gap-4">
-                                         <div class="w-12 h-12 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-500 text-xl shrink-0">
+                                 <div class="p-5 md:p-8 cursor-pointer hover:bg-black/5 transition-colors flex items-center justify-between" onclick="toggleMediaAccordion()">
+                                     <div class="flex items-center gap-3 md:gap-4">
+                                         <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-500 text-lg md:text-xl shrink-0">
                                              <i class="fas fa-image"></i>
                                          </div>
                                          <div>
-                                             <h3 class="text-lg font-bold text-[var(--text-main)] mb-1">Appearance & Media</h3>
-                                             <p class="text-sm text-[var(--text-muted)] m-0" id="mediaSubtitle">Personalize how your message looks.</p>
+                                             <h3 class="text-base md:text-lg font-bold text-[var(--text-main)] mb-1">Appearance & Media</h3>
+                                             <p class="text-xs md:text-sm text-[var(--text-muted)] m-0" id="mediaSubtitle">Personalize how your message looks.</p>
                                          </div>
                                      </div>
                                      <div class="flex items-center gap-4">
@@ -200,7 +222,7 @@
 
                                  <!-- Hidden Content -->
                                  <div id="mediaAccordionContent" class="hidden border-t border-gray-100 bg-slate-50/30">
-                                     <div class="p-8 pt-6">
+                                     <div class="p-5 md:p-8 pt-6">
                                          <div class="mb-0">
                                              <label class="block mb-3 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">ADD A PHOTO (OPTIONAL)</label>
                                              <div class="relative border-2 border-dashed border-gray-300 rounded-lg py-4 px-4 text-center hover:bg-black/5 transition-colors cursor-pointer">
@@ -252,20 +274,20 @@
                             <!-- Templates Accordion Card -->
                             <div class="glass-card w-full overflow-hidden transition-all duration-500" id="templatesAccordionCard">
                                 <!-- Clickable Header -->
-                                <div class="p-8 cursor-pointer hover:bg-black/5 transition-colors flex items-center justify-between" onclick="toggleTemplatesAccordion()">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 text-xl shrink-0">
+                                <div class="p-5 md:p-8 cursor-pointer hover:bg-black/5 transition-colors flex items-center justify-between" onclick="toggleTemplatesAccordion()">
+                                    <div class="flex items-center gap-3 md:gap-4">
+                                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 text-lg md:text-xl shrink-0">
                                             <i class="fas fa-th-large"></i>
                                         </div>
                                         <div>
-                                             <h3 class="text-lg font-bold text-[var(--text-main)] mb-1">Template Info</h3>
-                                             <p class="text-sm text-[var(--text-muted)] m-0" id="templateSubtitle">Select an option</p>
+                                             <h3 class="text-base md:text-lg font-bold text-[var(--text-main)] mb-1">Template Info</h3>
+                                             <p class="text-xs md:text-sm text-[var(--text-muted)] m-0" id="templateSubtitle">Select an option</p>
                                         </div>
                                     </div>
-                                    <div class="flex items-center gap-4">
-                                        <div id="accordionTemplatePreview" class="hidden items-center gap-2">
-                                            <div id="accordionThumbnail" class="w-6 h-6 rounded border border-black/10 shadow-sm"></div>
-                                            <span id="accordionTemplateName" class="text-sm font-semibold text-slate-700"></span>
+                                    <div class="flex items-center gap-2 md:gap-4">
+                                        <div id="accordionTemplatePreview" class="hidden items-center gap-1 md:gap-2">
+                                            <div id="accordionThumbnail" class="w-5 h-5 md:w-6 md:h-6 rounded border border-black/10 shadow-sm"></div>
+                                            <span id="accordionTemplateName" class="text-xs md:text-sm font-semibold text-slate-700"></span>
                                         </div>
                                         <i class="fas fa-chevron-down text-gray-400 transition-transform duration-300" id="templatesAccordionIcon"></i>
                                     </div>
@@ -273,7 +295,7 @@
                                 
                                 <!-- Hidden Content (Grid) -->
                                 <div id="templatesAccordionContent" class="hidden border-t border-gray-100 bg-slate-50/30">
-                                    <div class="p-6">
+                                    <div class="p-4 md:p-6">
                                         <input type="hidden" name="template_name" id="selectedTemplateInput" value="view-1">
                                         
                                         <!-- Tabs -->
@@ -298,8 +320,8 @@
                             </div>
 
                             <!-- Generate Card -->
-                            <div class="glass-card p-8 w-full text-center border-2 border-[var(--accent)] bg-indigo-500/5">
-                                <h3 class="text-xl font-bold text-[var(--text-main)] mb-3">Ready to Share?</h3>
+                            <div class="glass-card p-6 md:p-8 w-full text-center border-2 border-[var(--accent)] bg-indigo-500/5">
+                                <h3 class="text-lg md:text-xl font-bold text-[var(--text-main)] mb-2 md:mb-3">Ready to Share?</h3>
                                 <p class="text-[0.95rem] text-[var(--text-muted)] mb-6">Generate your unique magic link and share it instantly.</p>
                                 <button type="submit" id="mainSubmitBtn" class="bg-[var(--primary)] text-white py-4 px-10 w-auto rounded-[44px] font-semibold text-[1.1rem] cursor-pointer transition-all duration-300 inline-flex items-center justify-center shadow-[0_4px_15px_rgba(99,102,241,0.2)] hover:-translate-y-[2px] hover:shadow-[0_10px_20px_rgba(99,102,241,0.4)] relative">
                                     <span id="mainBtnLoader" class="hidden absolute left-4 w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
@@ -311,6 +333,70 @@
                     </div>
 
                 </form>
+            @endif
+
+            @if(isset($messages) && $messages->count() > 0)
+                <div class="mt-12 w-full mx-auto" style="max-width: 1200px;">
+                    <h3 class="text-xl font-bold text-[var(--text-main)] mb-6">Your Recent Magic Messages</h3>
+                    <div class="glass-card">
+                        <div class="w-full">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-black/5 bg-black/5">
+                                        <th class="py-4 px-4 md:px-6 text-sm font-semibold text-[var(--text-main)] whitespace-nowrap rounded-tl-2xl">Title</th>
+                                        <th class="py-4 px-4 md:px-6 text-sm font-semibold text-[var(--text-main)] whitespace-nowrap">Recipient</th>
+                                        <th class="hidden md:table-cell py-4 px-6 text-sm font-semibold text-[var(--text-main)] whitespace-nowrap">Type</th>
+                                        <th class="hidden md:table-cell py-4 px-6 text-sm font-semibold text-[var(--text-main)] whitespace-nowrap">Created</th>
+                                        <th class="py-4 px-4 md:px-6 text-sm font-semibold text-[var(--text-main)] text-right whitespace-nowrap rounded-tr-2xl">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($messages as $msg)
+                                        @php
+                                            $link = $msg->generatedLinks()->where('is_active', true)->first();
+                                        @endphp
+                                        <tr class="border-b border-black/5 last:border-0 hover:bg-black/5 transition-colors group/row">
+                                            <td class="py-4 px-4 md:px-6 text-sm font-medium text-[var(--text-main)]">{{ $msg->title ?? 'Untitled' }}</td>
+                                            <td class="py-4 px-4 md:px-6 text-sm text-[var(--text-muted)]">{{ $msg->recipient_name ?? 'Unknown' }}</td>
+                                            <td class="hidden md:table-cell py-4 px-6 text-sm text-[var(--text-muted)]">{{ ucfirst(str_replace('_', ' ', $msg->message_type)) }}</td>
+                                            <td class="hidden md:table-cell py-4 px-6 text-sm text-[var(--text-muted)]">{{ $msg->created_at->diffForHumans() }}</td>
+                                            <td class="py-4 px-4 md:px-6 text-sm text-right relative">
+                                                <div class="inline-block relative group">
+                                                    <button type="button" class="text-gray-400 hover:text-[var(--primary)] transition-colors p-2 focus:outline-none">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </button>
+                                                    
+                                                    <!-- Dropdown Menu -->
+                                                    <div class="absolute right-0 mt-1 w-40 md:w-48 bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.15)] border border-gray-100 py-2 z-[9999] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right scale-95 group-hover:scale-100">
+                                                        @if($link)
+                                                            <a href="{{ $link->generated_url }}" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors text-left">
+                                                                <i class="fas fa-eye w-5 text-center mr-2"></i> View
+                                                            </a>
+                                                        @else
+                                                            <span class="block px-4 py-2 text-sm text-gray-400 italic text-left">
+                                                                <i class="fas fa-eye-slash w-5 text-center mr-2"></i> Not Generated
+                                                            </span>
+                                                        @endif
+                                                        
+                                                        <div class="h-[1px] bg-gray-100 my-1"></div>
+                                                        
+                                                        <form action="{{ route('guest.try.delete', $msg->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this message?');" class="m-0">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                                                                <i class="fas fa-trash-alt w-5 text-center mr-2"></i> Delete
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             @endif
 
         </section>
@@ -399,9 +485,6 @@
                 document.getElementById('accordionTemplatePreview').classList.remove('hidden');
                 document.getElementById('accordionTemplatePreview').classList.add('flex');
             }
-            
-            // Auto close on select
-            toggleTemplatesAccordion();
         }
 
         let currentFilter = 'all';
@@ -484,7 +567,7 @@
 
             searchTimeout = setTimeout(async () => {
                 try {
-                    const response = await fetch(`{{ route('user.music.spotify.search') }}?q=${encodeURIComponent(query)}`);
+                    const response = await fetch(`{{ route('try.spotify.search') }}?q=${encodeURIComponent(query)}`);
                     const data = await response.json();
                     
                     if (data.error) throw new Error(data.error);
@@ -603,6 +686,9 @@
             }
 
             const formData = new FormData(this);
+            if (isMainButton) {
+                formData.append('generate_link', 'true');
+            }
 
             try {
                 const response = await fetch(this.action, {
@@ -627,6 +713,8 @@
                     if(document.getElementById('messageBasicsSubtitle')) document.getElementById('messageBasicsSubtitle').innerText = title;
                     if(document.getElementById('mediaSubtitle')) document.getElementById('mediaSubtitle').innerText = title;
                     if(document.getElementById('templateSubtitle')) document.getElementById('templateSubtitle').innerText = title;
+
+                    showNotification('Success', 'Message updated successfully.', 'success');
 
                     // Transform main button
                     document.getElementById('mainSubmitText').innerText = 'Share Message';
@@ -666,11 +754,11 @@
                         prompt("Copy your magic link:", generatedLink);
                     }
                 } else {
-                    alert(data.error || 'Something went wrong.');
+                    showNotification('Error', data.error || 'Something went wrong.', 'error');
                 }
             } catch (error) {
                 console.error('Error saving message:', error);
-                alert('An error occurred while saving your message.');
+                showNotification('Error', 'An error occurred while saving your message.', 'error');
             } finally {
                 // Reset loading states
                 if (isMainButton) {
@@ -695,6 +783,82 @@
                 }
             }
         });
+        }
+        
+        function showNotification(title, message, type = 'success', duration = 5000) {
+            const container = document.getElementById('notificationContainer');
+            if (!container) return;
+            const notification = document.createElement('div');
+            notification.className = `notification-toast ${type}`;
+
+            const icon = type === 'success' ? 'fas fa-check-circle' :
+                type === 'error' ? 'fas fa-exclamation-circle' :
+                    type === 'warning' ? 'fas fa-exclamation-triangle' :
+                        'fas fa-info-circle';
+
+            notification.innerHTML = `
+                <div class="notification-toast-icon">
+                    <i class="${icon}"></i>
+                </div>
+                <div class="notification-toast-content">
+                    <h4>${title}</h4>
+                    <p>${message}</p>
+                </div>
+                <button class="notification-toast-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+
+            container.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+
+            const autoRemove = setTimeout(() => {
+                closeNotification(notification);
+            }, duration);
+
+            const closeBtn = notification.querySelector('.notification-toast-close');
+            closeBtn.addEventListener('click', () => {
+                clearTimeout(autoRemove);
+                closeNotification(notification);
+            });
+        }
+
+        function closeNotification(notification) {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }
+
+        // Mobile Nav
+        const navToggle = document.getElementById('navToggle');
+        const navClose = document.getElementById('navClose');
+        const mobileNav = document.getElementById('mobileNav');
+        const navOverlay = document.getElementById('navOverlay');
+        const openNav = () => {
+            if(mobileNav) mobileNav.classList.add('active');
+            if(navOverlay) navOverlay.classList.add('active');
+            if(mobileNav) mobileNav.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        };
+        const closeNav = () => {
+            if(mobileNav) mobileNav.classList.remove('active');
+            if(navOverlay) navOverlay.classList.remove('active');
+            if(mobileNav) mobileNav.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        };
+        if (navToggle) navToggle.addEventListener('click', openNav);
+        if (navClose) navClose.addEventListener('click', closeNav);
+        if (navOverlay) navOverlay.addEventListener('click', closeNav);
+        if (mobileNav) {
+            mobileNav.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', closeNav);
+            });
         }
     </script>
 </body>

@@ -153,7 +153,7 @@
                         <i class="fas fa-search header-search-icon-inner"></i>
                         <input type="text" name="q" id="headerSearchInput"
                                value="{{ request('q') ?? '' }}"
-                               placeholder="Search messages, snippets..."
+                               placeholder="Search messages and pages..."
                                class="header-search-input" autocomplete="off">
                         @if(request('q'))
                             <a href="{{ route('user.search.page') }}" class="header-search-clear" title="Clear">

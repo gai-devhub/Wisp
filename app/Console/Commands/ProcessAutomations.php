@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\RecurringMessage;
+
 use App\Models\WishMessages;
 use App\Http\Controllers\ShareMessagesController;
 use Illuminate\Support\Facades\Mail;
@@ -32,7 +32,7 @@ class ProcessAutomations extends Command
     {
         $this->info('Starting automation processing...');
 
-        $this->processRecurringMessages();
+
         $this->processScheduledShares();
         $this->processExpiredPages();
 
@@ -122,44 +122,6 @@ class ProcessAutomations extends Command
                 $share->update(['status' => 'failed', 'error_message' => $e->getMessage()]);
                 $this->error("Failed to send scheduled share {$share->id}: " . $e->getMessage());
             }
-        }
-    }
-
-    private function processRecurringMessages()
-    {
-        $recurring = RecurringMessage::where('next_run_at', '<=', now())
-            ->where('is_active', true)
-            ->with('wishMessage.user')
-            ->get();
-
-        $this->info("Found {$recurring->count()} recurring messages to send.");
-
-        foreach ($recurring as $rec) {
-            $message = $rec->wishMessage;
-            
-            if (!$message || !$message->generated_link) {
-                // Cannot send
-                $this->error("Skipping recurring message {$rec->id} due to missing message or link.");
-                continue;
-            }
-
-            try {
-                $this->deliverMessage($rec->channel, $rec->recipient_contact, $message);
-                $this->info("Sent recurring message {$rec->id}");
-            } catch (\Exception $e) {
-                $this->error("Failed to send recurring message {$rec->id}: " . $e->getMessage());
-            }
-
-            // Update next_run_at
-            $nextRun = match ($rec->frequency) {
-                'daily' => now()->addDay(),
-                'weekly' => now()->addWeek(),
-                'monthly' => now()->addMonth(),
-                'yearly' => now()->addYear(),
-                default => now()->addWeek(),
-            };
-
-            $rec->update(['next_run_at' => $nextRun]);
         }
     }
 

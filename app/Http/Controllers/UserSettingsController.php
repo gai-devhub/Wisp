@@ -247,54 +247,6 @@ class UserSettingsController extends Controller
             ->with('success', 'Login Passcode updated successfully.');
     }
 
-    public function storeSnippet(Request $request)
-    {
-        $request->validate([
-            'snippet_text' => 'required|string|max:1000',
-            'message_title' => 'nullable|string|max:255',
-        ]);
-
-        \App\Models\MessageSnippet::create([
-            'user_id' => Auth::id(),
-            'message_title' => $request->input('message_title'),
-            'snippet_text' => $request->input('snippet_text'),
-        ]);
-
-        return back()
-            ->with('success', 'Snippet bookmarked inside Discovery center.');
-    }
-
-    public function storeRecurringMessage(Request $request)
-    {
-        $request->validate([
-            'wish_message_id' => 'required|exists:wish_messages,id',
-            'frequency' => 'required|in:daily,weekly,monthly,yearly',
-            'channel' => 'required|in:email,sms',
-            'recipient_contact' => 'required|string|max:255',
-        ]);
-
-        $frequency = $request->input('frequency');
-        $nextRun = match ($frequency) {
-            'daily' => now()->addDay(),
-            'weekly' => now()->addWeek(),
-            'monthly' => now()->addMonth(),
-            'yearly' => now()->addYear(),
-            default => now()->addWeek(),
-        };
-
-        \App\Models\RecurringMessage::create([
-            'user_id' => Auth::id(),
-            'wish_message_id' => $request->input('wish_message_id'),
-            'frequency' => $frequency,
-            'channel' => $request->input('channel'),
-            'recipient_contact' => $request->input('recipient_contact'),
-            'next_run_at' => $nextRun,
-            'is_active' => true,
-        ]);
-
-        return back()
-            ->with('success', 'Automated recurring message configured.');
-    }
 
     /**
      * Download a JSON copy of all personal user data.
