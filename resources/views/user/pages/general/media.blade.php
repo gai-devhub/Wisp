@@ -28,11 +28,28 @@
     </div>
     <form id="media-form" method="POST" action="{{ route('media.store') }}" enctype="multipart/form-data">
         @csrf
+        <style>
+            .media-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 24px;
+                margin-bottom: 24px;
+                align-items: start;
+            }
+            @media (min-width: 768px) {
+                .media-grid.two-cols {
+                    grid-template-columns: 1fr 1fr;
+                }
+            }
+            .media-grid-item {
+                min-width: 0;
+            }
+        </style>
         
         @if(!$selectedMessage)
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <div class="card h-100">
+        <div class="media-grid two-cols">
+            <div class="media-grid-item">
+                <div class="card">
                     <div class="card-header">
                         <h3>Message</h3>
                     </div>
@@ -49,13 +66,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="media-grid-item">
         @else
         <input type="hidden" id="media-message-id" name="wish_message_id" value="{{ $selectedMessage->id }}" data-url="{{ route('media.show') }}">
-        <div class="row">
-            <div class="col-12 mb-4">
+        <div class="media-grid">
+            <div class="media-grid-item">
         @endif
-                <div class="card h-100">
+                <div class="card">
                     <div class="card-header">
                         <h3>Recipient Image</h3>
                     </div>
