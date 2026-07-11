@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
+
+class AdminMiddleware
+{
+    /**
+     * Allow only authenticated users with role "admin". Redirect others.
+     */
+    public function handle(Request $request, Closure $next): Response
+    {
+        if (! Auth::check()) {
+            return redirect()->route('auth.login');
+        }
+
+        if (Auth::user()->role !== 'admin') {
+            return redirect()->route('user.page');
+        }
+
+        return $next($request);
+    }
+}

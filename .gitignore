@@ -1,0 +1,36 @@
+/vendor/
+/node_modules/
+
+# Server Environment & Credentials
+/.env
+/.env.*
+aws access.txt
+s3-config.md
+
+# Application Storage & Keys
+/storage/*.key
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/public/storage
+
+# Certificates & Keys
+*.pem
+*.key
+
+# IDEs and System files
+/.idea
+/.vscode
+.DS_Store
+Thumbs.db
+
+# Build/Package Managers
+composer.phar
+/public/build
+/public/hot
+/.phpunit.cache
+
+# Commit your application's lock file https://getcomposer.org/doc/01-basic-usage.md#commit-your-composer-lock-file-to-version-control
+# You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
+# composer.lock
