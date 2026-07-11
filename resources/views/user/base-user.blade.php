@@ -490,12 +490,7 @@
         });
     }
 })();
-</script>
-</body>
 
-
-@push('scripts')
-<script>
 // Template Preview Popup Functionality (component-based)
 const previewPopup = document.getElementById('preview-popup');
 const closePopup = document.getElementById('close-popup');
@@ -728,5 +723,5 @@ document.addEventListener('click', function (e) {
 });
 
 </script>
-@endpush
-</body></html>
+</body>
+</html>
