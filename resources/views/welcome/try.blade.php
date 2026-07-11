@@ -130,16 +130,6 @@
                                          </div>
 
                                          <div class="mb-4">
-                                             <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">GREETING</label>
-                                             <input type="text" name="greeting" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]" placeholder="Hello there" required>
-                                         </div>
-
-                                         <div class="mb-0">
-                                             <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">MESSAGE CONTENT</label>
-                                             <textarea name="message_body" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]" rows="3" placeholder="Write your heartfelt message here..." required></textarea>
-                                         </div>
-
-                                         <div class="mb-4">
                                              <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">RECIPIENT'S FULL NAME</label>
                                              <input type="text" name="recipient_name" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]" placeholder="Enter recipient's full name" required>
                                          </div>
@@ -147,6 +137,16 @@
                                          <div class="mb-4">
                                              <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">RECIPIENT'S SPECIAL NAME</label>
                                              <input type="text" name="recipient_special_name" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]" placeholder="Enter recipient's special name">
+                                         </div>
+                                         
+                                         <div class="mb-4">
+                                             <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">GREETING</label>
+                                             <input type="text" name="greeting" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]" placeholder="Hello there" required>
+                                         </div>
+
+                                         <div class="mb-0">
+                                             <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">MESSAGE CONTENT</label>
+                                             <textarea name="message_body" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]" rows="3" placeholder="Write your heartfelt message here..." required></textarea>
                                          </div>
 
                                          <div class="mb-4">
