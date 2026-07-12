@@ -1,7 +1,7 @@
 =========================================================
 WISP SYSTEM UPDATES & ROADMAP TO A PROFESSIONAL SAAS
 =========================================================
-Here are 10 gradual updates and implementations we can roll out to make WISP a top-tier, professional platform:
+Here are 20 gradual updates and implementations we can roll out to make WISP a top-tier, professional platform:
 
 1. DRAG & DROP WISH BUILDER (Phase 1)
 Integrate a lightweight visual builder (using libraries like SortableJS or GrapesJS) allowing users to drag text blocks, stickers, and images onto a canvas to visually arrange their cards exactly how they want them without writing code.
@@ -32,3 +32,33 @@ Implement a freemium model. Free users get standard templates with a WISP waterm
 
 10. PROGRESSIVE WEB APP (PWA) & PUSH NOTIFICATIONS
 Optimize the web app so users can "Install" WISP directly to their iOS or Android home screens without going through an app store. Add push notifications to remind them to send cards for their loved ones' special days.
+
+11. MULTI-LANGUAGE & LOCALIZATION
+Allow users to generate AI wishes in multiple languages and translate the entire user interface to cater to a global audience, automatically detecting the user's region.
+
+12. VIDEO GREETINGS INTEGRATION
+Let users record a short video message directly from their webcam or phone, which embeds beautifully inside the digital card layout without them needing to upload it to YouTube first.
+
+13. CUSTOM DOMAIN NAMES (WHITE-LABELING)
+For premium users or businesses, allow them to send wishes from their own domain (e.g., `wishes.yourbrand.com`) instead of the WISP domain, removing all WISP branding completely.
+
+14. AUTOMATED TEAM BIRTHDAYS (B2B TIER)
+Create a team workspace where HR or managers can upload an employee list. WISP will automatically generate and circulate a group card for signatures a week before an employee's birthday, and send it automatically on the day.
+
+15. GIFT CARD & DIGITAL CASH INTEGRATION
+Partner with services (like Tremendous or Stripe) to allow users to attach a digital gift card (Starbucks, Amazon) or a digital cash gift directly to their wish.
+
+16. CONTACTS & ADDRESS BOOK IMPORT
+Allow users to import contacts directly from Google Contacts or via CSV, making it extremely fast to select recipients and send bulk holiday cards or party invitations.
+
+17. PHYSICAL CARD PRINTING API
+Partner with a print-on-demand API (like Lob or Prodigi) so users can click "Send as Physical Card" and have their digital wish beautifully printed on premium paper and mailed directly to a physical address.
+
+18. EVENT RSVP & LANDING PAGES
+Expand beyond just wishes. Let users create RSVP pages for events (weddings, parties, baby showers) that match the aesthetic of their WISP invitations, complete with guest list management and meal preferences.
+
+19. COMMUNITY TEMPLATE MARKETPLACE
+Open up a marketplace where talented designers can upload their own premium WISP templates, and users can purchase them (or access them via subscription), with a revenue split for the creators.
+
+20. AI VIDEO AVATAR GENERATION
+Take the AI "Magic" to the absolute cutting edge by allowing users to generate a customized, lip-syncing AI avatar that speaks their written wish out loud to the recipient when they open the page.
