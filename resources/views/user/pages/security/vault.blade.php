@@ -11,7 +11,7 @@
             Vaulted Conversations
         </h2>
         <div class="vault-header-actions">
-            <a href="{{ route('user.vault.lock') }}" class="vault-lock-btn">
+            <a href="{{ route('user.settings.messages.page') }}" class="vault-lock-btn">
                 <i class="fas fa-lock text-muted"></i> Lock
             </a>
         </div>

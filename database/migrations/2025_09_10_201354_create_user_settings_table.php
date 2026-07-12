@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('auto_archive_days')->nullable();
             $table->boolean('privacy_blur_enabled')->default(false);
             $table->string('theme_preference')->default('theme-default');
+            $table->boolean('theme_bg_enabled')->default(true);
             $table->string('login_passcode')->nullable();
             $table->timestamps();
         });

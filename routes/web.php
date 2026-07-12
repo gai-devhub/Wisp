@@ -208,6 +208,7 @@ Route::middleware(['auth', 'user.role', 'require.passcode', 'billing'])->group(f
     Route::get('/user-page/search', [UserController::class, 'searchPage'])->name('user.search.page');
     Route::get('/user-page/control-center/security', [UserController::class, 'controlCenterSecurity'])->name('user.control-center.security.page');
     Route::get('/user-page/settings/user', [UserController::class, 'userSettingsPage'])->name('user.settings.user.page');
+    Route::get('/user-page/help-support', function () {return view('user.pages.settings.help-support');})->name('user.help-support.page');
     Route::post('/user-page/settings/delete-account', [UserController::class, 'deleteAccount'])->name('user.settings.delete-account');
     Route::post('/user-page/settings/passcode', [UserSettingsController::class, 'updatePasscode'])->name('user.settings.passcode');
     Route::post('/user/github/update', [GithubUpdateController::class, 'userUpdate'])->name('user.github.update');
@@ -256,33 +257,20 @@ Route::middleware(['auth', 'user.role', 'require.passcode', 'billing'])->group(f
     Route::get('/user-page/share-messages/schedule', [ShareMessagesController::class, 'schedulePage'])->name('share-messages.schedule.page');
     Route::post('/user-page/share-messages/schedule', [ShareMessagesController::class, 'schedule'])->name('share-messages.schedule');
 
-    // Billing
-    Route::get('/billing', [App\Http\Controllers\UserBillingController::class, 'index'])->name('user.billing.index');
-    Route::get('/billing/method', [App\Http\Controllers\UserBillingController::class, 'methodSelection'])->name('user.billing.method');
-    Route::get('/billing/checkout', [App\Http\Controllers\UserBillingController::class, 'checkout'])->name('user.billing.checkout');
-    Route::get('/billing/verify', [App\Http\Controllers\UserBillingController::class, 'verifyPaystack'])->name('user.billing.verify');
-    Route::post('/billing/charge', [App\Http\Controllers\UserBillingController::class, 'charge'])->name('user.billing.charge');
-    Route::post('/billing/otp', [App\Http\Controllers\UserBillingController::class, 'submitOtp'])->name('user.billing.otp');
+    // Billing (Disabled per user request)
+    // Route::get('/billing', [App\Http\Controllers\UserBillingController::class, 'index'])->name('user.billing.index');
+    // Route::get('/billing/method', [App\Http\Controllers\UserBillingController::class, 'methodSelection'])->name('user.billing.method');
+    // Route::get('/billing/checkout', [App\Http\Controllers\UserBillingController::class, 'checkout'])->name('user.billing.checkout');
+    // Route::get('/billing/verify', [App\Http\Controllers\UserBillingController::class, 'verifyPaystack'])->name('user.billing.verify');
+    // Route::post('/billing/charge', [App\Http\Controllers\UserBillingController::class, 'charge'])->name('user.billing.charge');
+    // Route::post('/billing/otp', [App\Http\Controllers\UserBillingController::class, 'submitOtp'])->name('user.billing.otp');
+
+    Route::get('/ai-assistant', [AiAssistantController::class, 'page'])->name('user.ai.page');
 });
 
 Route::post('/ai/generate', [AiAssistantController::class, 'generate'])->name('ai.generate');
 Route::get('/ai/tts', [AiAssistantController::class, 'tts'])->name('ai.tts');
-Route::get('/ai-assistant', function () {
-    $user = Auth::user();
-    $from = request()->query('from');
-    $backUrl = route('home');
 
-    if ($from === 'admin' || ($user && $user->role === 'admin')) {
-        $backUrl = route('admin.page');
-    } elseif ($user) {
-        $backUrl = route('user.page');
-    }
-
-    return view('ai.assistant', [
-        'backUrl' => $backUrl,
-        'from' => $from,
-    ]);
-})->name('ai.page');
 Route::prefix('templates')->middleware('auth')->group(function () {
     Route::get('/preview', [TemplateController::class, 'preview'])->name('templates.preview');
     Route::post('/select', [TemplateController::class, 'select'])->name('templates.select');

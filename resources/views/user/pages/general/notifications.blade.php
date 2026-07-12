@@ -255,32 +255,30 @@
 
             function deleteNotification(event, id) {
                 if (event) event.stopPropagation(); // prevent opening reader
-                showTypedConfirmModal('Are you sure you want to delete this message?', function () {
-                    fetch(`/notifications/${id}/delete`, {
-                        method: 'DELETE',
-                        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Content-Type': 'application/json' }
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.ok) {
-                                // Remove item from list
-                                const item = document.getElementById('item-' + id);
-                                if (item) item.remove();
+                fetch(`/notifications/${id}/delete`, {
+                    method: 'DELETE',
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Content-Type': 'application/json' }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.ok) {
+                            // Remove item from list
+                            const item = document.getElementById('item-' + id);
+                            if (item) item.remove();
 
-                                // Hide reader if open
-                                if (currentNotificationId == id) {
-                                    document.getElementById('inbox-reader-empty').style.display = 'flex';
-                                    document.getElementById('inbox-reader-content').style.display = 'none';
-                                    currentNotificationId = null;
-                                    closeInboxMobileDetail();
-                                }
-
-                                updateUnreadCount();
-                            } else {
-                                alert('Error: ' + (data.error || 'Failed to delete'));
+                            // Hide reader if open
+                            if (currentNotificationId == id) {
+                                document.getElementById('inbox-reader-empty').style.display = 'flex';
+                                document.getElementById('inbox-reader-content').style.display = 'none';
+                                currentNotificationId = null;
+                                closeInboxMobileDetail();
                             }
-                        });
-                }, 'confirm');
+
+                            updateUnreadCount();
+                        } else {
+                            alert('Error: ' + (data.error || 'Failed to delete'));
+                        }
+                    });
             }
 
             window.addEventListener('resize', function () {

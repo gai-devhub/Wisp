@@ -18,10 +18,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/user-page.css') }}?v={{ filemtime(public_path('css/user-page.css')) }}">
+    @stack('styles')
 
     @php
         $activeTheme = $userSettings->theme_preference ?? 'theme-default';
         $privacyEnabled = $userSettings->privacy_blur_enabled ?? false;
+        $themeBgEnabled = $userSettings->theme_bg_enabled ?? true;
         $isUserSettingsNav = request()->routeIs(
             'user.settings.messages.page',
             'user.control-center.security.page',
@@ -122,12 +124,12 @@
 </head>
 
 <body data-active-section="@yield('user-section', 'dashboard')"
-    class="{{ $activeTheme }} {{ $privacyEnabled ? 'privacy-blur-active' : '' }}">
+    class="{{ $activeTheme }} {{ $privacyEnabled ? 'privacy-blur-active' : '' }} {{ !$themeBgEnabled ? 'theme-no-bg' : '' }}">
     <div class="notification-container" id="notificationContainer"></div>
 
     @php $activeSection = View::yieldContent('user-section'); @endphp
     @if(in_array($activeSection, ['my-messages', 'create', 'edit']))
-        <a href="{{ route('ai.page', ['from' => 'user']) }}" class="btn-ai-float"
+        <a href="{{ route('user.ai.page') }}" class="btn-ai-float"
             title="AI Assistant - get help writing your message" aria-label="Open AI Assistant">
             <img src="{{ asset('img/logo.png') }}" alt="AI">
             <i class="fas fa-robot ai-float-fallback" aria-hidden="true"></i>
@@ -239,12 +241,14 @@
                                     ->exists();
                             }
                         @endphp
-                        @if($paymentEnabled && !$hasActiveSubscription)
+                        <!-- @if($paymentEnabled && !$hasActiveSubscription)
+                        {{-- 
                         <li><a href="{{ route('user.billing.index') }}"
                                 class="nav-link {{ request()->routeIs('user.billing.*') ? 'active' : '' }}"
                                 data-section="billing"><i class="fas fa-credit-card"></i> <span>Billing</span></a>
                         </li>
-                        @endif
+                        --}}
+                        @endif -->
 
                         <li class="has-dropdown {{ $isUserSettingsNav ? 'open' : '' }}">
                             <a href="#" class="dropdown-toggle {{ $isUserSettingsNav ? 'active' : '' }}">
@@ -261,8 +265,9 @@
                                 <li><a href="{{ route('user.settings.user.page') }}"
                                         class="nav-link {{ request()->routeIs('user.settings.user.page') ? 'active' : '' }}"
                                         data-section="settings-user"><i class="fas fa-user-cog fa-fw text-muted me-2" style="font-size: 0.9em; opacity: 0.7;"></i> <span>User Settings</span></a></li>
-                                <li><a href="{{ route('user.notifications.page') }}"
-                                        class="nav-link"><i class="fas fa-headset fa-fw text-muted me-2" style="font-size: 0.9em; opacity: 0.7;"></i> <span>Help & Support</span></a></li>
+                                <li><a href="{{ route('user.help-support.page') }}"
+                                        class="nav-link {{ request()->routeIs('user.help-support.page') ? 'active' : '' }}"
+                                        data-section="help-support"><i class="fas fa-headset fa-fw text-muted me-2" style="font-size: 0.9em; opacity: 0.7;"></i> <span>Help &amp; Support</span></a></li>
                             </ul>
                         </li>
                     </ul>
@@ -333,58 +338,33 @@
         </div>
     </div>
 
-    <!-- Typed Confirm Modal -->
+    <!-- Simple Confirm Modal -->
     <div class="custom-modal" id="typed-confirm-modal"
         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(4px);">
         <div class="custom-modal-content"
-            style="background: var(--card-bg, #ffffff); max-width: 400px; width: 90%; padding: 24px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
-            <div class="custom-modal-header"
-                style="border-bottom: none; padding: 0 0 16px 0; display: flex; justify-content: space-between; align-items: center;">
-                <h3 id="typed-confirm-title"
-                    style="color: var(--danger); font-size: 1.2rem; font-weight: 700; margin: 0;">Confirm Action</h3>
-                <button class="close-btn" onclick="closeTypedConfirmModal()"
-                    style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); padding: 0;"><i
-                        class="fas fa-times"></i></button>
+            style="background: var(--bg, #ffffff); max-width: 400px; width: 90%; padding: 32px 24px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center;">
+            
+            <div style="width: 56px; height: 56px; background: var(--primary-light, #eff6ff); color: var(--primary, #2563eb); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; margin: 0 auto 20px;">
+                <i class="fas fa-question"></i>
             </div>
-            <div class="custom-modal-body" style="padding: 0;">
-                <p id="typed-confirm-message" style="margin-bottom: 16px; font-size: 0.95rem; color: var(--text);"></p>
-                <div class="form-group mb-0">
-                    <label
-                        style="font-size: 0.85rem; font-weight: 500; color: var(--text-muted); display: block; margin-bottom: 8px;">
-                        Type <span id="typed-confirm-expected-word"
-                            style="font-weight: 800; color: var(--danger);">confirm</span> to proceed:
-                    </label>
-                    <input type="text" id="typed-confirm-input" class="form-control" autocomplete="off"
-                        style="width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px;">
-                </div>
-            </div>
-            <div class="custom-modal-footer"
-                style="border-top: none; padding: 24px 0 0 0; display: flex; justify-content: flex-end; gap: 12px;">
-                <button class="btn btn-light" onclick="closeTypedConfirmModal()"
-                    style="padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; font-weight: 500;">Cancel</button>
-                <button class="btn btn-danger" id="typed-confirm-btn" disabled
-                    style="padding: 8px 16px; border-radius: 8px; border: none; background: var(--danger); color: white; cursor: pointer; font-weight: 500; opacity: 0.5;">Proceed</button>
+            
+            <h3 id="typed-confirm-title" style="color: var(--text, #1f2937); font-size: 1.3rem; font-weight: 800; margin: 0 0 8px 0;">Confirm Action</h3>
+            <p id="typed-confirm-message" style="margin: 0 0 24px 0; font-size: 0.95rem; color: var(--text-muted, #6b7280);"></p>
+            
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button class="btn btn-primary" id="typed-confirm-btn" style="flex: 1; padding: 12px; border-radius: 12px; font-weight: 600;">Confirm</button>
+                <button class="btn" onclick="closeTypedConfirmModal()" style="flex: 1; padding: 12px; border-radius: 12px; background: var(--bg-subtle, #f8fafc); color: var(--text, #475569); border: 1px solid var(--border, #e2e8f0); cursor: pointer; font-weight: 600;">Cancel</button>
             </div>
         </div>
     </div>
 
     <script>
         let wispConfirmCallback = null;
-        let wispExpectedWord = 'confirm';
 
         function showTypedConfirmModal(message, callback, expectedWord = 'confirm') {
             document.getElementById('typed-confirm-message').innerText = message;
-            document.getElementById('typed-confirm-expected-word').innerText = expectedWord;
-            document.getElementById('typed-confirm-input').value = '';
-            document.getElementById('typed-confirm-input').placeholder = 'Type "' + expectedWord + '"';
-            document.getElementById('typed-confirm-btn').disabled = true;
-            document.getElementById('typed-confirm-btn').style.opacity = '0.5';
-
             wispConfirmCallback = callback;
-            wispExpectedWord = expectedWord.toLowerCase();
-
             document.getElementById('typed-confirm-modal').style.display = 'flex';
-            setTimeout(() => { document.getElementById('typed-confirm-input').focus(); }, 50);
         }
 
         function closeTypedConfirmModal() {
@@ -392,20 +372,8 @@
             wispConfirmCallback = null;
         }
 
-        document.getElementById('typed-confirm-input').addEventListener('input', function (e) {
-            const val = e.target.value.trim().toLowerCase();
-            const btn = document.getElementById('typed-confirm-btn');
-            if (val === wispExpectedWord) {
-                btn.disabled = false;
-                btn.style.opacity = '1';
-            } else {
-                btn.disabled = true;
-                btn.style.opacity = '0.5';
-            }
-        });
-
         document.getElementById('typed-confirm-btn').addEventListener('click', function () {
-            if (!this.disabled && typeof wispConfirmCallback === 'function') {
+            if (typeof wispConfirmCallback === 'function') {
                 const cb = wispConfirmCallback;
                 closeTypedConfirmModal();
                 cb();
@@ -416,7 +384,7 @@
             event.preventDefault();
             showTypedConfirmModal(message, function () {
                 formElement.submit();
-            }, expectedWord);
+            });
             return false;
         }
     </script>

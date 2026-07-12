@@ -91,7 +91,7 @@ class MessageLifecycleController extends Controller
     public function lockVault()
     {
         session()->forget('vault_unlocked');
-        return redirect()->route('user.vault.page')->with('success', 'Vault locked.');
+        return redirect()->route('user.settings.messages.page')->with('success', 'Vault locked.');
     }
 
     /**

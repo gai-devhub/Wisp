@@ -64,7 +64,6 @@ class AdminController extends Controller
     {
         return $this->renderSection($request, 'notifications');
     }
-
     public function aiUsagePage(Request $request): View
     {
         return $this->renderSection($request, 'ai-usage');
@@ -206,6 +205,7 @@ class AdminController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate(5, ['*'], 'ai_usage_page', $aiUsagePage);
         }
+        
         $notificationsPage = max(1, (int) $request->input('notifications_page', 1));
 
         $users = $this->paginateUsers($usersPage);

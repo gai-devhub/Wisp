@@ -26,14 +26,17 @@
             </div>
         </div>
         <div style="display: flex; gap: 10px; align-items: center;">
+            <!-- {{--
             @if(!($isPremium ?? false))
                 <a href="{{ route('user.billing.index') }}" class="template-upgrade-pill">
                     <i class="fas fa-crown"></i> Upgrade for 200+ Templates
                 </a>
             @endif
+            --}} -->
         </div>
     </div>
 
+    <!-- {{--
     @if(!($isPremium ?? false))
     <div class="template-free-notice">
         <i class="fas fa-info-circle"></i>
@@ -43,12 +46,16 @@
     <style>
     .template-free-notice {
         background: linear-gradient(90deg,#fdf4ff,#f0f4ff);
-        border: 1.5px solid #e9d5ff; border-radius: 14px;
-        padding: 12px 20px; display: flex; align-items: center; gap: 10px;
-        font-size: 14px; color: #374151; margin-bottom: 16px;
+        border: 1px solid #f5d0fe; padding: 12px 18px; border-radius: 12px;
+        margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #701a75; font-size: 0.95rem;
     }
-    .template-free-notice i { color: #7c3aed; flex-shrink: 0; }
-    .template-free-notice a { color: #7c3aed; font-weight: 700; text-decoration: underline; }
+    .template-free-notice i { font-size: 1.1rem; color: #d946ef; }
+    .template-free-notice a { color: #d946ef; font-weight: 600; text-decoration: none; margin-left: 4px; }
+    .template-free-notice a:hover { text-decoration: underline; }
+    </style>
+    @endif
+    --}} -->
+    <style>
     .template-upgrade-pill {
         display: inline-flex; align-items: center; gap: 6px;
         background: linear-gradient(90deg,#c084fc,#818cf8);
@@ -72,7 +79,6 @@
     .template-card-locked .template-lock-overlay i { font-size: 20px; color: #c084fc; }
     .template-card-locked .template-lock-overlay span { color: #e9d5ff; }
     </style>
-    @endif
 
     <div class="card template-gallery-card">
         <div class="card-body">
@@ -132,8 +138,9 @@
                     'glitter'  => 8,
                     'romance'  => 15,
                 ];
-                // Free users can see these two themes but not the rest
-                $freeThemes = ['view', 'aurora', 'casual'];
+                // Free users can see these two themes
+                $freeThemes = ['View', 'Aurora', 'Casual']; 
+                $premiumUser = true; // $isPremium ?? false; // Make all templates available
                 $counter = 0;
                 $globalTemplateIndex = 0;
                 @endphp

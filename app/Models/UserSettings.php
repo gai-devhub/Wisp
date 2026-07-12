@@ -19,6 +19,7 @@ class UserSettings extends Model
         'auto_archive_days',
         'privacy_blur_enabled',
         'theme_preference',
+        'theme_bg_enabled',
     ];
 
     public function user()

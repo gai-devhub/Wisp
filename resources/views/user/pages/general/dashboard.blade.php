@@ -210,6 +210,7 @@
             @endforeach
 
             @if($activeAds->isEmpty())
+            <!-- {{-- Premium Banner (commented out)
             <div class="dashboard-promo-banner" onclick="openPromoModal()">
                 <div class="promo-content">
                     <div class="promo-icon"><i class="fas fa-rocket"></i></div>
@@ -220,6 +221,17 @@
                 </div>
                 <div class="promo-cta"><span>Learn More <i class="fas fa-arrow-right"></i></span></div>
             </div>
+            --}} -->
+            <a href="{{ route('user.help-support.page') }}" class="dashboard-promo-banner" style="text-decoration: none; display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+                <div class="promo-content">
+                    <div class="promo-icon"><i class="fas fa-comment-dots"></i></div>
+                    <div class="promo-text">
+                        <h3>Share Your Feedback</h3>
+                        <p>Help us improve WISP — share your ideas, suggestions, or report an issue.</p>
+                    </div>
+                </div>
+                <div class="promo-cta"><span>Give Feedback <i class="fas fa-arrow-right"></i></span></div>
+            </a>
             @endif
         </div>
 

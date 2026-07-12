@@ -181,6 +181,7 @@ class UserSettingsController extends Controller
         $request->validate([
             'privacy_blur_enabled' => 'nullable|in:on,yes,1,true,0,false,off',
             'theme_preference'     => 'required|in:theme-default,theme-forest,theme-crimson',
+            'theme_bg_enabled'     => 'nullable|in:on,yes,1,true,0,false,off',
         ]);
 
         $settings = UserSettings::firstOrCreate(
@@ -190,6 +191,7 @@ class UserSettingsController extends Controller
         
         $settings->privacy_blur_enabled = $request->boolean('privacy_blur_enabled');
         $settings->theme_preference = $request->input('theme_preference');
+        $settings->theme_bg_enabled = $request->boolean('theme_bg_enabled');
         $settings->save();
 
         return back()

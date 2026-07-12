@@ -239,4 +239,17 @@ class AiAssistantController extends Controller
             'error' => $lastError ?: 'AI service error. Please try again.',
         ], $status);
     }
+
+    /**
+     * Display the AI Assistant page for the user.
+     */
+    public function page(Request $request)
+    {
+        $userSettings = \App\Models\UserSettings::where('user_id', \Illuminate\Support\Facades\Auth::id())->first();
+
+        return view('user.pages.ai.assistant', [
+            'backUrl' => route('user.page'),
+            'userSettings' => $userSettings,
+        ]);
+    }
 }

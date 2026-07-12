@@ -15,6 +15,7 @@
                     <i class="fas fa-plus-circle text-primary messages-header-icon"></i>
                     Create Message
                 </h2>
+                <!-- {{-- 
                 @if(!($isPremium ?? false))
                     @php $msgCount = auth()->user()->freeMessageCount(); $remaining = max(0, 5 - $msgCount); @endphp
                     <span class="free-msg-counter {{ $remaining <= 1 ? 'free-msg-danger' : ($remaining <= 2 ? 'free-msg-warning' : '') }}">
@@ -22,7 +23,8 @@
                         {{ $remaining }} free message{{ $remaining !== 1 ? 's' : '' }} remaining
                         &mdash; <a href="{{ route('user.billing.index') }}">Upgrade</a>
                     </span>
-                @endif
+                @endif 
+                --}} -->
             </div>
             <div class="card messages-form-card">
                 <div class="card-body">

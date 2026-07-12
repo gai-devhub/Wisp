@@ -16,11 +16,11 @@
             <div  class="message-settings-inline-4">
                 <a href="{{ route('user.vault.page') }}"
                      class="message-settings-inline-5">
-                    <i class="fas fa-lock text-warning"></i> The Vault
+                    <i class="fas fa-lock text-warning"></i> <span>The Vault</span>
                 </a>
                 <a href="{{ route('user.trash.page') }}"
                      class="message-settings-inline-6">
-                    <i class="fas fa-trash-restore"></i> Recently Deleted
+                    <i class="fas fa-trash-restore"></i> <span>Recently Deleted</span>
                 </a>
             </div>
         </div>
