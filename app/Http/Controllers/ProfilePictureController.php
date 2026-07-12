@@ -51,7 +51,13 @@ class ProfilePictureController extends Controller
             );
         }
 
+        // Ensure folder path prefix exists if stored as basename
+        $path = $url;
+        if (!str_contains($url, '/')) {
+            $path = 'profile-pictures/' . $url;
+        }
+
         // S3 path – redirect to S3 URL
-        return redirect()->away(\Illuminate\Support\Facades\Storage::disk('s3')->url($url));
+        return redirect()->away(\Illuminate\Support\Facades\Storage::disk('s3')->url($path));
     }
 }
