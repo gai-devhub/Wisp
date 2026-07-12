@@ -5,86 +5,172 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#6366f1">
     <title>Not available yet — WISP</title>
-    <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/png">
+    <link rel="icon" href="{{ asset('img/logo-circle.png') }}" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text: #0f172a;
+            --text-muted: #475569;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: 'Outfit', sans-serif;
+            margin: 0;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #f0f4ff 0%, #e8ecff 50%, #fdf2f8 100%);
-            color: #0f172a;
-            padding: 1.5rem;
-        }
-        .card {
-            max-width: 420px;
-            width: 100%;
             text-align: center;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            border-radius: 24px;
-            padding: 2.5rem;
-            box-shadow: 0 20px 50px -12px rgba(99, 102, 241, 0.2);
-            border: 1px solid rgba(99, 102, 241, 0.1);
+            background-color: #f6f7ff;
+            background-image: radial-gradient(circle at 10% 15%, rgba(166, 223, 255, 0.9), transparent 28%), radial-gradient(circle at 80% 22%, rgba(255, 181, 213, 0.78), transparent 34%), radial-gradient(circle at 60% 76%, rgba(255, 202, 230, 0.62), transparent 24%), linear-gradient(120deg, #edf4ff 0%, #f9f4ff 48%, #ffe8f2 100%);
+            background-attachment: fixed;
+            font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            padding: 20px;
+            overflow: hidden; /* Prevent scroll from bouncing elements */
         }
-        .logo { width: 56px; height: 56px; margin-bottom: 1.25rem; }
-        .recipient-circle {
-            width: 160px;
-            height: 160px;
-            margin: 0 auto 1.25rem;
-            border-radius: 50%;
+
+        /* Bouncing background logos */
+        .logo-container {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 1;
             overflow: hidden;
-            background: rgba(99, 102, 241, 0.15);
-            display: flex;
+        }
+
+        .bouncing-logo {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            opacity: 0;
+            animation: floatAround infinite ease-in-out alternate;
+            filter: drop-shadow(0 10px 15px rgba(99, 102, 241, 0.2));
+        }
+
+        .bouncing-logo:nth-child(1) { top: 10%; left: 15%; animation-duration: 12s; animation-delay: 0s; }
+        .bouncing-logo:nth-child(2) { top: 75%; left: 10%; animation-duration: 15s; animation-delay: -3s; }
+        .bouncing-logo:nth-child(3) { top: 35%; left: 80%; animation-duration: 14s; animation-delay: -5s; width: 60px; height: 60px; }
+        .bouncing-logo:nth-child(4) { top: 80%; left: 70%; animation-duration: 18s; animation-delay: -2s; width: 100px; height: 100px; }
+        .bouncing-logo:nth-child(5) { top: 20%; left: 50%; animation-duration: 16s; animation-delay: -7s; width: 50px; height: 50px; }
+        .bouncing-logo:nth-child(6) { top: 60%; left: 40%; animation-duration: 13s; animation-delay: -1s; width: 70px; height: 70px; }
+
+        @keyframes floatAround {
+            0% { transform: translate(0, 0) rotate(0deg) scale(0.8); opacity: 0; }
+            20% { opacity: 0.4; }
+            50% { transform: translate(15vw, 15vh) rotate(180deg) scale(1.1); opacity: 0.6; }
+            80% { opacity: 0.4; }
+            100% { transform: translate(-10vw, 25vh) rotate(360deg) scale(0.9); opacity: 0; }
+        }
+
+        .container {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 56px 48px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            position: relative;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        h1 {
+            margin: 0 0 12px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.02em;
+        }
+
+        p {
+            margin: 0 0 24px;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+        }
+
+        .date-badge {
+            display: inline-block;
+            margin-bottom: 24px;
+            padding: 8px 16px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 12px;
+            font-weight: 600;
+            color: #6366f1;
+        }
+
+        .btn-home {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            color: #6366f1;
-            font-size: 1.75rem;
-        }
-        .recipient-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        h1 { font-size: 1.5rem; font-weight: 600; color: #0f172a; margin-bottom: 0.5rem; }
-        p { font-size: 1rem; color: #475569; line-height: 1.5; }
-        .date-badge { display: inline-block; margin-top: 1rem; padding: 8px 16px; background: rgba(99, 102, 241, 0.1); border-radius: 12px; font-weight: 600; color: #6366f1; }
-        a {
-            display: inline-block;
-            margin-top: 1.5rem;
-            padding: 0.75rem 1.5rem;
-            background: #6366f1;
+            padding: 14px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
             color: #fff;
+            background: linear-gradient(135deg, var(--accent), #7c3aed);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
             text-decoration: none;
-            border-radius: 12px;
-            font-weight: 500;
-            transition: background 0.2s, transform 0.15s;
+            margin-top: 1rem;
         }
-        a:hover { background: #4f46e5; transform: translateY(-1px); }
+
+        .btn-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 24px -5px rgba(99, 102, 241, 0.5);
+            filter: brightness(1.05);
+        }
+
+        .btn-home:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 10px -3px rgba(99, 102, 241, 0.4);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 40px 24px;
+                border-radius: 20px;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <img src="{{ asset('img/logo.png') }}" alt="WISP" class="logo">
-        <div class="recipient-circle">
-            @if(!empty($recipient_image_url))
-                <img src="{{ $recipient_image_url }}" alt="Recipient">
-            @else
-                <i class="fas fa-calendar-clock"></i>
-            @endif
-        </div>
+    <div class="logo-container">
+        <img src="{{ asset('img/logo-circle.png') }}" class="bouncing-logo" alt="">
+        <img src="{{ asset('img/logo-circle.png') }}" class="bouncing-logo" alt="">
+        <img src="{{ asset('img/logo-circle.png') }}" class="bouncing-logo" alt="">
+        <img src="{{ asset('img/logo-circle.png') }}" class="bouncing-logo" alt="">
+        <img src="{{ asset('img/logo-circle.png') }}" class="bouncing-logo" alt="">
+        <img src="{{ asset('img/logo-circle.png') }}" class="bouncing-logo" alt="">
+    </div>
+
+    <div class="container">
         <h1>This message isn’t available yet</h1>
         <p>The link will work from the receiving date. Come back then to view the message.</p>
         @if(!empty($receiving_date))
-            <span class="date-badge">{{ $receiving_date }}</span>
+            <div><span class="date-badge">{{ $receiving_date }}</span></div>
         @endif
-        <a href="{{ route('home') }}"><i class="fas fa-home"></i> Back to home</a>
+        <a href="{{ route('home') }}" class="btn-home"><i class="fas fa-home"></i> Back to home</a>
     </div>
 </body>
 </html>
