@@ -124,17 +124,17 @@ class GuestMessageController extends Controller
                 if ($request->hasFile('recipient_image')) {
                     $image = $request->file('recipient_image');
                     if ($mediaFile->recipient_image) {
-                        \Illuminate\Support\Facades\Storage::disk('public')->delete($mediaFile->recipient_image);
+                        \Illuminate\Support\Facades\Storage::disk('s3')->delete($mediaFile->recipient_image);
                     }
-                    $mediaFile->recipient_image = $image->store('media/recipient-images', 'public');
+                    $mediaFile->recipient_image = $image->store('media/recipient-images', 's3');
                 }
 
                 if ($request->hasFile('background_music')) {
                     $file = $request->file('background_music');
                     if ($mediaFile->background_music && !str_starts_with($mediaFile->background_music, 'http')) {
-                        \Illuminate\Support\Facades\Storage::disk('public')->delete($mediaFile->background_music);
+                        \Illuminate\Support\Facades\Storage::disk('s3')->delete($mediaFile->background_music);
                     }
-                    $mediaFile->background_music = $file->store('media/background-music', 'public');
+                    $mediaFile->background_music = $file->store('media/background-music', 's3');
                 } elseif ($request->filled('spotify_url')) {
                     $mediaFile->background_music = $request->input('spotify_url');
                 }

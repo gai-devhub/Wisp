@@ -179,7 +179,7 @@
     <div class="main-container">
         <section class="image-section">
             @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image)
-            <img src="{{ asset('storage/' . $mediaFiles->recipient_image) }}" alt="{{ $message->recipient_name }}" class="floating-portrait">
+            <img src="{{ s3_url($mediaFiles->recipient_image) }}" alt="{{ $message->recipient_name }}" class="floating-portrait">
             @endif
         </section>
 

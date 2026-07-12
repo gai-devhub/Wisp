@@ -35,7 +35,7 @@
                             <div class="flex items-center gap-4">
                                 <div class="w-12 h-12 rounded-lg bg-slate-100 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center text-slate-400">
                                     @if($ad->image_path)
-                                        <img src="{{ asset('storage/' . $ad->image_path) }}" alt="" class="w-full h-full object-cover">
+                                        <img src="{{ s3_url($ad->image_path) }}" alt="" class="w-full h-full object-cover">
                                     @else
                                         <i class="fas fa-image"></i>
                                     @endif
@@ -181,6 +181,13 @@
     const form = document.getElementById('adForm');
     const modalTitle = document.getElementById('modalTitle');
     const methodField = document.getElementById('methodField');
+    const s3BaseUrl = "{{ rtrim(config('filesystems.disks.s3.url') ?: ('https://'.config('filesystems.disks.s3.bucket').'.s3.'.config('filesystems.disks.s3.region').'.amazonaws.com'), '/') }}";
+
+    function s3Url(path) {
+        if (!path) return '';
+        if (path.startsWith('http://') || path.startsWith('https://')) return path;
+        return s3BaseUrl + '/' + path;
+    }
 
     function openAddAdModal() {
         modalTitle.textContent = 'Create New Ad';
@@ -208,7 +215,7 @@
             const imgDiv = document.getElementById('currentImage');
             imgDiv.style.display = 'block';
             imgDiv.classList.remove('hidden');
-            imgDiv.querySelector('img').src = `/storage/${ad.image_path}`;
+            imgDiv.querySelector('img').src = s3Url(ad.image_path);
         } else {
             document.getElementById('currentImage').style.display = 'none';
             document.getElementById('currentImage').classList.add('hidden');

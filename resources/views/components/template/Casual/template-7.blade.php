@@ -156,7 +156,7 @@
         <span class="since-label">Est. 2013</span>
         <div class="portrait-frame" id="frame">
             @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image)
-                <img src="{{ asset('storage/' . $mediaFiles->recipient_image) }}" alt="{{ $message->recipient_name ?? '' }}">
+                <img src="{{ s3_url($mediaFiles->recipient_image) }}" alt="{{ $message->recipient_name ?? '' }}">
             @endif
         </div>
         <h1>{{ $message->recipient_special_name ?? $message->recipient_name ?? '' }}💕</h1>

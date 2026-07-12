@@ -183,13 +183,13 @@
     </style>
 </head>
 <body>
-    <div class="ambient-bg" @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image) style="background-image: url('{{ asset('storage/' . $mediaFiles->recipient_image) }}'); background-repeat: no-repeat; background-position: center center;" @endif></div>
+    <div class="ambient-bg" @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image) style="background-image: url('{{ s3_url($mediaFiles->recipient_image) }}'); background-repeat: no-repeat; background-position: center center;" @endif></div>
 
     <div class="glass-canvas">
         <div class="main-card">
             <div class="visual-side">
                 @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image)
-                    <img src="{{ asset('storage/' . $mediaFiles->recipient_image) }}" alt="{{ $message->recipient_name ?? '' }}">
+                    <img src="{{ s3_url($mediaFiles->recipient_image) }}" alt="{{ $message->recipient_name ?? '' }}">
                 @endif
             </div>
             

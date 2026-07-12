@@ -171,7 +171,7 @@
         <div class="romance-container">
         <div class="image-frame">
             @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image)
-                <img src="{{ asset('storage/' . $mediaFiles->recipient_image) }}" alt="{{ $message->recipient_name ?? '' }}">
+                <img src="{{ s3_url($mediaFiles->recipient_image) }}" alt="{{ $message->recipient_name ?? '' }}">
             @endif
             <x-background-music :mediaFiles="$mediaFiles">
                 <button type="button" id="audio-toggle" data-idle-label="♪" aria-label="Toggle music">♪</button>

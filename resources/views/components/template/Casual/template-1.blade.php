@@ -162,7 +162,7 @@
         <div class="header">
             <div class="logo">
                 @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image)
-                    <img src="{{ asset('storage/' . $mediaFiles->recipient_image) }}" alt="{{ $message->recipient_name }}">
+                    <img src="{{ s3_url($mediaFiles->recipient_image) }}" alt="{{ $message->recipient_name }}">
                 @endif
             </div>
             <h1>{{ $message->greeting ?? 'Hello' }}</h1>

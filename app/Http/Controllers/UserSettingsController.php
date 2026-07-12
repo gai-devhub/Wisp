@@ -44,14 +44,14 @@ class UserSettingsController extends Controller
             $dir = 'profile-pictures';
             $file = $request->file('profile_picture');
             $name = 'user-' . $user->id . '-' . time() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs($dir, $name, 'public');
+            $path = $file->storeAs($dir, $name, 's3');
             
             $oldFile = $user->profile_picture;
             $user->profile_picture = $path;
             $user->save();
 
             if ($oldFile) {
-                Storage::disk('public')->delete($oldFile);
+                Storage::disk('s3')->delete($oldFile);
             }
         } else {
             $user->save();

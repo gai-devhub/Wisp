@@ -198,7 +198,7 @@
         <div class="visual-anchor">
             <div class="image-portal">
                 @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image)
-                    <img src="{{ asset('storage/' . $mediaFiles->recipient_image) }}" alt="{{ $message->recipient_name ?? '' }}">
+                    <img src="{{ s3_url($mediaFiles->recipient_image) }}" alt="{{ $message->recipient_name ?? '' }}">
                 @endif
             </div>
         </div>

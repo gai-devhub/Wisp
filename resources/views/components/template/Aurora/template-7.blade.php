@@ -219,7 +219,7 @@
             <div class="image-outer-glow"></div>
             <div class="image-frame">
                 @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image)
-                    <img src="{{ asset('storage/' . $mediaFiles->recipient_image) }}" alt="Recipient Image">
+                    <img src="{{ s3_url($mediaFiles->recipient_image) }}" alt="Recipient Image">
                 @else
                     <div style="width:100%; height:100%; background: var(--glass);"></div>
                 @endif

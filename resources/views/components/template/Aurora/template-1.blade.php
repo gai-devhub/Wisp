@@ -276,7 +276,7 @@
         <div class="visual-section">
             <div class="hero-img-wrapper">
                 @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image)
-                    <img src="{{ asset('storage/' . $mediaFiles->recipient_image) }}" class="recipient-img" alt="Recipient">
+                    <img src="{{ s3_url($mediaFiles->recipient_image) }}" class="recipient-img" alt="Recipient">
                 @endif
             </div>
             <div style="margin-top: 30px; text-align: center;">

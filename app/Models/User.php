@@ -157,11 +157,11 @@ class User extends Authenticatable
         $mediaFiles = $this->mediaFiles;
         $totalSize = 0;
         foreach ($mediaFiles as $file) {
-            if ($file->recipient_image && \Illuminate\Support\Facades\Storage::disk('public')->exists($file->recipient_image)) {
-                $totalSize += \Illuminate\Support\Facades\Storage::disk('public')->size($file->recipient_image);
+            if ($file->recipient_image && \Illuminate\Support\Facades\Storage::disk('s3')->exists($file->recipient_image)) {
+                $totalSize += \Illuminate\Support\Facades\Storage::disk('s3')->size($file->recipient_image);
             }
-            if ($file->background_music && \Illuminate\Support\Facades\Storage::disk('public')->exists($file->background_music)) {
-                $totalSize += \Illuminate\Support\Facades\Storage::disk('public')->size($file->background_music);
+            if ($file->background_music && \Illuminate\Support\Facades\Storage::disk('s3')->exists($file->background_music)) {
+                $totalSize += \Illuminate\Support\Facades\Storage::disk('s3')->size($file->background_music);
             }
         }
         return $totalSize;

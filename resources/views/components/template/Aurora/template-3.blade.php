@@ -213,7 +213,7 @@
     <div class="hero-section">
         <div class="profile-container">
             @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image)
-                <img src="{{ asset('storage/' . $mediaFiles->recipient_image) }}" class="main-photo" alt="Recipient">
+                <img src="{{ s3_url($mediaFiles->recipient_image) }}" class="main-photo" alt="Recipient">
             @endif
         </div>
         <h1>{{ $message->title }}</h1>

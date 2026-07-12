@@ -187,13 +187,13 @@
                  data-title="{{ $ad->title }}"
                  data-content="{{ $ad->content ?? 'Check out this latest update from WISP.' }}"
                  data-details="{{ $ad->details ?? '' }}"
-                 data-image="{{ $ad->image_path ? asset('storage/' . $ad->image_path) : '' }}"
+                 data-image="{{ $ad->image_path ? s3_url($ad->image_path) : '' }}"
                  data-link="{{ $ad->link_url }}"
                  onclick="openDynamicAdModal(this)">
                 <div class="promo-content">
                     <div class="promo-icon">
                         @if($ad->image_path)
-                            <img src="{{ asset('storage/' . $ad->image_path) }}" alt="{{ $ad->title }}" class="dashboard-ad-img">
+                            <img src="{{ s3_url($ad->image_path) }}" alt="{{ $ad->title }}" class="dashboard-ad-img">
                         @else
                             <i class="fas fa-bullhorn"></i>
                         @endif

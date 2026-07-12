@@ -164,7 +164,7 @@
         <div class="polaroid">
             <div class="photo-frame">
                 @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image)
-                    <img src="{{ asset('storage/' . $mediaFiles->recipient_image) }}" alt="{{ $message->recipient_name }}">
+                    <img src="{{ s3_url($mediaFiles->recipient_image) }}" alt="{{ $message->recipient_name }}">
                 @else
                     <img src="{{ asset('img/default-profile.jpg') }}" alt="Default">
                 @endif

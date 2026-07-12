@@ -45,7 +45,7 @@
                                 onclick="openNotification('{{ $n->id }}')">
                                 <div class="item-avatar {{ $isFromAdmin || $isMyMessage ? 'admin-avatar' : '' }}">
                                     @if($n->sender && $n->sender->profile_picture && !$isMyMessage)
-                                        <img src="{{ asset('storage/' . $n->sender->profile_picture) }}" alt="Avatar" class="item-avatar-img">
+                                        <img src="{{ s3_url($n->sender->profile_picture) }}" alt="Avatar" class="item-avatar-img">
                                     @else
                                         {{ $initials }}
                                     @endif
@@ -105,7 +105,7 @@
                                         <div class="reader-sender">
                                             <div class="sender-avatar">
                                                 @if($n->sender && $n->sender->profile_picture && !$isMyMessage)
-                                                    <img src="{{ asset('storage/' . $n->sender->profile_picture) }}" alt="Avatar" class="item-avatar-img">
+                                                    <img src="{{ s3_url($n->sender->profile_picture) }}" alt="Avatar" class="item-avatar-img">
                                                 @else
                                                     {{ strtoupper(substr($displaySender, 0, 1)) }}
                                                 @endif

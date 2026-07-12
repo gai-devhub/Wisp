@@ -51,7 +51,7 @@
                         <div class="inbox-item" id="item-b-{{ $broadcast->id }}" onclick="showBroadcastDetail('{{ $broadcast->id }}')" style="border-bottom: 1px solid var(--admin-border);">
                             <div class="item-avatar" style="background: var(--admin-bg-soft); color: var(--admin-primary);">
                                 @if($broadcast->sender && $broadcast->sender->profile_picture)
-                                    <img src="{{ asset('storage/' . $broadcast->sender->profile_picture) }}" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                                    <img src="{{ s3_url($broadcast->sender->profile_picture) }}" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
                                 @else
                                     <i class="fas {{ $icon }}"></i>
                                 @endif
@@ -83,7 +83,7 @@
                         <div class="inbox-item" id="item-i-{{ $inquiry->id }}" onclick="showInquiryDetail('{{ $inquiry->id }}')" style="border-bottom: 1px solid var(--admin-border);">
                             <div class="item-avatar" style="background: var(--admin-bg-soft); color: var(--admin-primary);">
                                 @if($inquiry->sender && $inquiry->sender->profile_picture)
-                                    <img src="{{ asset('storage/' . $inquiry->sender->profile_picture) }}" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                                    <img src="{{ s3_url($inquiry->sender->profile_picture) }}" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
                                 @else
                                     {{ strtoupper(substr($inquiry->sender->username ?? 'U', 0, 1)) }}
                                 @endif
@@ -141,7 +141,7 @@
                                     <div class="reader-sender">
                                         <div class="sender-avatar" style="background: var(--admin-bg-soft); color: var(--admin-primary);">
                                             @if($broadcast->sender && $broadcast->sender->profile_picture)
-                                                <img src="{{ asset('storage/' . $broadcast->sender->profile_picture) }}" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                                                <img src="{{ s3_url($broadcast->sender->profile_picture) }}" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
                                             @else
                                                 <i class="fas {{ $icon }}"></i>
                                             @endif
@@ -168,7 +168,7 @@
                                             <div class="admin-notification-recipient-user" style="display: flex; align-items: center; gap: 12px; font-weight: 600;">
                                                 <span class="admin-notification-recipient-avatar" style="width: 32px; height: 32px; border-radius: 50%; background: var(--admin-bg-soft); display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
                                                     @if($un->user && $un->user->profile_picture)
-                                                        <img src="{{ asset('storage/' . $un->user->profile_picture) }}" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                                                        <img src="{{ s3_url($un->user->profile_picture) }}" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
                                                     @else
                                                         {{ strtoupper(substr($un->user->username ?? $un->user->email ?? 'U', 0, 1)) }}
                                                     @endif
@@ -203,7 +203,7 @@
                                     <div class="reader-sender">
                                         <div class="sender-avatar" style="background: var(--admin-bg-soft); color: var(--admin-primary);">
                                             @if($inquiry->sender && $inquiry->sender->profile_picture)
-                                                <img src="{{ asset('storage/' . $inquiry->sender->profile_picture) }}" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                                                <img src="{{ s3_url($inquiry->sender->profile_picture) }}" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
                                             @else
                                                 {{ strtoupper(substr($inquiry->sender->username ?? 'U', 0, 1)) }}
                                             @endif

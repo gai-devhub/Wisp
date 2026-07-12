@@ -275,7 +275,7 @@
         {{ $slot }}
 
         <audio id="bgMusic" loop>
-            <source src="{{ asset('storage/' . $music) }}" type="audio/mpeg">
+            <source src="{{ s3_url($music) }}" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
 

@@ -156,7 +156,7 @@
     <div class="container">
         <div class="photo-frame">
             @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image)
-                <img src="{{ asset('storage/' . $mediaFiles->recipient_image) }}" alt="{{ $message->recipient_name }}">
+                <img src="{{ s3_url($mediaFiles->recipient_image) }}" alt="{{ $message->recipient_name }}">
             @endif
             <div class="photo-caption">{{ $message->recipient_special_name ?? $message->recipient_name }}</div>
         </div>

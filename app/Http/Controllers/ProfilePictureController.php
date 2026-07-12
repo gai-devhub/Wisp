@@ -51,7 +51,7 @@ class ProfilePictureController extends Controller
             );
         }
 
-        // Local path – redirect to storage URL
-        return redirect()->away(asset('storage/' . $url));
+        // S3 path – redirect to S3 URL
+        return redirect()->away(\Illuminate\Support\Facades\Storage::disk('s3')->url($url));
     }
 }

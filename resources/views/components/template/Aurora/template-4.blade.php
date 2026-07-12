@@ -242,7 +242,7 @@
             <div class="profile-container">
                 <div class="hero-photo-wrapper">
                     @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image)
-                        <img src="{{ asset('storage/' . $mediaFiles->recipient_image) }}" class="hero-photo" alt="Profile">
+                        <img src="{{ s3_url($mediaFiles->recipient_image) }}" class="hero-photo" alt="Profile">
                     @else
                         <div style="width: 100%; height: 100%; background: var(--secondary); opacity: 0.5;"></div>
                     @endif

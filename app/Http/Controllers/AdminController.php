@@ -76,20 +76,25 @@ class AdminController extends Controller
 
     public function settingsMessagePage(Request $request): View
     {
-        $dirSize = function ($dir) use (&$dirSize) {
-            $size = 0;
-            if (!is_dir($dir)) return 0;
-            foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS)) as $file) {
-                $size += $file->getSize();
+        // Compute sizes by summing S3 file sizes per MediaFiles record
+        $mediaFiles = \App\Models\MediaFiles::all();
+        $imagesSize = 0;
+        $audioSize = 0;
+        foreach ($mediaFiles as $mf) {
+            if ($mf->recipient_image) {
+                try { $imagesSize += Storage::disk('s3')->size($mf->recipient_image); } catch (\Throwable $e) {}
             }
-            return $size;
-        };
-
-        // Scan physical directories on disk for images and audio files
-        $imagesSize = $dirSize(storage_path('app/public/media/recipient-images')) 
-                    + $dirSize(storage_path('app/public/profile-pictures'));
-        
-        $audioSize = $dirSize(storage_path('app/public/media/background-music'));
+            if ($mf->background_music && !str_starts_with($mf->background_music, 'http')) {
+                try { $audioSize += Storage::disk('s3')->size($mf->background_music); } catch (\Throwable $e) {}
+            }
+        }
+        // Profile pictures
+        $users = \App\Models\User::whereNotNull('profile_picture')->get();
+        foreach ($users as $u) {
+            if ($u->profile_picture && !str_starts_with($u->profile_picture, 'http')) {
+                try { $imagesSize += Storage::disk('s3')->size($u->profile_picture); } catch (\Throwable $e) {}
+            }
+        }
 
         return $this->renderSection($request, 'settings-message', compact('imagesSize', 'audioSize'));
     }
@@ -502,18 +507,18 @@ class AdminController extends Controller
         $mediaData = [];
 
         foreach ($message->mediaFiles as $media) {
-            $path = storage_path('app/public/' . $media->file_path);
-            $size = file_exists($path) ? filesize($path) : 0;
-            
-            if ($media->file_type === 'image') {
+            $size = 0;
+            if ($media->file_type === 'image' && $media->file_path) {
+                try { $size = Storage::disk('s3')->size($media->file_path); } catch (\Throwable $e) {}
                 $imagesSize += $size;
-            } elseif ($media->file_type === 'audio') {
+            } elseif ($media->file_type === 'audio' && $media->file_path) {
+                try { $size = Storage::disk('s3')->size($media->file_path); } catch (\Throwable $e) {}
                 $audioSize += $size;
             }
             
             $mediaData[] = [
                 'type' => $media->file_type,
-                'path' => asset('storage/' . $media->file_path),
+                'path' => s3_url($media->file_path),
                 'size' => $size,
                 'size_formatted' => $size > 0 ? round($size/1024, 2).' KB' : '0 KB'
             ];
@@ -695,9 +700,9 @@ class AdminController extends Controller
         }
         if ($request->hasFile('profile_picture')) {
             if ($user->profile_picture) {
-                Storage::disk('public')->delete($user->profile_picture);
+                Storage::disk('s3')->delete($user->profile_picture);
             }
-            $path = $request->file('profile_picture')->store('admin-avatars', 'public');
+            $path = $request->file('profile_picture')->store('admin-avatars', 's3');
             $user->profile_picture = $path;
         }
         $user->save();
@@ -1336,42 +1341,60 @@ class AdminController extends Controller
             return $size;
         };
 
-        $storageTotal = $dirSize(storage_path());
-        $uploads = $dirSize(storage_path('app/public/media/recipient-images')) 
-                 + $dirSize(storage_path('app/public/profile-pictures'))
-                 + $dirSize(storage_path('app/public/media/background-music'));
-        $backups = $dirSize(storage_path('app/backups'));
-        $logs = $dirSize(storage_path('logs'));
-        $system = max(0, $storageTotal - ($uploads + $backups + $logs));
+        // Compute upload sizes from S3 using DB records
+        $uploads = 0;
+        $mediaFiles = \App\Models\MediaFiles::all();
+        foreach ($mediaFiles as $mf) {
+            if ($mf->recipient_image) {
+                try { $uploads += Storage::disk('s3')->size($mf->recipient_image); } catch (\Throwable $e) {}
+            }
+            if ($mf->background_music && !str_starts_with($mf->background_music, 'http')) {
+                try { $uploads += Storage::disk('s3')->size($mf->background_music); } catch (\Throwable $e) {}
+            }
+        }
+        $users = \App\Models\User::whereNotNull('profile_picture')->get();
+        foreach ($users as $u) {
+            if ($u->profile_picture && !str_starts_with($u->profile_picture, 'http')) {
+                try { $uploads += Storage::disk('s3')->size($u->profile_picture); } catch (\Throwable $e) {}
+            }
+        }
 
-        // 2TB in bytes: 2 * 1024 * 1024 * 1024 * 1024 = 2199023255552
+        // Backups and logs remain local
+        $backups = $dirSize(storage_path('app/backups'));
+        $logs    = $dirSize(storage_path('logs'));
+
+        // Use uploads as the primary storage reference; local system files are minimal
+        $storageTotal = $uploads + $backups + $logs;
+        $system = 0;
+
+        // 2TB in bytes
         $twoTB = 2199023255552;
         
         $percentageUploads = ($uploads / $twoTB) * 100;
         $percentageBackups = ($backups / $twoTB) * 100;
-        $percentageLogs = ($logs / $twoTB) * 100;
-        $percentageSystem = ($system / $twoTB) * 100;
-        $percentageTotal = ($storageTotal / $twoTB) * 100;
+        $percentageLogs    = ($logs / $twoTB) * 100;
+        $percentageSystem  = 0;
+        $percentageTotal   = ($storageTotal / $twoTB) * 100;
 
         return [
-            'uploads_bytes' => $uploads,
-            'uploads_size' => $formatSize($uploads),
+            'uploads_bytes'      => $uploads,
+            'uploads_size'       => $formatSize($uploads),
             'uploads_percentage' => $percentageUploads,
             
-            'backups_bytes' => $backups,
-            'backups_size' => $formatSize($backups),
+            'backups_bytes'      => $backups,
+            'backups_size'       => $formatSize($backups),
             'backups_percentage' => $percentageBackups,
             
-            'logs_bytes' => $logs,
-            'logs_size' => $formatSize($logs),
-            'logs_percentage' => $percentageLogs,
+            'logs_bytes'         => $logs,
+            'logs_size'          => $formatSize($logs),
+            'logs_percentage'    => $percentageLogs,
             
-            'system_bytes' => $system,
-            'system_size' => $formatSize($system),
-            'system_percentage' => $percentageSystem,
+            'system_bytes'       => $system,
+            'system_size'        => $formatSize($system),
+            'system_percentage'  => $percentageSystem,
             
-            'total_bytes' => $storageTotal,
-            'total_size' => $formatSize($storageTotal),
+            'total_bytes'        => $storageTotal,
+            'total_size'         => $formatSize($storageTotal),
             'storage_percentage' => $percentageTotal,
         ];
     }
@@ -1462,10 +1485,10 @@ class AdminController extends Controller
                     // Delete associated media files from storage and database
                     if ($msg->mediaFiles) {
                         if ($msg->mediaFiles->recipient_image) {
-                            Storage::disk('public')->delete($msg->mediaFiles->recipient_image);
+                            Storage::disk('s3')->delete($msg->mediaFiles->recipient_image);
                         }
                         if ($msg->mediaFiles->background_music) {
-                            Storage::disk('public')->delete($msg->mediaFiles->background_music);
+                            Storage::disk('s3')->delete($msg->mediaFiles->background_music);
                         }
                         $msg->mediaFiles->delete();
                     }
@@ -1595,7 +1618,7 @@ class AdminController extends Controller
         $data = $request->only(['title', 'link_url', 'display_location', 'content', 'details']);
         $data['is_active'] = $request->input('status') === 'active';
         if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('ads', 'public');
+            $data['image_path'] = $request->file('image')->store('ads', 's3');
         }
 
         \App\Models\Ad::create($data);
@@ -1616,8 +1639,8 @@ class AdminController extends Controller
         $data = $request->only(['title', 'link_url', 'display_location', 'content', 'details']);
         $data['is_active'] = $request->input('status') === 'active';
         if ($request->hasFile('image')) {
-            if ($ad->image_path) \Illuminate\Support\Facades\Storage::disk('public')->delete($ad->image_path);
-            $data['image_path'] = $request->file('image')->store('ads', 'public');
+            if ($ad->image_path) \Illuminate\Support\Facades\Storage::disk('s3')->delete($ad->image_path);
+            $data['image_path'] = $request->file('image')->store('ads', 's3');
         }
 
         $ad->update($data);
@@ -1627,7 +1650,7 @@ class AdminController extends Controller
     public function deleteAd($id)
     {
         $ad = \App\Models\Ad::findOrFail($id);
-        if ($ad->image_path) \Illuminate\Support\Facades\Storage::disk('public')->delete($ad->image_path);
+        if ($ad->image_path) \Illuminate\Support\Facades\Storage::disk('s3')->delete($ad->image_path);
         $ad->delete();
         return redirect()->back()->with('success', 'Ad deleted successfully.');
     }

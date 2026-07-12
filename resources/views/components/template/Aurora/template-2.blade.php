@@ -294,7 +294,7 @@
                 <div class="profile-box">
                     <div class="logo">
                         @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image)
-                            <img src="{{ asset('storage/' . $mediaFiles->recipient_image) }}" alt="Profile">
+                            <img src="{{ s3_url($mediaFiles->recipient_image) }}" alt="Profile">
                         @endif
                     </div>
                 </div>

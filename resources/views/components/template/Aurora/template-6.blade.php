@@ -250,7 +250,7 @@
             <div class="orbital-ring"></div>
             <div class="orbital-ring slow"></div>
             @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image)
-                <img src="{{ asset('storage/' . $mediaFiles->recipient_image) }}" class="recipient-img" alt="Hero">
+                <img src="{{ s3_url($mediaFiles->recipient_image) }}" class="recipient-img" alt="Hero">
             @endif
         </div>
 

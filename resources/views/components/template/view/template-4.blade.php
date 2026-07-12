@@ -399,7 +399,7 @@
             <div class="card-header">
                 <div class="avatar">
                     @if(isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image)
-                        <img src="{{ asset('storage/' . $mediaFiles->recipient_image) }}"
+                        <img src="{{ s3_url($mediaFiles->recipient_image) }}"
                             alt="{{ $message->recipient_name }}">
                     @endif
                 </div>

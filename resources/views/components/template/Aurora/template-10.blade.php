@@ -215,7 +215,7 @@
             <div class="profile-wrapper">
                 <div class="avatar-circle">
                     @if(isset($mediaFiles) && $mediaFiles->recipient_image)
-                        <img src="{{ asset('storage/' . $mediaFiles->recipient_image) }}" alt="Recipient">
+                        <img src="{{ s3_url($mediaFiles->recipient_image) }}" alt="Recipient">
                     @else
                         <div style="background: #334155; width: 100%; height: 100%; border-radius: 50%;"></div>
                     @endif
