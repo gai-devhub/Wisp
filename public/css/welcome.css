@@ -43,6 +43,8 @@
 
         html {
             scroll-behavior: smooth;
+            overflow-x: hidden;
+            width: 100%;
         }
 
         body {
@@ -587,7 +589,8 @@
         }
 
         .mobile-nav {
-            display: none;
+            display: flex;
+            visibility: hidden;
             position: fixed;
             top: 0;
             left: 0;
@@ -607,7 +610,7 @@
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .mobile-nav.active {
-            display: flex;
+            visibility: visible;
             transform: translateX(0);
         }
         .mobile-nav a {
@@ -633,7 +636,8 @@
             padding: 0;
         }
         .nav-overlay {
-            display: none;
+            display: block;
+            visibility: hidden;
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.4);
@@ -642,7 +646,7 @@
             transition: opacity 0.3s;
         }
         .nav-overlay.active {
-            display: block;
+            visibility: visible;
             opacity: 1;
         }
 

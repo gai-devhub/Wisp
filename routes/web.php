@@ -56,10 +56,18 @@ Route::get('/account-blocked', [AuthController::class, 'showAccountBlocked'])->n
 // Email Verification Route
 Route::get('/verify-email/{id}/{hash}', [AuthController::class, 'verifyEmail'])->name('verification.verify');
 
+use App\Http\Controllers\SubscriberController;
+
+// ===================== SUBSCRIBERS =====================
+Route::post('/subscribe', [SubscriberController::class, 'store'])->name('subscribe');
+Route::get('/unsubscribe/{token}', [SubscriberController::class, 'unsubscribe'])->name('unsubscribe');
+
 // ===================== ADMIN =====================
 Route::middleware(['auth', 'admin', 'require.passcode'])->group(function () {
     Route::get('/admin-page', [AdminController::class, 'index'])->name('admin.page');
     Route::get('/admin-page/users', [AdminController::class, 'usersPage'])->name('admin.users.page');
+    Route::get('/admin-page/subscribers', [AdminController::class, 'subscribersPage'])->name('admin.subscribers.page');
+    Route::post('/admin/subscribers/send-update', [AdminController::class, 'sendUpdateEmail'])->name('admin.subscribers.sendUpdate');
     Route::get('/admin-page/messages', [AdminController::class, 'messagesPage'])->name('admin.messages.page');
     Route::get('/admin-page/view-activity', [AdminController::class, 'viewActivityPageView'])->name('admin.view-activity.page');
     Route::get('/admin-page/search', [AdminController::class, 'searchPage'])->name('admin.search.page');

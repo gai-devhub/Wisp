@@ -205,13 +205,22 @@
                         </li>
                         @endif
 
-                        <li>
-                            <a href="{{ route('admin.users.page') }}"
-                                class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline
-                                    {{ request()->routeIs('admin.users.page') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200' : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                        <li class="nav-dropdown {{ request()->is('admin-page/users*', 'admin-page/subscribers*') ? 'open' : '' }}">
+                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer">
                                 <i class="fas fa-users w-5 text-center"></i>
                                 <span>User Management</span>
+                                <i class="fas fa-chevron-right dropdown-arrow ml-auto text-xs"></i>
                             </a>
+                            <ul class="nav-sub-menu list-none pl-4 pt-1 pb-1 space-y-0.5">
+                                <li><a href="{{ route('admin.users.page') }}"
+                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
+                                        {{ request()->routeIs('admin.users.page') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                    <i class="fas fa-user w-4 text-center"></i> <span>Users</span></a></li>
+                                <li><a href="{{ route('admin.subscribers.page') }}"
+                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
+                                        {{ request()->routeIs('admin.subscribers.page') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                    <i class="fas fa-envelope-open-text w-4 text-center"></i> <span>Subscribers</span></a></li>
+                            </ul>
                         </li>
 
                         {{-- Message dropdown --}}
@@ -383,16 +392,7 @@
         </div>
     </div>
 
-    {{-- AI Float Button --}}
-    <a href="{{ route('ai.page', ['from' => 'admin']) }}"
-        class="fixed bottom-6 right-6 z-50 w-13 h-13 rounded-full flex items-center justify-center
-               bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-xl shadow-indigo-300
-               hover:scale-110 transition-transform no-underline"
-        title="WISP AI Assistant" style="width:52px;height:52px;">
-        <img src="{{ asset('img/logo.png') }}" alt="AI" class="w-7 h-7 object-contain"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-        <i class="fas fa-robot text-xl" style="display:none;"></i>
-    </a>
+
 
     {{-- Add User --}}
     <div id="addUserModal" class="modal fixed inset-0 z-[1000] items-center justify-center p-4 bg-black/50 backdrop-blur-sm">

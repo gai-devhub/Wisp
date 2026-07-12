@@ -13,6 +13,8 @@ use App\Models\MediaFiles;
 use App\Models\GeneratedLinks;
 use App\Models\AiChatMessage;
 use App\Models\ShareSend;
+use App\Models\Subscriber;
+use App\Mail\SubscriberUpdateMail;
 use App\Jobs\SendNotificationEmailJob;
 use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\Support\Facades\Schema;
@@ -22,6 +24,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
@@ -1696,5 +1699,29 @@ class AdminController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    public function subscribersPage()
+    {
+        $subscribers = Subscriber::orderBy('created_at', 'desc')->paginate(10);
+        return view('admin.pages.general.subscribers', compact('subscribers'));
+    }
+
+    public function sendUpdateEmail(Request $request)
+    {
+        $request->validate([
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+
+        $subscribers = Subscriber::where('status', 'active')->get();
+        $count = 0;
+
+        foreach ($subscribers as $subscriber) {
+            Mail::to($subscriber->email)->send(new SubscriberUpdateMail($subscriber, $request->subject, $request->message));
+            $count++;
+        }
+
+        return back()->with('success', "Update email broadcasted successfully to $count subscribers.");
     }
 }

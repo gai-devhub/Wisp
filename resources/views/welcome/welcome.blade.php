@@ -223,7 +223,7 @@
                     <a href="{{ route('templates.gallery') }}" style="color: var(--primary); font-weight: 600; text-decoration: none;">10 templates →</a>
                 </div>
                 <div class="glass-card" style="padding: 32px; text-align: center;">
-                    <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: rgba(245,158,11,0.12); border-radius: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-sparkles" style="font-size: 2rem; color: var(--warning);"></i></div>
+                    <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: rgba(245,158,11,0.12); border-radius: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-star" style="font-size: 2rem; color: var(--warning);"></i></div>
                     <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">Glitter</h3>
                     <p style="color: var(--text-muted); margin-bottom: 16px;">Shimmer and shine.</p>
                     <a href="{{ route('templates.gallery') }}" style="color: var(--primary); font-weight: 600; text-decoration: none;">8 templates →</a>
@@ -257,13 +257,13 @@
                     </ul>
                 </div>
                 <div style="display: grid; gap: 20px;">
-                    <div class="glass-card" style="padding: 28px; border-left: 4px solid var(--primary);">
-                        <h4 style="font-size: 1.25rem; margin-bottom: 8px;">Our mission</h4>
-                        <p style="color: var(--text-muted); line-height: 1.6;">Make it easy for everyone to send wishes that feel genuine and look stunning — without the hassle.</p>
+                    <div class="glass-card" style="padding: 16px 24px; border-left: 4px solid var(--primary);">
+                        <h4 style="font-size: 1.25rem; margin-bottom: 6px;">Our mission</h4>
+                        <p style="color: var(--text-muted); line-height: 1.5; margin: 0;">Make it easy for everyone to send wishes that feel genuine and look stunning — without the hassle.</p>
                     </div>
-                    <div class="glass-card" style="padding: 28px; border-left: 4px solid var(--accent);">
-                        <h4 style="font-size: 1.25rem; margin-bottom: 8px;">Who it’s for</h4>
-                        <p style="color: var(--text-muted); line-height: 1.6;">Friends, families, colleagues, and anyone who wants to say it right — birthdays, condolences, thank-yous, and every moment in between.</p>
+                    <div class="glass-card" style="padding: 16px 24px; border-left: 4px solid var(--accent);">
+                        <h4 style="font-size: 1.25rem; margin-bottom: 6px;">Who it’s for</h4>
+                        <p style="color: var(--text-muted); line-height: 1.5; margin: 0;">Friends, families, colleagues, and anyone who wants to say it right — birthdays, condolences, thank-yous, and every moment in between.</p>
                     </div>
                 </div>
             </div>
@@ -357,6 +357,29 @@
             </div>
         </section>
 
+        <!-- Try WISP Section -->
+        <section id="try-wisp" class="container" style="padding: 2rem 0 5rem;">
+            <div class="glass-card relative overflow-hidden" style="padding: clamp(40px, 6vw, 80px) clamp(20px, 4vw, 60px); text-align: center; background: linear-gradient(135deg, rgba(99,102,241,0.05) 0%, rgba(236,72,153,0.05) 100%); border: 1px solid rgba(99,102,241,0.15); border-radius: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.02);">
+                <!-- Decorative background elements -->
+                <div style="position: absolute; top: -50px; left: -50px; width: 150px; height: 150px; background: rgba(99,102,241,0.2); filter: blur(60px); border-radius: 50%; z-index: 0;"></div>
+                <div style="position: absolute; bottom: -50px; right: -50px; width: 150px; height: 150px; background: rgba(236,72,153,0.2); filter: blur(60px); border-radius: 50%; z-index: 0;"></div>
+                
+                <div class="relative z-10">
+                    <span class="badge" style="margin-bottom: 20px; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0,0,0,0.05);"><i class="fas fa-wand-magic-sparkles" style="color: var(--accent);"></i> Try WISP for free</span>
+                    <h2 style="font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; margin-bottom: 16px; color: var(--text-main); line-height: 1.1;">Experience the <span class="text-gradient">magic</span></h2>
+                    <p style="color: var(--text-muted); font-size: clamp(1.05rem, 2vw, 1.2rem); max-width: 600px; margin: 0 auto 36px; line-height: 1.6;">Create a stunning wish message in seconds, without signing up. Try it out and see how easy it is to make someone smile.</p>
+                    
+                    <a href="{{ route('guest.try') }}" class="btn btn-primary transition-all duration-300 hover:scale-105" style="padding: 18px 40px; font-size: 1.15rem; border-radius: 50px; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(99,102,241,0.4); font-weight: 600;">
+                        Create a free message <i class="fas fa-arrow-right"></i>
+                    </a>
+                    
+                    <div style="margin-top: 24px; color: var(--text-muted); font-size: 0.9rem; font-weight: 500;">
+                        No credit card required. Free up to 2 messages.
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- FAQ & Testimonials -->
         <section id="faq" class="container" style="padding: 3rem 0 6rem;">
             <div style="display: block;">
@@ -433,11 +456,23 @@
         <!-- Never miss a wish — Newsletter -->
         <section class="container" style="padding-bottom: 4rem;">
             <div class="glass-card" style="padding: clamp(32px, 5vw, 60px) clamp(20px, 4vw, 50px); background: linear-gradient(145deg, rgba(99,102,241,0.06), rgba(236,72,153,0.06)); border: 1px solid rgba(99,102,241,0.15); text-align: center;">
-                <h2 style="font-size: clamp(1.8rem, 5vw, 2.5rem); font-weight: 700; margin-bottom: 12px;">Never miss a wish</h2>
-                <p style="font-size: clamp(1rem, 3vw, 1.2rem); color: var(--text-muted); margin-bottom: 24px;">Get new templates, AI updates and WISP magic.</p>
-                <form action="#" method="POST" style="display: flex; gap: 12px; max-width: 480px; margin: 0 auto; flex-wrap: wrap; justify-content: center;">
+                <h2 style="font-size: clamp(2rem, 4vw, 2.5rem); font-weight: 700; margin-bottom: 12px; color: var(--text-main);">Never miss a wish</h2>
+                <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 32px;">Get new templates, AI updates and WISP magic.</p>
+                
+                @if(session('success'))
+                    <div style="background: rgba(16, 185, 129, 0.1); color: var(--success); padding: 12px 20px; border-radius: 12px; margin-bottom: 24px; font-weight: 500;">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if(session('info'))
+                    <div style="background: rgba(59, 130, 246, 0.1); color: var(--primary); padding: 12px 20px; border-radius: 12px; margin-bottom: 24px; font-weight: 500;">
+                        {{ session('info') }}
+                    </div>
+                @endif
+
+                <form action="{{ route('subscribe') }}" method="POST" style="display: flex; gap: 12px; max-width: 400px; margin: 0 auto; flex-direction: column;">
                     @csrf
-                    <input type="email" name="email" placeholder="Your email" required style="flex: 1; min-width: 220px; padding: 14px 20px; border: 1px solid var(--border); border-radius: 12px; font-size: 1rem;">
+                    <input type="email" name="email" placeholder="Your email" required style="width: 100%; padding: 14px 20px; border: 2px solid var(--border); border-radius: 12px; font-size: 1rem; outline: none; transition: all 0.2s; font-family: inherit;">
                     <button type="submit" class="btn btn-primary" style="padding: 14px 32px;">Subscribe</button>
                 </form>
             </div>
@@ -484,8 +519,8 @@
 
         // testimonial scroll buttons (simple)
         const scrollBox = document.querySelector('.testimonial-scroll');
-        const btns = document.querySelectorAll('.fa-arrow-left, .fa-arrow-right');
-        if (btns.length && scrollBox) {
+        const btns = document.querySelectorAll('.testimonial-buttons .fa-arrow-left, .testimonial-buttons .fa-arrow-right');
+        if (btns.length >= 2 && scrollBox) {
             btns[0].parentElement.addEventListener('click', () => scrollBox.scrollBy({ left: -420, behavior: 'smooth' }));
             btns[1].parentElement.addEventListener('click', () => scrollBox.scrollBy({ left: 420, behavior: 'smooth' }));
         }
