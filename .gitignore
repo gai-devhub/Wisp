@@ -6,6 +6,7 @@
 /.env.*
 aws access.txt
 s3-config.md
+/Wisp-Updates.txt
 
 # Application Storage & Keys
 /storage/*.key
