@@ -104,11 +104,11 @@
                     }
                 </script>
             @elseif($messageCount >= 2)
-                <div class="glass-card" style="padding: 40px; text-align: center;">
+                <div class="glass-card w-full max-w-2xl mx-auto" style="padding: 40px; text-align: center;">
                     <i class="fas fa-lock" style="font-size: 3rem; color: var(--accent); margin-bottom: 20px;"></i>
                     <h2 style="font-size: 1.8rem; margin-bottom: 12px;">You've reached the limit</h2>
                     <p style="color: var(--text-muted); margin-bottom: 24px;">We hope you enjoyed trying WISP! To create unlimited messages, schedule sends, and edit them later, please create a free account.</p>
-                    <a href="{{ route('auth.login') }}" class="bg-[var(--primary)] text-white py-4 px-8 w-full rounded-[44px] font-semibold text-[1.1rem] cursor-pointer transition-all duration-300 inline-flex items-center justify-center shadow-[0_4px_15px_rgba(99,102,241,0.2)] hover:-translate-y-[2px] hover:shadow-[0_10px_20px_rgba(99,102,241,0.4)]" style="display: inline-block; text-decoration: none;">Create Free Account</a>
+                    <a href="{{ route('auth.login') }}" class="bg-[var(--primary)] text-white py-4 px-8 w-full md:w-auto rounded-[44px] font-semibold text-[1.1rem] cursor-pointer transition-all duration-300 inline-flex items-center justify-center shadow-[0_4px_15px_rgba(99,102,241,0.2)] hover:-translate-y-[2px] hover:shadow-[0_10px_20px_rgba(99,102,241,0.4)]" style="text-decoration: none;">Create Free Account</a>
                 </div>
             @else
                 <form action="{{ route('guest.try.create') }}" method="POST" enctype="multipart/form-data" class="w-full" id="guestMessageForm">

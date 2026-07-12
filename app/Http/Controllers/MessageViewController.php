@@ -183,8 +183,13 @@ class MessageViewController extends Controller
                 }
             } else {
                 $settings = UserSettings::where('user_id', $message->user_id)->first();
-                if ($settings && Hash::check($request->input('vault_pin'), $settings->vault_pin)) {
-                    $isCorrect = true;
+                if ($settings && $settings->vault_pin) {
+                    try {
+                        $decrypted = \Illuminate\Support\Facades\Crypt::decryptString($settings->vault_pin);
+                        $isCorrect = ($decrypted === $request->input('vault_pin'));
+                    } catch (\Exception $e) {
+                        $isCorrect = Hash::check($request->input('vault_pin'), $settings->vault_pin);
+                    }
                 }
             }
 

@@ -16,15 +16,21 @@ class MessageLifecycleController extends Controller
      */
     public function updateSettings(Request $request)
     {
-        $request->validate([
-            'vault_pin' => 'nullable|string|min:4|max:6',
+        $vaultPinInput = $request->input('vault_pin');
+        $hasStars = $vaultPinInput && str_contains($vaultPinInput, '*');
+
+        $rules = [
             'auto_archive_days' => 'nullable|integer|min:1',
-        ]);
+        ];
+        if ($request->filled('vault_pin') && !$hasStars) {
+            $rules['vault_pin'] = 'required|string|min:4|max:6';
+        }
+        $request->validate($rules);
 
         $settings = UserSettings::firstOrCreate(['user_id' => Auth::id()]);
 
-        if ($request->filled('vault_pin')) {
-            $settings->vault_pin = Hash::make($request->input('vault_pin'));
+        if ($request->filled('vault_pin') && !$hasStars) {
+            $settings->vault_pin = \Illuminate\Support\Facades\Crypt::encryptString($request->input('vault_pin'));
         }
 
         $settings->auto_archive_days = $request->input('auto_archive_days');
@@ -45,7 +51,15 @@ class MessageLifecycleController extends Controller
             return redirect()->back()->with('error', 'Vault PIN not configured.');
         }
 
-        if (Hash::check($request->input('pin'), $settings->vault_pin)) {
+        $isCorrect = false;
+        try {
+            $decrypted = \Illuminate\Support\Facades\Crypt::decryptString($settings->vault_pin);
+            $isCorrect = ($request->input('pin') === $decrypted);
+        } catch (\Exception $e) {
+            $isCorrect = Hash::check($request->input('pin'), $settings->vault_pin);
+        }
+
+        if ($isCorrect) {
             session(['vault_unlocked' => true]);
             return redirect()->route('user.vault.page');
         }

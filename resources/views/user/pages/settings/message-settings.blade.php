@@ -185,8 +185,11 @@
                             <label  class="message-settings-inline-43">Set Vault PIN <span
                                      class="message-settings-inline-44">(4-6
                                     digits)</span></label>
-                            <input type="password" class="form-control message-settings-inline-45" name="vault_pin"
+                            <input type="text" class="form-control message-settings-inline-45" name="vault_pin"
+                                value="{{ $userSettings->masked_vault_pin ?? '' }}"
                                 placeholder="Leave blank to keep current PIN"
+                                onfocus="this.type='password'; if(this.value.includes('*')) { this.value=''; }"
+                                onblur="if(this.value==='') { this.value='{{ $userSettings->masked_vault_pin ?? '' }}'; this.type='text'; }"
                                 >
                             <small
                                  class="message-settings-inline-46">Required
