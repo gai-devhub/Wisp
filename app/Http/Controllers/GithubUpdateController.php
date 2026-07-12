@@ -171,6 +171,47 @@ class GithubUpdateController extends Controller
             return response()->json(['error' => 'No GitHub clone URL configured.'], 422);
         }
 
+        // --- PRE-CHECK: Re-use checkUpdate logic to see if we're already up-to-date ---
+        $repoUrl = $this->setting('github_repo_url');
+        if ($repoUrl) {
+            $parsed = $this->parseOwnerRepo($repoUrl);
+            if ($parsed) {
+                [$owner, $repo] = $parsed;
+                $apiUrl  = "https://api.github.com/repos/{$owner}/{$repo}/commits/{$branch}";
+                $headers = [
+                    'Accept'     => 'application/vnd.github+json',
+                    'User-Agent' => 'WISP-App/1.0',
+                ];
+                if ($pat) {
+                    $headers['Authorization'] = "Bearer {$pat}";
+                }
+                
+                try {
+                    $response = Http::withHeaders($headers)->timeout(10)->get($apiUrl);
+                    if ($response->successful()) {
+                        $latestSha = $response->json('sha');
+                        
+                        // Get local commit SHA
+                        $localSha = null;
+                        exec("cd " . escapeshellarg(base_path()) . " && git rev-parse HEAD 2>&1", $out, $code);
+                        if ($code === 0 && !empty($out[0])) {
+                            $localSha = trim($out[0]);
+                        }
+                        
+                        if ($localSha && $latestSha && ($localSha === $latestSha || str_starts_with($latestSha, $localSha))) {
+                            return response()->json([
+                                'success' => true,
+                                'message' => 'System is already up-to-date.',
+                                'log'     => ['⬇ Fetching from GitHub...', '✅ System is already up-to-date.']
+                            ]);
+                        }
+                    }
+                } catch (\Exception $e) {
+                    // Fail silently and proceed to git pull in case of API issues
+                }
+            }
+        }
+
         // Inject PAT into clone URL for authentication: https://TOKEN@github.com/user/repo.git
         $authenticatedUrl = $cloneUrl;
         if ($pat) {
@@ -209,8 +250,10 @@ class GithubUpdateController extends Controller
         $log = array_merge($log, $pullOut);
 
         if ($pullCode !== 0) {
+            // Abort the conflicted merge immediately to prevent leaving conflict markers in files!
+            exec("cd " . escapeshellarg($projectRoot) . " && git merge --abort 2>&1");
             return response()->json([
-                'error' => 'git pull failed. There may be local conflicts.',
+                'error' => 'git pull failed. There may be local conflicts. We have reverted the changes to keep the system clean.',
                 'log'   => $log,
             ], 500);
         }
