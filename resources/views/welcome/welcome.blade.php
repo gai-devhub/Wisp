@@ -31,7 +31,7 @@
     <!-- JSON-LD Structured Data for Google Search Sitelinks -->
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
+      "@@context": "https://schema.org",
       "@type": "WebSite",
       "name": "Wisp",
       "url": "{{ config('app.url') }}",
