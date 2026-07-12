@@ -52,7 +52,13 @@
                         </div>
                     </div>
                 @empty
-                    <p class="text-muted mb-0">No messages have been shared or scheduled yet.</p>
+                    <div class="empty-table-cell" style="padding: 60px 20px;">
+                        <div class="empty-table-icon-wrap">
+                            <i class="fas fa-paper-plane"></i>
+                        </div>
+                        <h4 class="empty-table-title" style="font-size: 0.95rem;">No Shared Messages</h4>
+                        <p class="empty-table-desc" style="font-size: 0.85rem;">No messages have been shared or scheduled yet.</p>
+                    </div>
                 @endforelse
             </div>
             @if(isset($allShareSends) && $allShareSends->hasPages())

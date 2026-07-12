@@ -179,7 +179,7 @@ class UserSettingsController extends Controller
     public function updatePrivacyAndTheme(Request $request)
     {
         $request->validate([
-            'privacy_blur_enabled' => 'nullable|in:on,yes,1,true',
+            'privacy_blur_enabled' => 'nullable|in:on,yes,1,true,0,false,off',
             'theme_preference'     => 'required|in:theme-default,theme-forest,theme-crimson',
         ]);
 
@@ -188,7 +188,7 @@ class UserSettingsController extends Controller
             ['page_expiry' => 24, 'page_view_alerts' => true, 'whatsapp_notifications' => true, 'auto_delete_expired' => true]
         );
         
-        $settings->privacy_blur_enabled = $request->has('privacy_blur_enabled');
+        $settings->privacy_blur_enabled = $request->boolean('privacy_blur_enabled');
         $settings->theme_preference = $request->input('theme_preference');
         $settings->save();
 

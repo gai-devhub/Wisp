@@ -36,7 +36,13 @@
                         </div>
                     </div>
                 @empty
-                    <p class="text-muted mb-0">No generated links yet. Select a saved message above and click Generate Link.</p>
+                    <div class="empty-table-cell" style="padding: 60px 20px;">
+                        <div class="empty-table-icon-wrap">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <h4 class="empty-table-title" style="font-size: 0.95rem;">No Generated Links</h4>
+                        <p class="empty-table-desc" style="font-size: 0.85rem;">Select a saved message above and click Generate Link.</p>
+                    </div>
                 @endforelse
             </div>
             @if(isset($generatedLinks) && $generatedLinks->hasPages())

@@ -30,6 +30,36 @@
     --content-pad-y: clamp(10px, 2.5vw, 16px);
 }
 
+body.theme-forest {
+    --primary: #10b981;
+    --primary-light: rgba(16, 185, 129, 0.1);
+    --secondary: #059669;
+    --bg-subtle: #f0fdf4;
+    --bg-header-start: #d1fae5;
+    --bg-header-end: #ecfdf5;
+    background-image: radial-gradient(circle at 10% 15%, rgba(167, 243, 208, 0.9), transparent 28%), radial-gradient(circle at 80% 22%, rgba(165, 243, 252, 0.78), transparent 34%), radial-gradient(circle at 60% 76%, rgba(217, 249, 157, 0.62), transparent 24%), linear-gradient(120deg, #ecfdf5 0%, #f8fafc 48%, #ecfeff 100%);
+}
+
+body.theme-crimson {
+    --primary: #ef4444;
+    --primary-light: rgba(239, 68, 68, 0.1);
+    --secondary: #dc2626;
+    --bg-subtle: #fef2f2;
+    --bg-header-start: #fee2e2;
+    --bg-header-end: #fef2f2;
+    background-image: radial-gradient(circle at 10% 15%, rgba(254, 202, 202, 0.9), transparent 28%), radial-gradient(circle at 80% 22%, rgba(253, 186, 116, 0.78), transparent 34%), radial-gradient(circle at 60% 76%, rgba(251, 207, 232, 0.62), transparent 24%), linear-gradient(120deg, #fef2f2 0%, #fffbeb 48%, #fdf2f8 100%);
+}
+
+body.dark-mode {
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --bg: #0f172a;
+    --bg-subtle: #1e293b;
+    --bg-header-start: #1e293b;
+    --bg-header-end: #0f172a;
+}
+
 /* Alerts (flash success/error and validation) */
 .content-area .alert {
     margin: 0 var(--content-pad-x) 16px;

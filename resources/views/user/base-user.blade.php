@@ -261,6 +261,8 @@
                                 <li><a href="{{ route('user.settings.user.page') }}"
                                         class="nav-link {{ request()->routeIs('user.settings.user.page') ? 'active' : '' }}"
                                         data-section="settings-user"><i class="fas fa-user-cog fa-fw text-muted me-2" style="font-size: 0.9em; opacity: 0.7;"></i> <span>User Settings</span></a></li>
+                                <li><a href="{{ route('user.notifications.page') }}"
+                                        class="nav-link"><i class="fas fa-headset fa-fw text-muted me-2" style="font-size: 0.9em; opacity: 0.7;"></i> <span>Help & Support</span></a></li>
                             </ul>
                         </li>
                     </ul>
