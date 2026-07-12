@@ -29,6 +29,7 @@
             'user.control-center.security.page',
             'user.settings.user.page',
         );
+        $enableUpdates = \Illuminate\Support\Facades\DB::table('system_settings')->where('key', 'enable_system_updates')->value('value') === '1';
     @endphp
     
     <style>
@@ -126,6 +127,40 @@
 <body data-active-section="@yield('user-section', 'dashboard')"
     class="{{ $activeTheme }} {{ $privacyEnabled ? 'privacy-blur-active' : '' }} {{ !$themeBgEnabled ? 'theme-no-bg' : '' }}">
     <div class="notification-container" id="notificationContainer"></div>
+
+    <!-- Global System Update Loading Overlay -->
+    <div id="update-loading-overlay" class="user-settings-inline-8">
+        <!-- Progress Circle -->
+        <div class="user-settings-inline-9">
+            <svg viewBox="0 0 100 100" class="user-settings-inline-10">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="8"></circle>
+                <circle id="update-progress-circle" cx="50" cy="50" r="45" fill="none" stroke="#3b82f6" stroke-width="8" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="283" class="user-settings-inline-11"></circle>
+            </svg>
+            <div id="update-progress-text" class="user-settings-inline-12">
+                0%
+            </div>
+        </div>
+        <h2 class="user-settings-inline-13">Updating Wisp</h2>
+        <p id="update-status-text" class="user-settings-inline-14">Fetching update packages...</p>
+    </div>
+
+    <!-- Global System Update Toast Notification -->
+    @if($enableUpdates)
+    <div id="global-update-toast" class="update-toast" style="display: none;">
+        <div class="update-toast-content" onclick="startSystemUpdate()">
+            <div class="update-toast-icon">
+                <i class="fas fa-sync-alt fa-spin"></i>
+            </div>
+            <div class="update-toast-text">
+                <strong>System Update Available</strong>
+                <span>Click here to install latest updates.</span>
+            </div>
+        </div>
+        <button type="button" class="update-toast-close" onclick="dismissUpdateToast(event)" aria-label="Close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    @endif
 
     @php $activeSection = View::yieldContent('user-section'); @endphp
     @if(in_array($activeSection, ['my-messages', 'create', 'edit']))
@@ -690,6 +725,101 @@ document.addEventListener('click', function (e) {
     updatePreviewSaveButton();
     var saveBtn = document.getElementById('preview-save-template-btn');
     if (saveBtn && previewSingleMessageMode) saveBtn.style.display = 'none';
+});
+
+// ===== SYSTEM UPDATE TOAST & OVERLAY FUNCTIONALITY =====
+function startSystemUpdate() {
+    var overlay     = document.getElementById('update-loading-overlay');
+    var progressCircle = document.getElementById('update-progress-circle');
+    var progressText   = document.getElementById('update-progress-text');
+    var statusText     = document.getElementById('update-status-text');
+    var CSRF = document.querySelector('meta[name="csrf-token"]') && document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    var UPDATE_URL = "{{ route('user.github.update') }}";
+
+    if (!overlay) return;
+
+    overlay.style.display = 'flex';
+    progressCircle.style.strokeDashoffset = '283';
+    progressText.innerText = '0%';
+    statusText.innerText = 'Connecting to GitHub...';
+
+    // Animate progress while waiting for server response
+    var progress = 0;
+    var fakeInterval = setInterval(function () {
+        if (progress < 85) {
+            progress += Math.random() * 3;
+            var offset = 283 - (283 * Math.min(progress, 85) / 100);
+            progressCircle.style.strokeDashoffset = offset;
+            progressText.innerText = Math.floor(Math.min(progress, 85)) + '%';
+            if (progress > 20 && progress < 60) statusText.innerText = 'Pulling latest code...';
+            else if (progress >= 60) statusText.innerText = 'Applying updates...';
+        }
+    }, 120);
+
+    fetch(UPDATE_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': CSRF,
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({})
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+        clearInterval(fakeInterval);
+
+        if (data.error) {
+            progressCircle.style.strokeDashoffset = '283';
+            progressText.innerText = '!';
+            progressText.style.color = '#ef4444';
+            statusText.innerText = 'Error: ' + data.error;
+            statusText.style.color = '#ef4444';
+            setTimeout(function () { overlay.style.display = 'none'; progressText.style.color = ''; statusText.style.color = ''; }, 4000);
+            return;
+        }
+
+        // Success — fill to 100%
+        progressCircle.style.strokeDashoffset = '0';
+        progressText.innerText = '100%';
+        statusText.innerText = data.message || 'Update complete!';
+
+        setTimeout(function () {
+            statusText.innerText = 'Reloading page...';
+            setTimeout(function () {
+                overlay.style.display = 'none';
+                location.reload();
+            }, 1000);
+        }, 1500);
+    })
+    .catch(function () {
+        clearInterval(fakeInterval);
+        progressText.innerText = '!';
+        statusText.innerText = 'Network error. Please try again.';
+        setTimeout(function () { overlay.style.display = 'none'; }, 3000);
+    });
+}
+
+function dismissUpdateToast(event) {
+    if (event) event.stopPropagation();
+    const toast = document.getElementById('global-update-toast');
+    if (toast) {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px) scale(0.9)';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 300);
+    }
+    sessionStorage.setItem('dismissed_update_toast', '1');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toast = document.getElementById('global-update-toast');
+    if (toast && !sessionStorage.getItem('dismissed_update_toast')) {
+        setTimeout(function() {
+            toast.style.display = 'flex';
+        }, 1000); // slight delay for smooth entry
+    }
 });
 
 </script>
