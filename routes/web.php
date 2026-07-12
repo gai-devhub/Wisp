@@ -308,3 +308,48 @@ Route::post('/message/consent/{type}/{slug}', [MessageViewController::class, 'ac
     ->where('type', '[a-zA-Z\s\-]+')->name('message.consent.accept');
 Route::get('/{type}/{slug}', [MessageViewController::class, 'show'])
     ->where('type', '[a-zA-Z\s\-]+')->name('message.show');
+
+// Dynamic XML Sitemap for Search Engines
+Route::get('/sitemap.xml', function () {
+    $url = config('app.url');
+    $content = '<?xml version="1.0" encoding="UTF-8"?>';
+    $content .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    
+    // Homepage
+    $content .= '<url>';
+    $content .= '<loc>' . $url . '</loc>';
+    $content .= '<lastmod>' . now()->toDateString() . '</lastmod>';
+    $content .= '<changefreq>daily</changefreq>';
+    $content .= '<priority>1.0</priority>';
+    $content .= '</url>';
+    
+    // Login
+    $content .= '<url>';
+    $content .= '<loc>' . $url . '/login</loc>';
+    $content .= '<lastmod>' . now()->toDateString() . '</lastmod>';
+    $content .= '<changefreq>monthly</changefreq>';
+    $content .= '<priority>0.8</priority>';
+    $content .= '</url>';
+    
+    // Templates
+    $content .= '<url>';
+    $content .= '<loc>' . $url . '/templates</loc>';
+    $content .= '<lastmod>' . now()->toDateString() . '</lastmod>';
+    $content .= '<changefreq>weekly</changefreq>';
+    $content .= '<priority>0.9</priority>';
+    $content .= '</url>';
+    
+    // Try WISP
+    $content .= '<url>';
+    $content .= '<loc>' . $url . '/try</loc>';
+    $content .= '<lastmod>' . now()->toDateString() . '</lastmod>';
+    $content .= '<changefreq>weekly</changefreq>';
+    $content .= '<priority>0.8</priority>';
+    $content .= '</url>';
+    
+    $content .= '</urlset>';
+    
+    return response($content, 200, [
+        'Content-Type' => 'application/xml'
+    ]);
+})->name('sitemap');

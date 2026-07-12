@@ -10,6 +10,76 @@
     <link rel="apple-touch-icon" href="{{ asset('img/logo.png') }}">
     <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/png">   
     <title>WISP — Wishes that feel like magic</title>
+    <meta name="description" content="WISP is your personal wish studio. From birthdays to just because — craft stunning AI-powered greetings in seconds. Choose templates, add photos and music.">
+    <meta name="keywords" content="WISP, wish studio, AI greetings, birthday wishes, digital cards, templates gallery, create wish">
+    <link rel="canonical" href="{{ config('app.url') }}" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ config('app.url') }}" />
+    <meta property="og:title" content="WISP — Wishes that feel like magic" />
+    <meta property="og:description" content="Craft stunning AI-powered greetings in seconds. Choose templates, add photos and music, share a link or send via WhatsApp." />
+    <meta property="og:image" content="{{ asset('img/logo.png') }}" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="{{ config('app.url') }}" />
+    <meta property="twitter:title" content="WISP — Wishes that feel like magic" />
+    <meta property="twitter:description" content="Craft stunning AI-powered greetings in seconds. Choose templates, add photos and music, share a link or send via WhatsApp." />
+    <meta property="twitter:image" content="{{ asset('img/logo.png') }}" />
+
+    <!-- JSON-LD Structured Data for Google Search Sitelinks -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Wisp",
+      "url": "{{ config('app.url') }}",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "{{ config('app.url') }}/login?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Wisp Navigation links",
+      "description": "Quick links to Wisp key pages",
+      "itemListElement": [
+        {
+          "@type": "SiteNavigationElement",
+          "position": 1,
+          "name": "Log In",
+          "url": "{{ route('auth.login') }}"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 2,
+          "name": "Create Account",
+          "url": "{{ route('auth.login') }}?tab=signup"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 3,
+          "name": "Templates Gallery",
+          "url": "{{ route('templates.gallery') }}"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 4,
+          "name": "Try Wisp (Guest Mode)",
+          "url": "{{ route('guest.try') }}"
+        }
+      ]
+    }
+    </script>
+
     <!-- Fonts (same Outfit + fallback) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
