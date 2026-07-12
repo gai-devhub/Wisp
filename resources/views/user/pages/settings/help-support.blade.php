@@ -381,7 +381,7 @@
                             @for($i = 1; $i <= 5; $i++)
                             <div class="rating-option">
                                 <span>{{ $i }}</span>
-                                <input type="radio" name="fb_rating" value="{{ $i }}" {{ $i === 3 ? 'checked' : '' }} required>
+                                <input type="radio" name="fb_rating" value="{{ $i }}" {{ $i === 0 ? 'checked' : '' }} required>
                             </div>
                             @endfor
                         </div>
