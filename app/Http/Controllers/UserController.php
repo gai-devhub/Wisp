@@ -657,7 +657,9 @@ class UserController extends Controller
             if ($user->profile_picture && !str_starts_with($user->profile_picture, 'http')) {
                 \Illuminate\Support\Facades\Storage::disk('s3')->delete('profile-pictures/' . $user->profile_picture);
             }
-            $path = $request->file('profile_picture')->store('profile-pictures', 's3');
+            $file = $request->file('profile_picture');
+            $name = 'user-' . $user->id . '-' . time() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('profile-pictures', $name, 's3');
             $user->profile_picture = basename($path);
             $user->save();
         }

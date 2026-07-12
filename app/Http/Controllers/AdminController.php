@@ -702,7 +702,9 @@ class AdminController extends Controller
             if ($user->profile_picture) {
                 Storage::disk('s3')->delete($user->profile_picture);
             }
-            $path = $request->file('profile_picture')->store('admin-avatars', 's3');
+            $file = $request->file('profile_picture');
+            $name = 'admin-user-' . $user->id . '-' . time() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('profile-pictures', $name, 's3');
             $user->profile_picture = $path;
         }
         $user->save();
