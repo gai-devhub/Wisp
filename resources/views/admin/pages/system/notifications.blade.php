@@ -37,7 +37,7 @@
                         <button class="admin-tab-btn" id="tab-inquiries" onclick="switchAdminTab('inquiries')">
                             <i class="fas fa-user-tag"></i>
                             <span>Inquiries</span>
-                            <span class="admin-badge-count" id="inquiry-count">{{ count($userInquiries ?? []) }}</span>
+                            <span class="admin-badge-count" id="inquiry-count">{{ $userInquiries ? $userInquiries->where('read_at', null)->count() : 0 }}</span>
                         </button>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                 <!-- Inquiries List -->
                 <div class="inbox-list" id="inbox-list-inquiries" style="display: none;">
                     @forelse($userInquiries ?? collect() as $inquiry)
-                        <div class="inbox-item" id="item-i-{{ $inquiry->id }}" onclick="showInquiryDetail('{{ $inquiry->id }}')" style="border-bottom: 1px solid var(--admin-border);">
+                        <div class="inbox-item {{ $inquiry->read_at ? '' : 'unread' }}" id="item-i-{{ $inquiry->id }}" onclick="showInquiryDetail('{{ $inquiry->id }}')" style="border-bottom: 1px solid var(--admin-border);">
                             <div class="item-avatar" style="background: var(--admin-bg-soft); color: var(--admin-primary);">
                                 @if($inquiry->sender && $inquiry->sender->profile_picture)
                                     <img src="{{ s3_url($inquiry->sender->profile_picture) }}" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
@@ -341,10 +341,37 @@ function showInquiryDetail(id) {
     if (detail) detail.style.display = "flex";
     
     const thread = document.getElementById("item-i-" + id);
-    if (thread) thread.classList.add("active");
+    if (thread) {
+        thread.classList.add("active");
+        
+        if (thread.classList.contains('unread')) {
+            thread.classList.remove('unread');
+            
+            // Call API to mark as read
+            fetch(`/notifications/${id}/read`, {
+                method: 'POST',
+                headers: { 
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}', 
+                    'Content-Type': 'application/json' 
+                }
+            }).then(response => {
+                if (response.ok) {
+                    updateInquiryUnreadCount();
+                }
+            });
+        }
+    }
     
     if (window.innerWidth <= 992) {
         document.querySelector(".inbox-layout").classList.add("detail-open");
+    }
+}
+
+function updateInquiryUnreadCount() {
+    const count = document.querySelectorAll('#inbox-list-inquiries .inbox-item.unread').length;
+    const badge = document.getElementById('inquiry-count');
+    if (badge) {
+        badge.innerText = count;
     }
 }
 
@@ -377,7 +404,10 @@ function deleteNotification(e, id) {
         // Here you would make an AJAX call to delete the notification.
         // For now, simply hide it.
         const item = document.getElementById('item-' + id);
-        if(item) item.remove();
+        if(item) {
+            item.remove();
+            updateInquiryUnreadCount();
+        }
         
         const detail = document.getElementById('detail-' + id);
         if(detail && detail.style.display !== 'none') {
