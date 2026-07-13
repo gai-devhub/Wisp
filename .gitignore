@@ -5,6 +5,7 @@
 /.env
 /.env.*
 AWS.txt
+AWS.md
 Wisp-Updates.txt
 
 # Application Storage & Keys
