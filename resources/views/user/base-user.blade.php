@@ -824,5 +824,22 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script>
+<script>
+    // Global Fetch Interceptor to handle session timeouts and redirects
+    (function() {
+        const originalFetch = window.fetch;
+        window.fetch = async function(...args) {
+            try {
+                const response = await originalFetch(...args);
+                if (response.status === 401 || response.status === 419) {
+                    window.location.href = "{{ route('auth.login') }}";
+                }
+                return response;
+            } catch (error) {
+                throw error;
+            }
+        };
+    })();
+</script>
 </body>
 </html>

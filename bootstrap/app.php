@@ -33,6 +33,22 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($request->routeIs('auth.logout')) {
                 return redirect()->route('auth.login');
             }
-            return redirect()->back()->withInput()->with('error', 'Your session has expired. Please try again.');
+            if ($request->expectsJson() || $request->ajax() || $request->isXmlHttpRequest() || in_array($request->method(), ['POST', 'PUT', 'DELETE', 'PATCH'])) {
+                return response()->json([
+                    'message' => 'Your session has expired. Please reload the page or log in again.',
+                    'redirect' => route('auth.login')
+                ], 419);
+            }
+            return redirect()->route('auth.login')->with('error', 'Your session has expired. Please try again.');
+        });
+
+        $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, \Illuminate\Http\Request $request) {
+            if ($request->expectsJson() || $request->ajax() || $request->isXmlHttpRequest() || in_array($request->method(), ['POST', 'PUT', 'DELETE', 'PATCH'])) {
+                return response()->json([
+                    'message' => 'Your session has expired. Please reload the page or log in again.',
+                    'redirect' => route('auth.login')
+                ], 401);
+            }
+            return redirect()->guest(route('auth.login'))->with('error', 'Please log in to continue.');
         });
     })->create();
