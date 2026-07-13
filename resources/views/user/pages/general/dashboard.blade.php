@@ -790,8 +790,16 @@
                         }
                     }
 
+                    const isGoogleConnected = @json(!empty(Auth::user()->google_token));
+
                     function fetchGoogleEvents(year, month, day) {
                         const container = document.getElementById('google-events-container');
+                        
+                        if (!isGoogleConnected) {
+                            container.innerHTML = '<div style="color:#94a3b8;padding:4px 0;">Connect your Google account above to view calendar events.</div>';
+                            return;
+                        }
+
                         container.innerHTML = '<div style="display:flex;align-items:center;gap:8px;color:#94a3b8;"><i class="fas fa-spinner fa-spin"></i> Loading events...</div>';
                         
                         const dateStr = year + '-' + (month+1).toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
