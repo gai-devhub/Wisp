@@ -2,6 +2,19 @@
 @section('admin-section', 'subscribers')
 
 @section('content')
+<style>
+    [data-theme="dark"] .btn-cancel {
+        background-color: #334155 !important;
+        color: #f1f5f9 !important;
+        border-color: #475569 !important;
+    }
+    [data-theme="dark"] .btn-cancel:hover {
+        background-color: #475569 !important;
+    }
+    [data-theme="dark"] .modal-close-btn:hover {
+        color: #ffffff !important;
+    }
+</style>
 <div class="content-section active" id="subscribers">
 
     {{-- Page Header --}}
@@ -105,29 +118,29 @@
 
     <!-- Broadcast Modal -->
     <div id="broadcastModal" class="modal fixed inset-0 z-[1000] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm" style="display: none;">
-        <div class="db-card rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden border border-slate-700/50" style="animation:modalIn .2s ease; background: #1e293b;">
-            <div class="flex items-center justify-between p-5 border-b border-slate-700/50">
-                <h3 class="text-lg font-bold text-white m-0">Send Broadcast Email</h3>
-                <button type="button" onclick="closeBroadcastModal()" class="border-0 bg-transparent text-2xl cursor-pointer text-slate-400 hover:text-white leading-none">&times;</button>
+        <div class="db-card rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden" style="animation:modalIn .2s ease; padding: 0 !important;">
+            <div class="flex items-center justify-between p-5 border-b border-slate-200">
+                <h3 class="text-lg font-bold text-slate-800 m-0">Send Broadcast Email</h3>
+                <button type="button" onclick="closeBroadcastModal()" class="border-0 bg-transparent text-2xl cursor-pointer text-slate-400 hover:text-slate-600 modal-close-btn leading-none">&times;</button>
             </div>
             
             <form action="{{ route('admin.subscribers.sendUpdate') }}" method="POST" class="p-6 space-y-5">
                 @csrf
                 <div>
-                    <label class="block text-sm font-semibold text-slate-300 mb-1.5">Subject</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Subject</label>
                     <input type="text" name="subject" required placeholder="e.g. New WISP Templates Available!"
-                        class="w-full px-4 py-3 rounded-xl border border-slate-700 text-sm text-white bg-slate-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder-slate-500">
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm text-slate-800 bg-white outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder-slate-400">
                 </div>
                 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-300 mb-1.5">Message</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Message</label>
                     <textarea name="message" required rows="8" placeholder="Type your message here..."
-                        class="w-full px-4 py-3 rounded-xl border border-slate-700 text-sm text-white bg-slate-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all resize-y placeholder-slate-500"></textarea>
-                    <p class="text-xs text-slate-400 mt-2"><i class="fas fa-info-circle mr-1"></i>This message will be sent to all active subscribers. An unsubscribe link will be attached automatically.</p>
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm text-slate-800 bg-white outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all resize-y placeholder-slate-400"></textarea>
+                    <p class="text-xs text-slate-500 mt-2"><i class="fas fa-info-circle mr-1"></i>This message will be sent to all active subscribers. An unsubscribe link will be attached automatically.</p>
                 </div>
                 
                 <div class="flex justify-end gap-3 pt-2">
-                    <button type="button" onclick="closeBroadcastModal()" class="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-xl cursor-pointer border-0 transition-colors">Cancel</button>
+                    <button type="button" onclick="closeBroadcastModal()" class="btn-cancel px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl cursor-pointer border border-slate-200 transition-colors">Cancel</button>
                     <button type="submit" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl cursor-pointer border-0 transition-colors flex items-center gap-2">
                         <i class="fas fa-paper-plane"></i> Send to All Active
                     </button>
