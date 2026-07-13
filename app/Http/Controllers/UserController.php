@@ -84,7 +84,10 @@ class UserController extends Controller
     {
         $user = Auth::user();
         if (!$user->google_token) {
-            return response()->json(['error' => 'No Google token found'], 401);
+            // Return 200 (not 401) — the global fetch interceptor redirects to login on 401,
+            // which causes an infinite reload loop since the user is already authenticated.
+            // Not having a Google token is a missing integration, not an auth failure.
+            return response()->json(['error' => 'No Google token found'], 200);
         }
 
         $date = $request->query('date');
@@ -147,11 +150,11 @@ class UserController extends Controller
                             return response()->json($events['items'] ?? []);
                         }
                     } catch (\Exception $refreshEx) {
-                        return response()->json(['error' => 'Failed to refresh token: ' . $refreshEx->getMessage()], 401);
+                        return response()->json(['error' => 'Failed to refresh token: ' . $refreshEx->getMessage()], 200);
                     }
                 }
             }
-            return response()->json(['error' => 'Failed to fetch calendar events: ' . $e->getMessage()], $e->getResponse()->getStatusCode());
+            return response()->json(['error' => 'Failed to fetch calendar events: ' . $e->getMessage()], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
         }
