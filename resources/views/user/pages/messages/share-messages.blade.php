@@ -389,14 +389,19 @@ document.addEventListener('DOMContentLoaded', function() {
             const date = document.getElementById('share-page-schedule-date').value;
             const time = document.getElementById('share-page-schedule-time').value;
             if (!date || !time) {
-                alert('Please provide both date and time for scheduling.');
+                showNotification('Validation Error', 'Please provide both date and time for scheduling.', 'error');
                 return;
             }
             if (!recipient) {
-                alert('Please provide a recipient phone or email.');
+                showNotification('Validation Error', 'Please provide a recipient phone or email.', 'error');
                 return;
             }
             
+            // Show loading instantly (within 10ms)
+            submitText.textContent = 'Scheduling...';
+            submitIcon.className = 'fas fa-spinner fa-spin';
+            submitBtn.disabled = true;
+
             const scheduleChannel = selectedMethod === 'all' ? 'email' : (selectedMethod === 'whatsapp' ? 'sms' : selectedMethod);
 
             const formData = new FormData();
@@ -412,81 +417,150 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append('schedule_date', date);
             formData.append('schedule_time', time);
 
+            // Use client-side flash to show toast on the redirected page
+            sessionStorage.setItem('flash_success', 'Message scheduled successfully!');
+
+            // keepalive: true ensures the browser completes the request even when the page unloads/redirects
             fetch('{{ route("share-messages.schedule") }}', {
                 method: 'POST',
                 headers: { 'Accept': 'application/json' },
-                body: formData
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Message scheduled successfully!');
-                    window.location.href = '{{ route("user.my-messages.page") }}';
-                } else {
-                    alert('Error scheduling: ' + (data.error || 'Unknown error'));
-                }
-            })
-            .catch(e => {
-                console.error(e);
-                alert('Error scheduling message.');
+                body: formData,
+                keepalive: true
             });
+
+            // Redirect immediately
+            setTimeout(() => {
+                window.location.href = '{{ route("user.my-messages.page") }}';
+            }, 10);
 
             return;
         }
 
         // Immediate Sending
-        if (selectedMethod === 'whatsapp' || selectedMethod === 'all') {
+        if (selectedMethod === 'whatsapp') {
             const encodedText = encodeURIComponent(text);
             const waUrl = recipient ? `https://wa.me/${recipient.replace(/[^0-9]/g, '')}?text=${encodedText}` : `https://wa.me/?text=${encodedText}`;
+            
+            submitText.textContent = 'Sending...';
+            submitIcon.className = 'fas fa-spinner fa-spin';
+            submitBtn.disabled = true;
+
             window.open(waUrl, '_blank');
+            sessionStorage.setItem('flash_success', 'WhatsApp share opened successfully!');
+            setTimeout(() => {
+                window.location.href = '{{ route("user.my-messages.page") }}';
+            }, 10);
+            return;
         }
 
-        if (selectedMethod === 'sms' || selectedMethod === 'all') {
-            if (!recipient && selectedMethod === 'sms') {
-                alert('Please provide a recipient phone number for SMS.');
+        if (selectedMethod === 'sms') {
+            if (!recipient) {
+                showNotification('Validation Error', 'Please provide a recipient phone number for SMS.', 'error');
                 return;
             }
-            if (recipient && !recipient.includes('@')) {
-                const formData = new FormData();
-                formData.append('_token', '{{ csrf_token() }}');
-                formData.append('wish_message_id', currentMessageId);
-                formData.append('recipient_phone', recipient);
-                formData.append('custom_message', text);
-                
-                fetch('{{ route("share-messages.sendSms") }}', {
-                    method: 'POST',
-                    headers: { 'Accept': 'application/json' },
-                    body: formData
-                }).then(r => r.json()).then(data => {
-                    if (selectedMethod === 'sms') alert(data.success ? 'SMS sent successfully!' : 'Error sending SMS.');
-                });
-            }
+            submitText.textContent = 'Sending SMS...';
+            submitIcon.className = 'fas fa-spinner fa-spin';
+            submitBtn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('_token', '{{ csrf_token() }}');
+            formData.append('wish_message_id', currentMessageId);
+            formData.append('recipient_phone', recipient);
+            formData.append('custom_message', text);
+            
+            sessionStorage.setItem('flash_success', 'SMS sent successfully!');
+            fetch('{{ route("share-messages.sendSms") }}', {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                body: formData,
+                keepalive: true
+            });
+
+            setTimeout(() => {
+                window.location.href = '{{ route("user.my-messages.page") }}';
+            }, 10);
+            return;
         }
 
-        if (selectedMethod === 'email' || selectedMethod === 'all') {
-            if (!recipient && selectedMethod === 'email') {
-                alert('Please provide a recipient email.');
+        if (selectedMethod === 'email') {
+            if (!recipient) {
+                showNotification('Validation Error', 'Please provide a recipient email.', 'error');
                 return;
             }
-            if (recipient && recipient.includes('@')) {
-                const formData = new FormData();
-                formData.append('_token', '{{ csrf_token() }}');
-                formData.append('wish_message_id', currentMessageId);
-                formData.append('recipient_email', recipient);
-                formData.append('custom_message', text);
+            submitText.textContent = 'Sending Email...';
+            submitIcon.className = 'fas fa-spinner fa-spin';
+            submitBtn.disabled = true;
 
-                fetch('{{ route("share-messages.sendEmail") }}', {
-                    method: 'POST',
-                    headers: { 'Accept': 'application/json' },
-                    body: formData
-                }).then(r => r.json()).then(data => {
-                    if (selectedMethod === 'email') alert(data.success ? 'Email sent successfully!' : 'Error sending Email.');
-                });
-            }
+            const formData = new FormData();
+            formData.append('_token', '{{ csrf_token() }}');
+            formData.append('wish_message_id', currentMessageId);
+            formData.append('recipient_email', recipient);
+            formData.append('custom_message', text);
+
+            sessionStorage.setItem('flash_success', 'Email sent successfully!');
+            fetch('{{ route("share-messages.sendEmail") }}', {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                body: formData,
+                keepalive: true
+            });
+
+            setTimeout(() => {
+                window.location.href = '{{ route("user.my-messages.page") }}';
+            }, 10);
+            return;
         }
         
         if (selectedMethod === 'all') {
-            alert('Messages triggered for all selected channels!');
+            const emailRecipient = document.getElementById('share-page-recipient-email-input').value.trim();
+            if (!recipient && !emailRecipient) {
+                showNotification('Validation Error', 'Please provide a recipient phone number or email.', 'error');
+                return;
+            }
+
+            submitText.textContent = 'Sending via All Channels...';
+            submitIcon.className = 'fas fa-spinner fa-spin';
+            submitBtn.disabled = true;
+
+            // Trigger WhatsApp in new tab
+            const encodedText = encodeURIComponent(text);
+            const waUrl = recipient ? `https://wa.me/${recipient.replace(/[^0-9]/g, '')}?text=${encodedText}` : `https://wa.me/?text=${encodedText}`;
+            window.open(waUrl, '_blank');
+
+            // Trigger SMS in background
+            if (recipient && !recipient.includes('@')) {
+                const smsData = new FormData();
+                smsData.append('_token', '{{ csrf_token() }}');
+                smsData.append('wish_message_id', currentMessageId);
+                smsData.append('recipient_phone', recipient);
+                smsData.append('custom_message', text);
+                fetch('{{ route("share-messages.sendSms") }}', {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json' },
+                    body: smsData,
+                    keepalive: true
+                });
+            }
+
+            // Trigger Email in background
+            if (emailRecipient && emailRecipient.includes('@')) {
+                const emailData = new FormData();
+                emailData.append('_token', '{{ csrf_token() }}');
+                emailData.append('wish_message_id', currentMessageId);
+                emailData.append('recipient_email', emailRecipient);
+                emailData.append('custom_message', text);
+                fetch('{{ route("share-messages.sendEmail") }}', {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json' },
+                    body: emailData,
+                    keepalive: true
+                });
+            }
+
+            sessionStorage.setItem('flash_success', 'Messages triggered for all selected channels!');
+            setTimeout(() => {
+                window.location.href = '{{ route("user.my-messages.page") }}';
+            }, 10);
         }
     });
 });

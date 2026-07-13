@@ -821,6 +821,18 @@ document.addEventListener('DOMContentLoaded', function() {
             toast.style.display = 'flex';
         }, 1000); // slight delay for smooth entry
     }
+
+    // Process client-side session storage flashes
+    const flashSuccess = sessionStorage.getItem('flash_success');
+    if (flashSuccess && typeof showNotification === 'function') {
+        showNotification('Success', flashSuccess, 'success', 3000);
+        sessionStorage.removeItem('flash_success');
+    }
+    const flashError = sessionStorage.getItem('flash_error');
+    if (flashError && typeof showNotification === 'function') {
+        showNotification('Error', flashError, 'error', 4000);
+        sessionStorage.removeItem('flash_error');
+    }
 });
 
 </script>
