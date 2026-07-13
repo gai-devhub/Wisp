@@ -227,6 +227,7 @@ class AdminController extends Controller
         $notificationBroadcasts = $this->getNotificationBroadcastsPaginated($notificationsPage);
         $userInquiries = UserNotification::where('user_id', Auth::id())
             ->where('context', 'admin_message')
+            ->where('deleted_by_admin', false)
             ->rootThreads()
             ->with(['sender', 'replies.sender'])
             ->orderBy('created_at', 'desc')

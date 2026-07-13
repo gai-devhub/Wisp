@@ -26,6 +26,8 @@ class UserNotification extends Model
         'is_reply',
         'replied_at',
         'read_at',
+        'deleted_by_user',
+        'deleted_by_admin',
     ];
 
     protected $casts = [
@@ -33,6 +35,8 @@ class UserNotification extends Model
         'is_reply' => 'boolean',
         'replied_at' => 'datetime',
         'read_at' => 'datetime',
+        'deleted_by_user' => 'boolean',
+        'deleted_by_admin' => 'boolean',
     ];
 
     public const TYPE_INFO = 'info';

@@ -29,6 +29,7 @@ class UserNotificationsController extends Controller
                       ->orWhere('sender_id', $userId);
             })
             ->whereIn('context', $allowedContexts)
+            ->where('deleted_by_user', false)
             ->rootThreads()
             ->with(['sender', 'replies.sender'])
             ->orderBy('created_at', 'desc')
@@ -148,7 +149,19 @@ class UserNotificationsController extends Controller
         $notification = UserNotification::where(function ($query) use ($userId) {
             $query->where('user_id', $userId)->orWhere('sender_id', $userId);
         })->findOrFail($id);
-        $notification->delete();
+
+        if (Auth::user()->role === 'admin') {
+            $notification->deleted_by_admin = true;
+        } else {
+            $notification->deleted_by_user = true;
+        }
+        
+        $notification->save();
+
+        if ($notification->deleted_by_user && $notification->deleted_by_admin) {
+            $notification->delete();
+        }
+
         return response()->json(['ok' => true]);
     }
 }

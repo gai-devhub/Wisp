@@ -209,6 +209,7 @@
                     @php
                         $unreadCount = \App\Models\UserNotification::where('user_id', auth()->id())
                             ->whereNull('read_at')
+                            ->where('deleted_by_user', false)
                             ->count();
                     @endphp
                     <a href="{{ route('user.notifications.page') }}" class="notification-bell" id="notificationBell"

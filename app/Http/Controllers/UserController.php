@@ -292,7 +292,7 @@ class UserController extends Controller
         $allMessagesForSelect = WishMessages::where('user_id', $userId)->orderBy('created_at', 'desc')->get(['id', 'title', 'recipient_name', 'recipient_special_name', 'is_published']);
         $allMessagesForEdit = WishMessages::where('user_id', $userId)->get(['id', 'message_type', 'title', 'recipient_name', 'recipient_special_name', 'greeting', 'message', 'last_note', 'receiving_date', 'sender_name', 'is_published']);
         $lastTwoMessages = WishMessages::where('user_id', $userId)->orderBy('created_at', 'desc')->take(2)->get();
-        $notifications = UserNotification::where(function($q) use ($userId) { $q->where('user_id', $userId)->orWhere('sender_id', $userId); })->rootThreads()->with(['sender', 'replies.sender'])->orderBy('created_at', 'desc')->limit(50)->get();
+        $notifications = UserNotification::where(function($q) use ($userId) { $q->where('user_id', $userId)->orWhere('sender_id', $userId); })->where('deleted_by_user', false)->rootThreads()->with(['sender', 'replies.sender'])->orderBy('created_at', 'desc')->limit(50)->get();
 
         $templateList = TemplateController::getAllTemplateKeys();
         $messageTemplates = Template::where('user_id', $userId)
@@ -655,11 +655,11 @@ class UserController extends Controller
 
         if ($request->hasFile('profile_picture')) {
             if ($user->profile_picture && !str_starts_with($user->profile_picture, 'http')) {
-                \Illuminate\Support\Facades\Storage::disk('s3')->delete('profile-pictures/' . $user->profile_picture);
+                \Illuminate\Support\Facades\Storage::disk('public')->delete('profile-pictures/' . $user->profile_picture);
             }
             $file = $request->file('profile_picture');
             $name = 'user-' . $user->id . '-' . time() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('profile-pictures', $name, 's3');
+            $path = $file->storeAs('profile-pictures', $name, 'public');
             $user->profile_picture = basename($path);
             $user->save();
         }
@@ -675,7 +675,7 @@ class UserController extends Controller
     {
         $user = $request->user();
         if ($user->profile_picture && !str_starts_with($user->profile_picture, 'http')) {
-            \Illuminate\Support\Facades\Storage::disk('s3')->delete('profile-pictures/' . $user->profile_picture);
+            \Illuminate\Support\Facades\Storage::disk('public')->delete('profile-pictures/' . $user->profile_picture);
         }
         $user->profile_picture = null;
         $user->save();
@@ -780,14 +780,14 @@ class UserController extends Controller
             // 1. Delete Media Files (Storage & DB)
             $mediaFiles = \App\Models\MediaFiles::where('user_id', $user->id)->get();
             foreach ($mediaFiles as $file) {
-                if ($file->recipient_image) \Illuminate\Support\Facades\Storage::disk('s3')->delete($file->recipient_image);
-                if ($file->background_music) \Illuminate\Support\Facades\Storage::disk('s3')->delete($file->background_music);
+                if ($file->recipient_image) \Illuminate\Support\Facades\Storage::disk('public')->delete($file->recipient_image);
+                if ($file->background_music) \Illuminate\Support\Facades\Storage::disk('public')->delete($file->background_music);
                 $file->delete();
             }
 
             // 2. Delete Profile Picture
             if ($user->profile_picture) {
-                \Illuminate\Support\Facades\Storage::disk('s3')->delete('profile-pictures/' . $user->profile_picture);
+                \Illuminate\Support\Facades\Storage::disk('public')->delete('profile-pictures/' . $user->profile_picture);
             }
 
             // 3. Delete Messages & Associated Data
