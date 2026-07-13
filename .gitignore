@@ -4,8 +4,7 @@
 # Server Environment & Credentials
 /.env
 /.env.*
-aws access.txt
-s3-config.md
+AWS.txt
 Wisp-Updates.txt
 
 # Application Storage & Keys
