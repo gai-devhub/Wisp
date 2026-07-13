@@ -21,14 +21,20 @@
             
             <!-- Left Pane: List -->
             <div class="inbox-list-pane" style="background: var(--admin-bg-main); border-right: 1px solid var(--admin-border);">
-                <!-- Tabs Wrapper inside the card -->
-                <div class="admin-notification-tabs-wrapper" style="margin: 16px 16px 0 16px; width: calc(100% - 32px); display: flex; justify-content: stretch;">
+                <!-- Search Box first -->
+                <div class="inbox-search" style="padding-bottom: 12px;">
+                    <i class="fas fa-search" style="color: var(--admin-text-muted);"></i>
+                    <input type="text" id="notification-search" placeholder="Search messages..." style="background: var(--admin-bg-soft); border: 1px solid var(--admin-border); color: var(--admin-text-main);">
+                </div>
+
+                <!-- Tabs Wrapper under the search input bar -->
+                <div class="admin-notification-tabs-wrapper" style="margin: 0 20px 20px 20px; width: calc(100% - 40px); display: flex;">
                     <div class="admin-notification-tabs-nav" style="width: 100%; display: flex;">
-                        <button class="admin-tab-btn active" id="tab-broadcasts" onclick="switchAdminTab('broadcasts')" style="flex: 1; justify-content: center;">
+                        <button class="admin-tab-btn active" id="tab-broadcasts" onclick="switchAdminTab('broadcasts')">
                             <i class="fas fa-bullhorn"></i>
                             <span>Broadcasts</span>
                         </button>
-                        <button class="admin-tab-btn" id="tab-inquiries" onclick="switchAdminTab('inquiries')" style="flex: 1; justify-content: center;">
+                        <button class="admin-tab-btn" id="tab-inquiries" onclick="switchAdminTab('inquiries')">
                             <i class="fas fa-user-tag"></i>
                             <span>Inquiries</span>
                             <span class="admin-badge-count" id="inquiry-count">{{ count($userInquiries ?? []) }}</span>
@@ -36,10 +42,7 @@
                     </div>
                 </div>
 
-                <div class="inbox-search" style="border-bottom: 1px solid var(--admin-border);">
-                    <i class="fas fa-search" style="color: var(--admin-text-muted);"></i>
-                    <input type="text" id="notification-search" placeholder="Search messages..." style="background: var(--admin-bg-soft); border: 1px solid var(--admin-border); color: var(--admin-text-main);">
-                </div>
+                <div style="border-bottom: 1px solid var(--admin-border);"></div>
 
                 <!-- Broadcasts List -->
                 <div class="inbox-list" id="inbox-list-broadcasts">
@@ -408,33 +411,40 @@ function deleteNotification(e, id) {
 }
 
 .admin-notification-tabs-wrapper {
-    background: var(--admin-bg-main);
-    padding: 6px;
-    border-radius: 12px;
-    display: inline-block;
+    background: var(--admin-bg-soft);
+    padding: 4px;
+    border-radius: 10px;
+    display: flex;
     border: 1px solid var(--admin-border);
 }
 .admin-notification-tabs-nav {
     display: flex;
     gap: 4px;
+    width: 100%;
 }
 .admin-tab-btn {
     border: none;
     background: transparent;
-    padding: 10px 20px;
-    border-radius: 8px;
+    padding: 8px 16px;
+    border-radius: 6px;
     font-weight: 600;
+    font-size: 0.9rem;
     color: var(--admin-text-muted);
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     transition: var(--admin-transition);
     cursor: pointer;
+    flex: 1;
 }
 .admin-tab-btn i { font-size: 0.9rem; }
 .admin-tab-btn:hover {
-    color: var(--admin-primary);
-    background: var(--admin-bg-soft);
+    color: var(--admin-text-main);
+    background: rgba(0, 0, 0, 0.04);
+}
+[data-theme="dark"] .admin-tab-btn:hover {
+    background: rgba(255, 255, 255, 0.04);
 }
 .admin-tab-btn.active {
     background: var(--admin-primary);
@@ -442,17 +452,27 @@ function deleteNotification(e, id) {
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 .admin-tab-btn.active .admin-badge-count {
-    background: var(--admin-bg-main);
+    background: #fff;
     color: var(--admin-primary);
 }
 .admin-badge-count {
-    background: var(--admin-bg-soft);
+    background: rgba(0, 0, 0, 0.06);
     color: var(--admin-text-muted);
     font-size: 0.75rem;
-    padding: 2px 8px;
-    border-radius: 20px;
-    margin-left: 4px;
     font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    margin-left: 6px;
+    line-height: 1;
+}
+[data-theme="dark"] .admin-badge-count {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--admin-text-muted);
 }
 
 /* Inbox Layout exactly matching User side */
