@@ -119,6 +119,7 @@ Route::middleware(['auth', 'admin', 'require.passcode'])->group(function () {
     Route::post('/admin/maintenance/optimize', [AdminController::class, 'optimizeApp'])->name('admin.maintenance.optimize');
     Route::post('/admin/system/ai-logs/delete', [AdminController::class, 'deleteAiLogs'])->name('admin.aiLogs.delete');
     Route::post('/admin/notifications/{id}/reply', [AdminController::class, 'replyToInquiry'])->name('admin.notifications.reply');
+    Route::delete('/admin/notifications/broadcast/{id}', [AdminController::class, 'deleteBroadcast'])->name('admin.notifications.deleteBroadcast');
 
     // Advertisements
     Route::get('/admin-page/ads', [AdminController::class, 'adsPage'])->name('admin.ads.page');

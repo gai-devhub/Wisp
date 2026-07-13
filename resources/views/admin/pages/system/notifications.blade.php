@@ -398,21 +398,48 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-function deleteNotification(e, id) {
+function deleteNotification(e, idStr) {
     e.stopPropagation();
+    
+    // Parse the type and ID
+    const parts = idStr.split('-');
+    const type = parts[0]; // 'b' or 'i'
+    const id = parts[1]; // numeric ID
+    
+    let url = '';
+    if (type === 'i') {
+        url = `/notifications/${id}/delete`;
+    } else if (type === 'b') {
+        url = `/admin/notifications/broadcast/${id}`;
+    } else {
+        url = `/notifications/${idStr}/delete`; // fallback if no prefix
+    }
+    
     showAdminConfirm('Are you sure you want to delete this?', function() {
-        // Here you would make an AJAX call to delete the notification.
-        // For now, simply hide it.
-        const item = document.getElementById('item-' + id);
-        if(item) {
-            item.remove();
-            updateInquiryUnreadCount();
-        }
-        
-        const detail = document.getElementById('detail-' + id);
-        if(detail && detail.style.display !== 'none') {
-            showEmptyReader();
-        }
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                const item = document.getElementById('item-' + idStr);
+                if (item) {
+                    item.remove();
+                    updateInquiryUnreadCount();
+                }
+                
+                const detail = document.getElementById('detail-' + idStr);
+                if (detail && detail.style.display !== 'none') {
+                    showEmptyReader();
+                }
+            } else {
+                showAdminAlert('Failed to delete message. Please try again.');
+            }
+        }).catch(err => {
+            showAdminAlert('An error occurred. Please try again.');
+        });
     });
 }
 </script>

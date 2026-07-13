@@ -700,11 +700,11 @@ class AdminController extends Controller
         }
         if ($request->hasFile('profile_picture')) {
             if ($user->profile_picture) {
-                Storage::disk('s3')->delete($user->profile_picture);
+                Storage::disk('public')->delete($user->profile_picture);
             }
             $file = $request->file('profile_picture');
             $name = 'admin-user-' . $user->id . '-' . time() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('profile-pictures', $name, 's3');
+            $path = $file->storeAs('profile-pictures', $name, 'public');
             $user->profile_picture = $path;
         }
         $user->save();
@@ -1599,6 +1599,20 @@ class AdminController extends Controller
         ActivityLog::log(Auth::id(), 'Notification reply sent', 'Replied to inquiry #' . $id . ' from ' . $userToReply->username);
 
         return $this->redirectToAdminSection('notifications', 'success', 'Reply sent to ' . $userToReply->username . '.');
+    }
+
+    /**
+     * Delete a notification broadcast.
+     */
+    public function deleteBroadcast($id)
+    {
+        $broadcast = NotificationBroadcast::findOrFail($id);
+        $broadcast->userNotifications()->delete();
+        $broadcast->delete();
+
+        ActivityLog::log(Auth::id(), 'Notification broadcast deleted', 'Deleted broadcast #' . $id);
+
+        return response()->json(['ok' => true]);
     }
 
     public function adsPage()
