@@ -107,10 +107,10 @@
 
             <div class="template-tabs" role="tablist" style="display: flex; flex-wrap: nowrap; overflow-x: auto; white-space: nowrap; padding-bottom: 8px; gap: 8px; scrollbar-width: none;">
                 <button type="button" class="template-tab active" data-filter="all" role="tab" aria-selected="true">All</button>
-                <button type="button" class="template-tab" data-filter="view" role="tab" aria-selected="false">Views</button>
-                <button type="button" class="template-tab" data-filter="aurora" role="tab" aria-selected="false">Aurora</button>
-                <button type="button" class="template-tab" data-filter="casual" role="tab" aria-selected="false">Casual</button>
-                @if($premiumUser)
+                @foreach($themes as $theme => $count)
+                    <button type="button" class="template-tab" data-filter="{{ $theme }}">{{ ucfirst($theme) }}</button>
+                @endforeach
+                <!-- @if($premiumUser)
                     <button type="button" class="template-tab" data-filter="confetti" role="tab" aria-selected="false">Confetti</button>
                     <button type="button" class="template-tab" data-filter="minimal" role="tab" aria-selected="false">Minimal</button>
                     <button type="button" class="template-tab" data-filter="garden" role="tab" aria-selected="false">Garden</button>
@@ -123,23 +123,13 @@
                             {{ ucfirst($lockedTab) }} <i class="fas fa-lock" style="font-size:10px;margin-left:4px;"></i>
                         </button>
                     @endforeach
-                @endif
+                @endif -->
             </div>
 
             <div class="template-grid" id="template-grid">
                 @php
-                $themes = [
-                    'view'     => 6,
-                    'aurora'   => 14,
-                    'casual'   => 22,
-                    'confetti' => 12,
-                    'minimal'  => 18,
-                    'garden'   => 10,
-                    'glitter'  => 8,
-                    'romance'  => 15,
-                ];
                 // Free users can see these two themes
-                $freeThemes = ['View', 'Aurora', 'Casual']; 
+                $freeThemes = ['view', 'aurora', 'casual']; 
                 $premiumUser = true; // $isPremium ?? false; // Make all templates available
                 $counter = 0;
                 $globalTemplateIndex = 0;

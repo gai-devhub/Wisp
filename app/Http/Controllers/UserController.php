@@ -581,6 +581,9 @@ class UserController extends Controller
 
         $viewPath = $folderMap[$section] ?? $section;
 
+        // Fetch themes data for template gallery
+        $themes = array_merge(['view' => 6], TemplateGalleryController::THEMES);
+
         return view('user.pages.' . $viewPath, compact(
             'user', 'userSettings', 'message', 'messages', 'allMessagesForSelect', 'allMessagesForEdit', 'lastTwoMessages', 'notifications', 'templateList', 'generatedLinks', 'messageTemplates',
             'dashboardStats', 'recentActivity', 'viewsLast7Days', 'recentShareSends', 'allShareSends',
@@ -588,7 +591,7 @@ class UserController extends Controller
             'activityTotal', 'activityHasPrev', 'activityHasNext', 'activityPage',
             'imagesSize', 'audioSize',
             'scheduledSends', 'activeSessions', 'searchQuery', 'searchResults', 'matchedSystemPages',
-            'activeAds', 'isPremium'
+            'activeAds', 'isPremium', 'themes'
         ));
     }
 

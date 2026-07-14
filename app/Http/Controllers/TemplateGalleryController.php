@@ -11,30 +11,35 @@ class TemplateGalleryController extends Controller
     public const THEMES = [
         'aurora' => 14,
         'casual' => 22,
-        'confetti' => 12,
+        // 'confetti' => 12,
         // 'minimal' => 18,
         // 'garden' => 10,
         // 'glitter' => 8,
         // 'romance' => 15,
     ];
 
-    /**
-     * Get all template keys (view-1..6 + theme templates).
-     */
+    /** Template keys for views (view-1..6) plus theme templates (template.Theme.template-N). */
     public static function getAllTemplateKeys(): array
     {
         $keys = [];
-        for ($v = 1; $v <= 6; $v++) {
-            $keys[] = 'template.view.template-' . $v;
-        }
-        foreach (self::THEMES as $theme => $count) {
-            $pascal = ucfirst($theme);
+        $themes = [
+            'view' => 6,
+            'Aurora' => 14,
+            'Casual' => 22,
+            // 'Confetti' => 12,
+            // 'Minimal' => 18,
+            // 'Garden' => 10,
+            // 'Glitter' => 8,
+            // 'Romance' => 15,
+        ];
+        foreach ($themes as $theme => $count) {
             for ($n = 1; $n <= $count; $n++) {
-                $keys[] = 'template.' . $pascal . '.template-' . $n;
+                $keys[] = 'template.' . $theme . '.template-' . $n;
             }
         }
         return $keys;
     }
+
 
     /**
      * Create a demo message object for template previews (no DB).
