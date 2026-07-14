@@ -1,10 +1,32 @@
 # WISP (Wish, Inspire, Share, Protect)
 
+<p align="center">
+  <img src="public/img/logo.png" alt="Wisp Logo" width="180">
+</p>
+
+<h1 align="center">WISP</h1>
+
+<h3 align="center">
 WISP is a state-of-the-art, digital keepsake and messaging platform built on Laravel. It allows users to create rich, highly personalized messages, attach media and Spotify background audio, lock them behind secure Vault PINs, and automatically schedule their delivery via Email, SMS, or WhatsApp. 
 
 WISP treats messages as premium digital greeting cards rather than ephemeral texts, designed with a stunning glassmorphic UI and seamless user experience.
+</h3>
+
+<p align="center">
+A modern social and community platform built exclusively for the members of <strong>All Christians Fellowship (ACF)</strong>.
+</p>
 
 ---
+
+<p align="center">
+
+![Status](https://img.shields.io/badge/status-development-blue)
+![Platform](https://img.shields.io/badge/Web%Base%App-green)
+![React Native](https://img.shields.io/badge/Blade-blue)
+![Backend](https://img.shields.io/badge/Backend-Laravel-red)
+![License](https://img.shields.io/badge/license-Private-black)
+
+</p>
 
 ## 🌟 Key Features
 
