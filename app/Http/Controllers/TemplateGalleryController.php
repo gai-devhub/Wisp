@@ -9,6 +9,7 @@ class TemplateGalleryController extends Controller
 {
     /** @var array Theme name => count */
     public const THEMES = [
+        'view' => 6,
         'aurora' => 14,
         'casual' => 22,
         // 'confetti' => 12,

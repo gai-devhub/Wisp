@@ -32,7 +32,7 @@ class GuestMessageController extends Controller
             $messageCount = $messages->count();
         }
 
-        $themes = array_merge(['view' => 6], \App\Http\Controllers\TemplateGalleryController::THEMES);
+        $themes = TemplateGalleryController::THEMES;
 
         return view('welcome.try', compact('messageCount', 'themes', 'messages'));
     }

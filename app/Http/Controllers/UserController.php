@@ -581,8 +581,8 @@ class UserController extends Controller
 
         $viewPath = $folderMap[$section] ?? $section;
 
-        // Fetch themes data for template gallery
-        $themes = array_merge(['view' => 6], TemplateGalleryController::THEMES);
+        // Fetch themes data for template gallery (all themes come from backend)
+        $themes = TemplateGalleryController::THEMES;
 
         return view('user.pages.' . $viewPath, compact(
             'user', 'userSettings', 'message', 'messages', 'allMessagesForSelect', 'allMessagesForEdit', 'lastTwoMessages', 'notifications', 'templateList', 'generatedLinks', 'messageTemplates',
