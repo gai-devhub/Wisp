@@ -1,43 +1,52 @@
-# WISP (Wish, Inspire, Share, Protect)
+# ✨ WISP
+### *Wish • Inspire • Share • Protect*
 
 <p align="center">
-  <img src="public/img/logo.png" alt="Wisp Logo" width="180">
+  <img src="public/img/logo.png" alt="WISP Logo" width="180">
 </p>
 
-<h1 align="center">WISP</h1>
-
-<h3 align="center">
-WISP is a state-of-the-art, digital keepsake and messaging platform built on Laravel. It allows users to create rich, highly personalized messages, attach media and Spotify background audio, lock them behind secure Vault PINs, and automatically schedule their delivery via Email, SMS, or WhatsApp. 
-
-WISP treats messages as premium digital greeting cards rather than ephemeral texts, designed with a stunning glassmorphic UI and seamless user experience.
-</h3>
+<p align="center">
+  <strong>WISP</strong> is a premium digital messaging and keepsake platform built with Laravel that transforms ordinary messages into meaningful, interactive experiences.
+</p>
 
 <p align="center">
-A modern social and community platform built exclusively for the members of <strong>All Christians Fellowship (ACF)</strong>.
+Create beautiful digital greeting cards, schedule messages for future delivery, protect private memories with secure Vault PINs, attach photos, videos, and music, and share them through Email, SMS, or WhatsApp—all from one elegant platform.
+</p>
+
+<p align="center">
+Designed with a modern glassmorphic interface, WISP combines automation, security, and personalization to help people celebrate life's most important moments.
 </p>
 
 ---
 
 <p align="center">
 
-![Status](https://img.shields.io/badge/status-development-blue)
-![Platform](https://img.shields.io/badge/Web%Base%App-green)
-![React Native](https://img.shields.io/badge/Blade-blue)
-![Backend](https://img.shields.io/badge/Backend-Laravel-red)
-![License](https://img.shields.io/badge/license-Private-black)
+![Status](https://img.shields.io/badge/status-active%20development-blue)
+![Laravel](https://img.shields.io/badge/Laravel-12-red)
+![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php&logoColor=white)
+![Database](https://img.shields.io/badge/Database-MySQL-orange)
+![Frontend](https://img.shields.io/badge/Frontend-Blade-green)
+![License](https://img.shields.io/badge/License-Proprietary-black)
 
 </p>
 
-## 🌟 Key Features
+---
 
-- **Rich Message Generation:** Create aesthetically pleasing messages with customized templates, attached images, and integrated Spotify background music.
-- **The Vault (PIN Protection):** Secure sensitive or highly personal messages behind a 4-6 digit encrypted PIN. Recipients must enter the PIN to unlock the message contents and media.
-- **Omnichannel Automations:** Schedule messages to be delivered precisely when you want (hours, days, or years in advance) via **Email**, **SMS**, or **WhatsApp**.
-- **Recurring Messages:** Automatically send yearly birthday wishes or anniversary messages.
-- **Analytics & Tracking:** Track when your messages are delivered, opened, and viewed.
-- **Premium UI/UX:** Built with a custom, highly responsive CSS architecture featuring glassmorphism, soft shadows, and mobile-first pixel-perfect layouts.
-- **Auto-Expiring Links:** Set messages to self-destruct and permanently delete from the database after a specific timeframe (e.g., 1 week after viewing).
+## 🌟 Features
 
+- 🎉 Beautiful digital greeting cards
+- 📅 Schedule messages for future delivery
+- 🔐 Vault PIN protection for private messages
+- 📷 Image and media attachments
+- 🎵 Spotify music integration
+- 📧 Email delivery
+- 📱 SMS notifications
+- 💬 WhatsApp messaging
+- 🔁 Recurring birthday and anniversary messages
+- 📊 Delivery and view analytics
+- ⏳ Auto-expiring message links
+- 🎨 Modern glassmorphism interface
+- 📱 Fully responsive design
 ---
 
 ## 🛠️ Technology Stack
