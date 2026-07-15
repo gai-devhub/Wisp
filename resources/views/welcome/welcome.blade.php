@@ -45,9 +45,9 @@
       }
     }
     </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
+        <script type="application/ld+json">
+        {
+            "@@context": "https://schema.org",
       "@type": "ItemList",
       "name": "Wisp Navigation links",
       "description": "Quick links to Wisp key pages",
