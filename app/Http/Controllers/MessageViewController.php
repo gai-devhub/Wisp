@@ -43,7 +43,7 @@ class MessageViewController extends Controller
                 $recipientImageUrl = null;
                 $media = $message->mediaFiles;
                 if ($media && $media->recipient_image) {
-                    $recipientImageUrl = asset('storage/' . $media->recipient_image);
+                    $recipientImageUrl = media_url($media->recipient_image);
                 }
                 return response()->view('sub-folder.message-not-available', [
                     'receiving_date'       => $receivingDateFormatted,
@@ -56,7 +56,7 @@ class MessageViewController extends Controller
             $recipientImageUrl = null;
             $media = $message->mediaFiles;
             if ($media && $media->recipient_image) {
-                $recipientImageUrl = asset('storage/' . $media->recipient_image);
+                $recipientImageUrl = media_url($media->recipient_image);
             }
             return response()->view('sub-folder.message-expired', [
                 'recipient_image_url' => $recipientImageUrl,
