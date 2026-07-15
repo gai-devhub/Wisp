@@ -76,27 +76,27 @@
 
             @if(session('success'))
                 <div class="glass-card success-box">
-                    <i class="fas fa-check-circle" style="font-size: 3rem; margin-bottom: 16px;"></i>
-                    <h2 style="font-size: 1.5rem; color: white;">Your magic link is ready!</h2>
-                    <p style="margin-top: 8px; color: var(--text-muted);">Copy the link below and share it with your recipient.</p>
-                    
-                    <div class="generated-link-box">
+                    <i class="fas fa-check-circle text-4xl mb-4"></i>
+                    <h2 class="text-xl text-white font-semibold">Your magic link is ready!</h2>
+                    <p class="mt-2 text-sm text-[var(--text-muted)]">Copy the link below and share it with your recipient.</p>
+
+                    <div class="generated-link-box mt-6">
                         <input type="text" id="magicLink" value="{{ session('generated_link') }}" readonly>
-                        <button onclick="copyLink()" class="btn btn-secondary" style="padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; cursor: pointer;">
-                            <i class="fas fa-copy"></i> Copy
+                        <button type="button" onclick="copyLink()" class="btn btn-secondary px-4 py-2 rounded-xl border border-white/20 bg-white/10 text-white">
+                            <i class="fas fa-copy mr-2"></i> Copy
                         </button>
                     </div>
-                    
-                    <div style="margin-top: 24px;">
-                        <a href="{{ route('guest.try') }}" style="color: var(--accent); text-decoration: none; font-weight: 600;">Create another message</a>
-                        <span style="color: rgba(255,255,255,0.3); margin: 0 12px;">|</span>
-                        <a href="{{ route('auth.login') }}" style="color: white; text-decoration: none; font-weight: 600;">Sign up for more</a>
+
+                    <div class="mt-6 flex flex-wrap items-center justify-center gap-2 text-sm">
+                        <a href="{{ route('guest.try') }}" class="text-[var(--accent)] font-semibold">Create another message</a>
+                        <span class="text-white/50">|</span>
+                        <a href="{{ route('auth.login') }}" class="text-white font-semibold">Sign up for more</a>
                     </div>
                 </div>
-                
+
                 <script>
                     function copyLink() {
-                        var copyText = document.getElementById("magicLink");
+                        const copyText = document.getElementById("magicLink");
                         copyText.select();
                         copyText.setSelectionRange(0, 99999);
                         navigator.clipboard.writeText(copyText.value);
