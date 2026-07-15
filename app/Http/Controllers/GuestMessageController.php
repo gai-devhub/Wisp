@@ -122,21 +122,24 @@ class GuestMessageController extends Controller
                     'user_id' => $guestUser->id
                 ]);
                 
-                if ($request->hasFile('recipient_image')) {
-                    $image = $request->file('recipient_image');
-                    if ($mediaFile->recipient_image) {
-                        \Illuminate\Support\Facades\Storage::disk('public')->delete($mediaFile->recipient_image);
+                    if ($request->hasFile('recipient_image')) {
+                        $image = $request->file('recipient_image');
+                        if ($mediaFile->recipient_image) {
+                            \Illuminate\Support\Facades\Storage::disk('s3')->delete($mediaFile->recipient_image);
+                        }
+                        $mediaFile->recipient_image = $image->storePublicly('guest_media/recipient-images', 's3');
                     }
-                    $mediaFile->recipient_image = $image->store('guest_media/recipient-images', 'public');
-                }
 
                 if ($request->hasFile('background_music')) {
                     $file = $request->file('background_music');
                     if ($mediaFile->background_music && !str_starts_with($mediaFile->background_music, 'http')) {
-                        \Illuminate\Support\Facades\Storage::disk('public')->delete($mediaFile->background_music);
+                        \Illuminate\Support\Facades\Storage::disk('s3')->delete($mediaFile->background_music);
                     }
-                    $mediaFile->background_music = $file->store('guest_media/background-music', 'public');
+                        $mediaFile->background_music = $file->storePublicly('guest_media/background-music', 's3');
                 } elseif ($request->filled('spotify_url')) {
+                    if ($mediaFile->background_music && !str_starts_with($mediaFile->background_music, 'http')) {
+                        \Illuminate\Support\Facades\Storage::disk('s3')->delete($mediaFile->background_music);
+                    }
                     $mediaFile->background_music = $request->input('spotify_url');
                 }
                 
@@ -190,12 +193,12 @@ class GuestMessageController extends Controller
 
                 if ($request->hasFile('recipient_image')) {
                     $image = $request->file('recipient_image');
-                    $mediaFile->recipient_image = $image->store('guest_media/recipient-images', 'public');
+                    $mediaFile->recipient_image = $image->storePublicly('guest_media/recipient-images', 's3');
                 }
                 
                 if ($request->hasFile('background_music')) {
                     $file = $request->file('background_music');
-                    $mediaFile->background_music = $file->store('guest_media/background-music', 'public');
+                    $mediaFile->background_music = $file->storePublicly('guest_media/background-music', 's3');
                 } elseif ($request->filled('spotify_url')) {
                     $mediaFile->background_music = $request->input('spotify_url');
                 }
@@ -242,6 +245,64 @@ class GuestMessageController extends Controller
             }
             
             return redirect()->back()->with('error', 'Something went wrong while saving your message.');
+        }
+    }
+
+    /**
+     * Delete a guest message and its media, then stay on the same page with a toast.
+     */
+    public function destroy(Request $request, $id)
+    {
+        $ip = $request->ip();
+        $guestEmail = 'guest-' . str_replace([':', '.'], '-', $ip) . '@wisp.local';
+
+        $guestUser = User::where('email', $guestEmail)->first();
+        if (!$guestUser) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'error' => 'Message not found.'], 404);
+            }
+            return redirect()->back()->with('error', 'Message not found.');
+        }
+
+        $message = WishMessages::where('id', $id)->where('user_id', $guestUser->id)->first();
+        if (!$message) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'error' => 'Message not found.'], 404);
+            }
+            return redirect()->back()->with('error', 'Message not found.');
+        }
+
+        try {
+            // Delete associated media files on S3 if present
+            if ($message->mediaFiles) {
+                $mf = $message->mediaFiles;
+                if ($mf->recipient_image) {
+                    try { \Illuminate\Support\Facades\Storage::disk('s3')->delete($mf->recipient_image); } catch (\Throwable $e) {}
+                }
+                if ($mf->background_music && !str_starts_with($mf->background_music, 'http')) {
+                    try { \Illuminate\Support\Facades\Storage::disk('s3')->delete($mf->background_music); } catch (\Throwable $e) {}
+                }
+                $mf->delete();
+            }
+
+            // Remove generated links and template records
+            $message->generatedLinks()->delete();
+            $message->template()->delete();
+
+            // Soft-delete the message
+            $message->delete();
+
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => true]);
+            }
+
+            return redirect()->back()->with('success', 'Message deleted.');
+        } catch (\Exception $e) {
+            Log::error('Guest message delete failed: ' . $e->getMessage());
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'error' => 'Failed to delete message.'], 500);
+            }
+            return redirect()->back()->with('error', 'Failed to delete message.');
         }
     }
 }

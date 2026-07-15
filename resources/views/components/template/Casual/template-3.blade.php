@@ -34,7 +34,7 @@
 
         .bg-left {
             flex: 1;
-            background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('{{ isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image ? asset("storage/" . $mediaFiles->recipient_image) : asset("img/logo.png") }}');
+            background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('{{ isset($mediaFiles) && $mediaFiles && $mediaFiles->recipient_image ? s3_url($mediaFiles->recipient_image) : asset("img/logo.png") }}');
             background-size: cover;
             background-position: center;
             filter: grayscale(40%) blur(2px);

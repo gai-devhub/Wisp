@@ -123,12 +123,12 @@ class MediaFilesController extends Controller
         try {
             if ($request->hasFile('recipient_image')) {
                 $file = $request->file('recipient_image');
-                $recipientImagePath = $file->store('media/recipient-images', 's3');
+                $recipientImagePath = $file->storePublicly('media/recipient-images', 's3');
             }
 
             if ($request->hasFile('background_music')) {
                 $file = $request->file('background_music');
-                $backgroundMusicPath = $file->store('media/background-music', 's3');
+                $backgroundMusicPath = $file->storePublicly('media/background-music', 's3');
             } elseif ($request->filled('spotify_url')) {
                 $backgroundMusicPath = $request->input('spotify_url');
             }
@@ -235,7 +235,7 @@ class MediaFilesController extends Controller
                 Storage::disk('s3')->delete($media->recipient_image);
             }
             $file = $request->file('recipient_image');
-            $media->recipient_image = $file->store('media/recipient-images', 's3');
+            $media->recipient_image = $file->storePublicly('media/recipient-images', 's3');
         }
 
         if ($request->hasFile('background_music')) {
@@ -243,7 +243,7 @@ class MediaFilesController extends Controller
                 Storage::disk('s3')->delete($media->background_music);
             }
             $file = $request->file('background_music');
-            $media->background_music = $file->store('media/background-music', 's3');
+            $media->background_music = $file->storePublicly('media/background-music', 's3');
             $media->apple_music_url = null;
         } elseif ($request->filled('spotify_url')) {
             if ($media->background_music && !str_starts_with($media->background_music, 'http')) {

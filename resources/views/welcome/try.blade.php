@@ -129,7 +129,7 @@
                                              <i class="fas fa-envelope-open-text"></i>
                                          </div>
                                          <div>
-                                             <h3 class="text-base md:text-lg font-bold text-[var(--text-main)] mb-1">Message Basics</h3>
+                                             <h3 class="text-base md:text-lg font-bold text-[var(--text-main)] mb-1">Create Message</h3>
                                              <p class="text-xs md:text-sm text-[var(--text-muted)] m-0" id="messageBasicsSubtitle">The core details of your magical message.</p>
                                          </div>
                                      </div>
@@ -147,7 +147,7 @@
                                          </div>
                                          
                                          <div class="mb-4">
-                                             <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">PAGE TITLE</label>
+                                             <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">MESSAGE TITLE</label>
                                              <input type="text" name="title" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]" placeholder="Enter preferred view title" required>
                                          </div>
 
@@ -211,7 +211,7 @@
                                              <i class="fas fa-image"></i>
                                          </div>
                                          <div>
-                                             <h3 class="text-base md:text-lg font-bold text-[var(--text-main)] mb-1">Appearance & Media</h3>
+                                             <h3 class="text-base md:text-lg font-bold text-[var(--text-main)] mb-1">Add Media Files</h3>
                                              <p class="text-xs md:text-sm text-[var(--text-muted)] m-0" id="mediaSubtitle">Personalize how your message looks.</p>
                                          </div>
                                      </div>
@@ -280,7 +280,7 @@
                                             <i class="fas fa-th-large"></i>
                                         </div>
                                         <div>
-                                             <h3 class="text-base md:text-lg font-bold text-[var(--text-main)] mb-1">Template Info</h3>
+                                             <h3 class="text-base md:text-lg font-bold text-[var(--text-main)] mb-1">Template & Appearance</h3>
                                              <p class="text-xs md:text-sm text-[var(--text-muted)] m-0" id="templateSubtitle">Select an option</p>
                                         </div>
                                     </div>
@@ -380,7 +380,7 @@
                                                         
                                                         <div class="h-[1px] bg-gray-100 my-1"></div>
                                                         
-                                                        <form action="{{ route('guest.try.delete', $msg->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this message?');" class="m-0">
+                                                        <form action="{{ route('guest.try.delete', $msg->id) }}" method="POST" class="m-0">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
