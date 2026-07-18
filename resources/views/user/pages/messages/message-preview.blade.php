@@ -144,7 +144,7 @@
                         @php
                             $imgSrc = Str::startsWith($message->mediaFiles->recipient_image, ['http://', 'https://']) 
                                 ? $message->mediaFiles->recipient_image 
-                                : Storage::url($message->mediaFiles->recipient_image);
+                                : s3_url($message->mediaFiles->recipient_image);
                         @endphp
                         <img src="{{ $imgSrc }}" 
                              alt="Message Image" 
@@ -188,7 +188,7 @@
                         @else
                             <div class="preview-label mb-8"><i class="fas fa-music"></i> Background Music</div>
                             <audio controls class="audio-player-custom" style="width: 100%; margin-top: 10px;">
-                                <source src="{{ Str::startsWith($bgMusic, ['http://', 'https://']) ? $bgMusic : Storage::url($bgMusic) }}" type="audio/mpeg">
+                                <source src="{{ Str::startsWith($bgMusic, ['http://', 'https://']) ? $bgMusic : s3_url($bgMusic) }}" type="audio/mpeg">
                                 Your browser does not support the audio element.
                             </audio>
                         @endif

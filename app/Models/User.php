@@ -79,7 +79,7 @@ class User extends Authenticatable
             $filename = str_replace('profile-pictures/', '', $url);
             
             // Local path (uploaded file)
-            return asset('storage/profile-pictures/' . $filename);
+            return s3_url('profile-pictures/' . $filename);
         }
 
         return 'https://ui-avatars.com/api/?name=' . urlencode($this->username ?? 'User') . '&color=7F9CF5&background=EBF4FF';
@@ -149,19 +149,16 @@ class User extends Authenticatable
         return $this->hasMany(NotificationBroadcast::class, 'sent_by');
     }
 
-    /**
-     * Calculate total storage used by the user in bytes.
-     */
     public function totalStorageUsage(): int
     {
         $mediaFiles = $this->mediaFiles;
         $totalSize = 0;
         foreach ($mediaFiles as $file) {
-            if ($file->recipient_image && \Illuminate\Support\Facades\Storage::disk('s3')->exists($file->recipient_image)) {
-                $totalSize += \Illuminate\Support\Facades\Storage::disk('s3')->size($file->recipient_image);
+            if ($file->recipient_image && \Illuminate\Support\Facades\Storage::disk(media_disk())->exists($file->recipient_image)) {
+                $totalSize += \Illuminate\Support\Facades\Storage::disk(media_disk())->size($file->recipient_image);
             }
-            if ($file->background_music && \Illuminate\Support\Facades\Storage::disk('s3')->exists($file->background_music)) {
-                $totalSize += \Illuminate\Support\Facades\Storage::disk('s3')->size($file->background_music);
+            if ($file->background_music && \Illuminate\Support\Facades\Storage::disk(media_disk())->exists($file->background_music)) {
+                $totalSize += \Illuminate\Support\Facades\Storage::disk(media_disk())->size($file->background_music);
             }
         }
         return $totalSize;

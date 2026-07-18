@@ -17,6 +17,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Media Upload Disk
+    |--------------------------------------------------------------------------
+    |
+    | Disk used for user-uploaded files (message media, profile pictures, ads).
+    | Set to "s3" in production; "public" for local development.
+    |
+    */
+
+    'media_disk' => env('MEDIA_DISK', env('FILESYSTEM_DISK') === 's3' ? 's3' : 'public'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Filesystem Disks
     |--------------------------------------------------------------------------
     |

@@ -164,7 +164,7 @@
                                                                     <div>
                                                                         <i class="fas fa-image text-primary" style="color: #3b82f6;"></i> <strong style="color: var(--text-main);">Recipient Image</strong> <span style="color: var(--text-muted); font-size: 0.8rem;">({{ $formatBytes($imagesSize) }})</span>
                                                                     </div>
-                                                                    <a href="{{ Storage::url($media->recipient_image) }}" target="_blank" class="btn btn-sm" style="background-color: #3b82f6; color: white; padding: 4px 10px; border-radius: 4px; text-decoration: none; border: none;">
+                                                                    <a href="{{ s3_url($media->recipient_image) }}" target="_blank" class="btn btn-sm" style="background-color: #3b82f6; color: white; padding: 4px 10px; border-radius: 4px; text-decoration: none; border: none;">
                                                                         View <i class="fas fa-external-link-alt" style="font-size: 0.75rem; margin-left: 4px;"></i>
                                                                     </a>
                                                                 </li>
@@ -186,7 +186,7 @@
                                                                             <span style="color: var(--text-muted); font-size: 0.8rem;">(Spotify Link)</span>
                                                                         @endif
                                                                     </div>
-                                                                    <a href="{{ str_starts_with($media->background_music, 'http') ? $media->background_music : Storage::url($media->background_music) }}" target="_blank" class="btn btn-sm" style="background-color: #6366f1; color: white; padding: 4px 10px; border-radius: 4px; text-decoration: none; border: none;">
+                                                                    <a href="{{ str_starts_with($media->background_music, 'http') ? $media->background_music : s3_url($media->background_music) }}" target="_blank" class="btn btn-sm" style="background-color: #6366f1; color: white; padding: 4px 10px; border-radius: 4px; text-decoration: none; border: none;">
                                                                         Listen <i class="fas fa-headphones" style="font-size: 0.75rem; margin-left: 4px;"></i>
                                                                     </a>
                                                                 </li>

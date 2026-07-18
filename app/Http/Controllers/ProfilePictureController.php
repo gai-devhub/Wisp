@@ -58,6 +58,6 @@ class ProfilePictureController extends Controller
         }
 
         // S3 path – redirect to S3 URL
-        return redirect()->away(\Illuminate\Support\Facades\Storage::disk('s3')->url($path));
+        return redirect()->away(s3_url($path));
     }
 }
