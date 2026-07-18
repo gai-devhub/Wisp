@@ -2,16 +2,7 @@
 
 use Illuminate\Support\Facades\Storage;
 
-if (!function_exists('media_disk')) {
-    /**
-     * Disk used for user-uploaded media (images, audio, profile pictures, ads).
-     * Production: s3. Local dev: public.
-     */
-    function media_disk(): string
-    {
-        return config('filesystems.media_disk', 'public');
-    }
-}
+
 
 if (!function_exists('profile_picture_storage_path')) {
     /**
@@ -42,7 +33,7 @@ if (!function_exists('delete_storage_file')) {
         }
 
         try {
-            Storage::disk(media_disk())->delete($path);
+            Storage::disk('s3')->delete($path);
         } catch (\Throwable $e) {
             // Ignore missing files or misconfigured disks during cleanup.
         }
@@ -65,13 +56,9 @@ if (!function_exists('s3_url')) {
         }
 
         try {
-            return Storage::disk(media_disk())->url($path);
+            return Storage::disk('s3')->url($path);
         } catch (\Throwable $e) {
-            try {
-                return Storage::disk('public')->url($path);
-            } catch (\Throwable $e) {
-                return '';
-            }
+            return '';
         }
     }
 }

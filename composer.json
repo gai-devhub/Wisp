@@ -12,6 +12,7 @@
         "php": "^8.2",
         "aerni/laravel-spotify": "^3.0",
         "aws/aws-sdk-php": "^3.388",
+        "intervention/image-laravel": "^4.1",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.3",
         "laravel/socialite": "^5.23",

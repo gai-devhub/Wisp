@@ -43,16 +43,18 @@ class UserSettingsController extends Controller
         if ($request->hasFile('profile_picture')) {
             $dir = 'profile-pictures';
             $file = $request->file('profile_picture');
-            $name = 'user-' . $user->id . '-' . time() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs($dir, $name, media_disk());
+            $name = 'user-' . $user->id . '-' . time() . '.jpg';
+            $path = $dir . '/' . $name;
+            $encodedImage = \Intervention\Image\Laravel\Facades\Image::read($file)->scaleDown(width: 800)->toJpeg(quality: 80);
+            \Illuminate\Support\Facades\Storage::disk('public')->put($path, (string) $encodedImage);
             
             $oldFile = $user->profile_picture;
             $user->profile_picture = $path;
-            $user->save();
-
-            if ($oldFile) {
-                Storage::disk(media_disk())->delete($oldFile);
+                try {
+                    Storage::disk('public')->delete('profile-pictures/' . basename($oldFile));
+                } catch (\Throwable $e) {}
             }
+            $user->save();
         } else {
             $user->save();
         }

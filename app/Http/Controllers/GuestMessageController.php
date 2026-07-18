@@ -125,20 +125,24 @@ class GuestMessageController extends Controller
                     if ($request->hasFile('recipient_image')) {
                         $image = $request->file('recipient_image');
                         if ($mediaFile->recipient_image) {
-                            \Illuminate\Support\Facades\Storage::disk(media_disk())->delete($mediaFile->recipient_image);
+                            \Illuminate\Support\Facades\Storage::disk('s3')->delete($mediaFile->recipient_image);
                         }
-                        $mediaFile->recipient_image = $image->storePublicly('guest_media/recipient-images', media_disk());
+                        $filename = \Illuminate\Support\Str::random(20) . '.jpg';
+                        $path = 'guest_media/recipient-images/' . $filename;
+                        $encodedImage = \Intervention\Image\Laravel\Facades\Image::read($image)->scaleDown(width: 1000)->toJpeg(quality: 75);
+                        \Illuminate\Support\Facades\Storage::disk('s3')->put($path, (string) $encodedImage);
+                        $mediaFile->recipient_image = $path;
                     }
 
                 if ($request->hasFile('background_music')) {
                     $file = $request->file('background_music');
                     if ($mediaFile->background_music && !str_starts_with($mediaFile->background_music, 'http')) {
-                        \Illuminate\Support\Facades\Storage::disk(media_disk())->delete($mediaFile->background_music);
+                        \Illuminate\Support\Facades\Storage::disk('s3')->delete($mediaFile->background_music);
                     }
-                        $mediaFile->background_music = $file->storePublicly('guest_media/background-music', media_disk());
+                        $mediaFile->background_music = $file->store('guest_media/background-music', 's3');
                 } elseif ($request->filled('spotify_url')) {
                     if ($mediaFile->background_music && !str_starts_with($mediaFile->background_music, 'http')) {
-                        \Illuminate\Support\Facades\Storage::disk(media_disk())->delete($mediaFile->background_music);
+                        \Illuminate\Support\Facades\Storage::disk('s3')->delete($mediaFile->background_music);
                     }
                     $mediaFile->background_music = $request->input('spotify_url');
                 }
@@ -193,12 +197,12 @@ class GuestMessageController extends Controller
 
                 if ($request->hasFile('recipient_image')) {
                     $image = $request->file('recipient_image');
-                    $mediaFile->recipient_image = $image->storePublicly('guest_media/recipient-images', media_disk());
+                    $mediaFile->recipient_image = $image->store('guest_media/recipient-images', 's3');
                 }
                 
                 if ($request->hasFile('background_music')) {
                     $file = $request->file('background_music');
-                    $mediaFile->background_music = $file->storePublicly('guest_media/background-music', media_disk());
+                    $mediaFile->background_music = $file->store('guest_media/background-music', 's3');
                 } elseif ($request->filled('spotify_url')) {
                     $mediaFile->background_music = $request->input('spotify_url');
                 }
@@ -276,11 +280,9 @@ class GuestMessageController extends Controller
             // Delete associated media files on S3 if present
             if ($message->mediaFiles) {
                 $mf = $message->mediaFiles;
-                if ($mf->recipient_image) {
-                    try { \Illuminate\Support\Facades\Storage::disk(media_disk())->delete($mf->recipient_image); } catch (\Throwable $e) {}
-                }
-                if ($mf->background_music && !str_starts_with($mf->background_music, 'http')) {
-                    try { \Illuminate\Support\Facades\Storage::disk(media_disk())->delete($mf->background_music); } catch (\Throwable $e) {}
+                try { \Illuminate\Support\Facades\Storage::disk('s3')->delete($mf->recipient_image); } catch (\Throwable $e) {}
+                if ($mf->background_music && !str_starts_with((string)$mf->background_music, 'http')) {
+                    try { \Illuminate\Support\Facades\Storage::disk('s3')->delete($mf->background_music); } catch (\Throwable $e) {}
                 }
                 $mf->delete();
             }

@@ -380,11 +380,11 @@ class UserController extends Controller
         $imagesSize = 0;
         $audioSize = 0;
         foreach ($mediaFiles as $file) {
-            if ($file->recipient_image && \Illuminate\Support\Facades\Storage::disk(media_disk())->exists($file->recipient_image)) {
-                $imagesSize += \Illuminate\Support\Facades\Storage::disk(media_disk())->size($file->recipient_image);
+            if ($file->recipient_image && \Illuminate\Support\Facades\Storage::disk('s3')->exists($file->recipient_image)) {
+                $imagesSize += \Illuminate\Support\Facades\Storage::disk('s3')->size($file->recipient_image);
             }
-            if ($file->background_music && \Illuminate\Support\Facades\Storage::disk(media_disk())->exists($file->background_music)) {
-                $audioSize += \Illuminate\Support\Facades\Storage::disk(media_disk())->size($file->background_music);
+            if ($file->background_music && \Illuminate\Support\Facades\Storage::disk('s3')->exists($file->background_music)) {
+                $audioSize += \Illuminate\Support\Facades\Storage::disk('s3')->size($file->background_music);
             }
         }
 
@@ -660,12 +660,16 @@ class UserController extends Controller
         ]);
 
         if ($request->hasFile('profile_picture')) {
-            if ($user->profile_picture && !str_starts_with($user->profile_picture, 'http')) {
-                \Illuminate\Support\Facades\Storage::disk(media_disk())->delete('profile-pictures/' . $user->profile_picture);
+            if ($user->profile_picture) {
+                try {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete('profile-pictures/' . $user->profile_picture);
+                } catch (\Throwable $e) {}
             }
             $file = $request->file('profile_picture');
-            $name = 'user-' . $user->id . '-' . time() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('profile-pictures', $name, media_disk());
+            $name = 'user-' . $user->id . '-' . time() . '.jpg';
+            $path = 'profile-pictures/' . $name;
+            $encodedImage = \Intervention\Image\Laravel\Facades\Image::read($file)->scaleDown(width: 800)->toJpeg(quality: 80);
+            \Illuminate\Support\Facades\Storage::disk('public')->put($path, (string) $encodedImage);
             $user->profile_picture = basename($path);
             $user->save();
         }
@@ -680,10 +684,10 @@ class UserController extends Controller
     public function deleteProfilePicture(Request $request)
     {
         $user = $request->user();
-        if ($user->profile_picture && !str_starts_with($user->profile_picture, 'http')) {
-            \Illuminate\Support\Facades\Storage::disk(media_disk())->delete('profile-pictures/' . $user->profile_picture);
+        if ($user->profile_picture) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete('profile-pictures/' . $user->profile_picture);
+            $user->profile_picture = null;
         }
-        $user->profile_picture = null;
         $user->save();
 
         return response()->json([
@@ -786,14 +790,16 @@ class UserController extends Controller
             // 1. Delete Media Files (Storage & DB)
             $mediaFiles = \App\Models\MediaFiles::where('user_id', $user->id)->get();
             foreach ($mediaFiles as $file) {
-                if ($file->recipient_image) \Illuminate\Support\Facades\Storage::disk(media_disk())->delete($file->recipient_image);
-                if ($file->background_music) \Illuminate\Support\Facades\Storage::disk(media_disk())->delete($file->background_music);
+                if ($file) {
+                    if ($file->recipient_image) \Illuminate\Support\Facades\Storage::disk('s3')->delete($file->recipient_image);
+                    if ($file->background_music) \Illuminate\Support\Facades\Storage::disk('s3')->delete($file->background_music);
+                }
                 $file->delete();
             }
 
             // 2. Delete Profile Picture
             if ($user->profile_picture) {
-                \Illuminate\Support\Facades\Storage::disk(media_disk())->delete('profile-pictures/' . $user->profile_picture);
+                \Illuminate\Support\Facades\Storage::disk('public')->delete('profile-pictures/' . $user->profile_picture);
             }
 
             // 3. Delete Messages & Associated Data

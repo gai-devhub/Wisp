@@ -123,12 +123,15 @@ class MediaFilesController extends Controller
         try {
             if ($request->hasFile('recipient_image')) {
                 $file = $request->file('recipient_image');
-                $recipientImagePath = $file->storePublicly('media/recipient-images', media_disk());
+                $filename = \Illuminate\Support\Str::random(20) . '.jpg';
+                $recipientImagePath = 'media/recipient-images/' . $filename;
+                $encodedImage = \Intervention\Image\Laravel\Facades\Image::read($file)->scaleDown(width: 1000)->toJpeg(quality: 75);
+                \Illuminate\Support\Facades\Storage::disk('s3')->put($recipientImagePath, (string) $encodedImage);
             }
 
             if ($request->hasFile('background_music')) {
                 $file = $request->file('background_music');
-                $backgroundMusicPath = $file->storePublicly('media/background-music', media_disk());
+                $backgroundMusicPath = $file->store('media/background-music', 's3');
             } elseif ($request->filled('spotify_url')) {
                 $backgroundMusicPath = $request->input('spotify_url');
             }
@@ -235,7 +238,7 @@ class MediaFilesController extends Controller
                 delete_storage_file($media->recipient_image);
             }
             $file = $request->file('recipient_image');
-            $media->recipient_image = $file->storePublicly('media/recipient-images', media_disk());
+            $media->recipient_image = $file->store('media/recipient-images', 's3');
         }
 
         if ($request->hasFile('background_music')) {
@@ -243,7 +246,7 @@ class MediaFilesController extends Controller
                 delete_storage_file($media->background_music);
             }
             $file = $request->file('background_music');
-            $media->background_music = $file->storePublicly('media/background-music', media_disk());
+            $media->background_music = $file->store('media/background-music', 's3');
             $media->apple_music_url = null;
         } elseif ($request->filled('spotify_url')) {
             if ($media->background_music && !str_starts_with($media->background_music, 'http')) {
