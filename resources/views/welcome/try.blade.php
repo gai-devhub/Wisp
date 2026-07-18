@@ -74,36 +74,13 @@
                 </div>
             @endif
 
-            @if(session('success'))
-                <div class="glass-card success-box">
-                    <i class="fas fa-check-circle text-4xl mb-4"></i>
-                    <h2 class="text-xl text-white font-semibold">Your magic link is ready!</h2>
-                    <p class="mt-2 text-sm text-[var(--text-muted)]">Copy the link below and share it with your recipient.</p>
-
-                    <div class="generated-link-box mt-6">
-                        <input type="text" id="magicLink" value="{{ session('generated_link') }}" readonly>
-                        <button type="button" onclick="copyLink()" class="btn btn-secondary px-4 py-2 rounded-xl border border-white/20 bg-white/10 text-white">
-                            <i class="fas fa-copy mr-2"></i> Copy
-                        </button>
-                    </div>
-
-                    <div class="mt-6 flex flex-wrap items-center justify-center gap-2 text-sm">
-                        <a href="{{ route('guest.try') }}" class="text-[var(--accent)] font-semibold">Create another message</a>
-                        <span class="text-white/50">|</span>
-                        <a href="{{ route('auth.login') }}" class="text-white font-semibold">Sign up for more</a>
-                    </div>
+            @if(session('success') && !session('generated_link'))
+                <div class="glass-card mb-6" style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.2); color: #4ade80; padding: 15px 20px; border-radius: 12px; text-align: center;">
+                    <i class="fas fa-check-circle"></i> {{ session('success') }}
                 </div>
+            @endif
 
-                <script>
-                    function copyLink() {
-                        const copyText = document.getElementById("magicLink");
-                        copyText.select();
-                        copyText.setSelectionRange(0, 99999);
-                        navigator.clipboard.writeText(copyText.value);
-                        alert("Copied the magic link!");
-                    }
-                </script>
-            @elseif($messageCount >= 2)
+            @if($messageCount >= 2)
                 <div class="glass-card w-full max-w-2xl mx-auto" style="padding: 40px; text-align: center;">
                     <i class="fas fa-lock" style="font-size: 3rem; color: var(--accent); margin-bottom: 20px;"></i>
                     <h2 style="font-size: 1.8rem; margin-bottom: 12px;">You've reached the limit</h2>
