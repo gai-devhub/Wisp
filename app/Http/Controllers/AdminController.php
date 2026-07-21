@@ -706,7 +706,7 @@ class AdminController extends Controller
             $file = $request->file('profile_picture');
             $name = 'admin-user-' . $user->id . '-' . time() . '.jpg';
             $path = 'profile-pictures/' . $name;
-            $encodedImage = \Intervention\Image\Laravel\Facades\Image::read($file)->scaleDown(width: 800)->toJpeg(quality: 80);
+            $encodedImage = \Intervention\Image\Laravel\Facades\Image::decode($file)->scaleDown(width: 800)->encodeUsingFileExtension('jpg', quality: 80);
             Storage::disk('public')->put($path, (string) $encodedImage);
             $user->profile_picture = $path;
         }

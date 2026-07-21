@@ -129,7 +129,7 @@ class GuestMessageController extends Controller
                         }
                         $filename = \Illuminate\Support\Str::random(20) . '.jpg';
                         $path = 'guest_media/recipient-images/' . $filename;
-                        $encodedImage = \Intervention\Image\Laravel\Facades\Image::read($image)->scaleDown(width: 1000)->toJpeg(quality: 75);
+                        $encodedImage = \Intervention\Image\Laravel\Facades\Image::decode($image)->scaleDown(width: 1000)->encodeUsingFileExtension('jpg', quality: 75);
                         \Illuminate\Support\Facades\Storage::disk('s3')->put($path, (string) $encodedImage);
                         $mediaFile->recipient_image = $path;
                     }
