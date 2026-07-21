@@ -82,10 +82,10 @@ class AdminController extends Controller
         $audioSize = 0;
         foreach ($mediaFiles as $mf) {
             if ($mf->recipient_image) {
-                try { $imagesSize += Storage::disk('s3')->size($mf->recipient_image); } catch (\Throwable $e) {}
+                try { $imagesSize += Storage::disk(config('filesystems.media_disk'))->size($mf->recipient_image); } catch (\Throwable $e) {}
             }
             if ($mf->background_music && !str_starts_with($mf->background_music, 'http')) {
-                try { $audioSize += Storage::disk('s3')->size($mf->background_music); } catch (\Throwable $e) {}
+                try { $audioSize += Storage::disk(config('filesystems.media_disk'))->size($mf->background_music); } catch (\Throwable $e) {}
             }
         }
         // Profile pictures
@@ -510,10 +510,10 @@ class AdminController extends Controller
         foreach ($message->mediaFiles as $media) {
             $size = 0;
             if ($media->file_type === 'image' && $media->file_path) {
-                try { $size = Storage::disk('s3')->size($media->file_path); } catch (\Throwable $e) {}
+                try { $size = Storage::disk(config('filesystems.media_disk'))->size($media->file_path); } catch (\Throwable $e) {}
                 $imagesSize += $size;
             } elseif ($media->file_type === 'audio' && $media->file_path) {
-                try { $size = Storage::disk('s3')->size($media->file_path); } catch (\Throwable $e) {}
+                try { $size = Storage::disk(config('filesystems.media_disk'))->size($media->file_path); } catch (\Throwable $e) {}
                 $audioSize += $size;
             }
             
@@ -1351,10 +1351,10 @@ class AdminController extends Controller
         $mediaFiles = \App\Models\MediaFiles::all();
         foreach ($mediaFiles as $mf) {
             if ($mf->recipient_image) {
-                try { $uploads += Storage::disk('s3')->size($mf->recipient_image); } catch (\Throwable $e) {}
+                try { $uploads += Storage::disk(config('filesystems.media_disk'))->size($mf->recipient_image); } catch (\Throwable $e) {}
             }
             if ($mf->background_music && !str_starts_with($mf->background_music, 'http')) {
-                try { $uploads += Storage::disk('s3')->size($mf->background_music); } catch (\Throwable $e) {}
+                try { $uploads += Storage::disk(config('filesystems.media_disk'))->size($mf->background_music); } catch (\Throwable $e) {}
             }
         }
         $users = \App\Models\User::whereNotNull('profile_picture')->get();
@@ -1490,10 +1490,10 @@ class AdminController extends Controller
                     // Delete associated media files from storage and database
                     if ($msg->mediaFiles) {
                         if ($msg->mediaFiles->recipient_image) {
-                            Storage::disk('s3')->delete($msg->mediaFiles->recipient_image);
+                            try { Storage::disk(config('filesystems.media_disk'))->delete($msg->mediaFiles->recipient_image); } catch (\Throwable $e) {}
                         }
                         if ($msg->mediaFiles->background_music) {
-                            Storage::disk('s3')->delete($msg->mediaFiles->background_music);
+                            try { Storage::disk(config('filesystems.media_disk'))->delete($msg->mediaFiles->background_music); } catch (\Throwable $e) {}
                         }
                         $msg->mediaFiles->delete();
                     }
@@ -1637,7 +1637,7 @@ class AdminController extends Controller
         $data = $request->only(['title', 'link_url', 'display_location', 'content', 'details']);
         $data['is_active'] = $request->input('status') === 'active';
         if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('ads', 's3');
+            $data['image_path'] = $request->file('image')->store('ads', config('filesystems.media_disk'));
         }
 
         \App\Models\Ad::create($data);
@@ -1658,8 +1658,8 @@ class AdminController extends Controller
         $data = $request->only(['title', 'link_url', 'display_location', 'content', 'details']);
         $data['is_active'] = $request->input('status') === 'active';
         if ($request->hasFile('image')) {
-            if ($ad->image_path) \Illuminate\Support\Facades\Storage::disk('s3')->delete($ad->image_path);
-            $data['image_path'] = $request->file('image')->store('ads', 's3');
+            if ($ad->image_path) { try { \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->delete($ad->image_path); } catch (\Throwable $e) {} }
+            $data['image_path'] = $request->file('image')->store('ads', config('filesystems.media_disk'));
         }
 
         $ad->update($data);
@@ -1669,7 +1669,7 @@ class AdminController extends Controller
     public function deleteAd($id)
     {
         $ad = \App\Models\Ad::findOrFail($id);
-        if ($ad->image_path) \Illuminate\Support\Facades\Storage::disk('s3')->delete($ad->image_path);
+        if ($ad->image_path) { try { \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->delete($ad->image_path); } catch (\Throwable $e) {} }
         $ad->delete();
         return redirect()->back()->with('success', 'Ad deleted successfully.');
     }

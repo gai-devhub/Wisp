@@ -795,10 +795,11 @@ class UserController extends Controller
             // 1. Delete Media Files (Storage & DB)
             $mediaFiles = \App\Models\MediaFiles::where('user_id', $user->id)->get();
             foreach ($mediaFiles as $file) {
-                if ($file) {
-                    if ($file->recipient_image) \Illuminate\Support\Facades\Storage::disk('s3')->delete($file->recipient_image);
-                    if ($file->background_music) \Illuminate\Support\Facades\Storage::disk('s3')->delete($file->background_music);
-                }
+                try {
+                    if ($file->recipient_image) \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->delete($file->recipient_image);
+                    if ($file->background_music) \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->delete($file->background_music);
+                } catch (\Exception $e) {}
+                
                 $file->delete();
             }
 

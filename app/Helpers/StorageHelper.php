@@ -33,7 +33,7 @@ if (!function_exists('delete_storage_file')) {
         }
 
         try {
-            Storage::disk('s3')->delete($path);
+            Storage::disk(config('filesystems.media_disk'))->delete($path);
         } catch (\Throwable $e) {
             // Ignore missing files or misconfigured disks during cleanup.
         }
@@ -56,7 +56,7 @@ if (!function_exists('s3_url')) {
         }
 
         try {
-            return Storage::disk('s3')->url($path);
+            return Storage::disk(config('filesystems.media_disk'))->url($path);
         } catch (\Throwable $e) {
             return '';
         }
