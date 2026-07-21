@@ -679,7 +679,10 @@
 
                 const data = await response.json();
 
-                if (data.success) {
+                if (response.status === 422) {
+                    let errorMsg = Object.values(data.errors).map(e => e.join(' ')).join(' ');
+                    showNotification('Error', errorMsg, 'error');
+                } else if (data.success) {
                     // Update hidden id
                     document.getElementById('current_message_id').value = data.message_id;
                     generatedLink = data.generated_link;
