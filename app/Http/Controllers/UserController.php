@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
@@ -270,7 +271,7 @@ class UserController extends Controller
         return $this->renderSection($request, 'user-settings');
     }
 
-    private function renderSection(Request $request, string $section): View|RedirectResponse
+    private function renderSection(Request $request, string $section): View|RedirectResponse|JsonResponse
     {
         if ($this->appLocked()) {
             return redirect()->route('app.locked');
