@@ -381,11 +381,15 @@ class UserController extends Controller
         $imagesSize = 0;
         $audioSize = 0;
         foreach ($mediaFiles as $file) {
-            if ($file->recipient_image && \Illuminate\Support\Facades\Storage::disk('s3')->exists($file->recipient_image)) {
-                $imagesSize += \Illuminate\Support\Facades\Storage::disk('s3')->size($file->recipient_image);
-            }
-            if ($file->background_music && \Illuminate\Support\Facades\Storage::disk('s3')->exists($file->background_music)) {
-                $audioSize += \Illuminate\Support\Facades\Storage::disk('s3')->size($file->background_music);
+            try {
+                if ($file->recipient_image && \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->exists($file->recipient_image)) {
+                    $imagesSize += \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->size($file->recipient_image);
+                }
+                if ($file->background_music && \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->exists($file->background_music)) {
+                    $audioSize += \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->size($file->background_music);
+                }
+            } catch (\Exception $e) {
+                // Ignore existence/size check errors (e.g., missing IAM permissions or deleted files on S3)
             }
         }
 
