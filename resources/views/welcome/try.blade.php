@@ -643,8 +643,28 @@
             guestMessageForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
 
-            const submitter = e.submitter;
-            const isMainButton = submitter && submitter.id === 'mainSubmitBtn';
+                const submitter = e.submitter;
+                const isMainButton = submitter && submitter.id === 'mainSubmitBtn';
+
+                // If link is already generated, clicking the main button again should open share modal immediately (synchronously)
+                if (isMainButton && isShareMode && generatedLink) {
+                    if (navigator.share) {
+                        try {
+                            navigator.share({
+                                title: document.getElementById('messageBasicsSubtitle')?.innerText || 'My Message',
+                                text: 'I made a magical message for you!',
+                                url: generatedLink
+                            });
+                        } catch (err) {
+                            console.log('Share canceled or failed', err);
+                        }
+                    } else {
+                        prompt("Copy your magic link:", generatedLink);
+                    }
+                    // Submit in background silently to save any latest changes
+                    fetch(this.action, { method: 'POST', body: new FormData(this), headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' } });
+                    return;
+                }
 
             // Set loading states
             if (isMainButton) {
@@ -716,22 +736,6 @@
                         setTimeout(() => {
                             document.getElementById('templateSaveText').innerText = 'Save Template';
                         }, 2000);
-                    }
-
-                    // If it was the main button, trigger share
-                    if (isMainButton && navigator.share) {
-                        try {
-                            await navigator.share({
-                                title: title,
-                                text: 'I made a magical message for you!',
-                                url: generatedLink
-                            });
-                        } catch (err) {
-                            console.log('Share canceled or failed', err);
-                        }
-                    } else if (isMainButton) {
-                        // Fallback if no navigator.share
-                        prompt("Copy your magic link:", generatedLink);
                     }
                 } else {
                     showNotification('Error', data.error || 'Something went wrong.', 'error');
