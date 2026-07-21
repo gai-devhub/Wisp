@@ -705,8 +705,10 @@
                 } else if (data.success) {
                     // Update hidden id
                     document.getElementById('current_message_id').value = data.message_id;
-                    generatedLink = data.generated_link;
-                    isShareMode = true;
+                    
+                    if (data.generated_link) {
+                        generatedLink = data.generated_link;
+                    }
 
                     // Update subtitles
                     const title = data.title;
@@ -716,9 +718,12 @@
 
                     showNotification('Success', 'Message updated successfully.', 'success');
 
-                    // Transform main button
-                    document.getElementById('mainSubmitText').innerText = 'Share Message';
-                    document.getElementById('mainSubmitIcon').className = 'fas fa-share-alt mr-2';
+                    // Transform main button only if they clicked it to generate the link
+                    if (isMainButton && generatedLink) {
+                        isShareMode = true;
+                        document.getElementById('mainSubmitText').innerText = 'Share Message';
+                        document.getElementById('mainSubmitIcon').className = 'fas fa-share-alt mr-2';
+                    }
 
                     // Transform inner button
                     if (submitter && submitter.id === 'innerSaveBtn') {
