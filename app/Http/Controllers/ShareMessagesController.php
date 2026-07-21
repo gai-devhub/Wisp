@@ -192,15 +192,15 @@ class ShareMessagesController extends Controller
             $phone = '+' . ltrim($phone, '0');
         }
 
-        if (!config('services.sns.key') || !config('services.sns.secret')) {
-            return $request->wantsJson() ? response()->json(['success' => false, 'error' => 'AWS SMS is not configured on the server.'], 400) : redirect()->route('user.share-messages.page')
-                ->with('error', 'AWS SMS is not configured. Set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_DEFAULT_REGION in .env and run: composer require aws/aws-sdk-php');
+        if (!config('services.twilio.sid') || !config('services.twilio.token')) {
+            return $request->wantsJson() ? response()->json(['success' => false, 'error' => 'Twilio SMS is not configured on the server.'], 400) : redirect()->route('user.share-messages.page')
+                ->with('error', 'Twilio SMS is not configured. Set TWILIO_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM in .env');
         }
 
-        $snsClientClass = 'Aws\Sns\SnsClient';
-        if (!class_exists($snsClientClass)) {
-            return $request->wantsJson() ? response()->json(['success' => false, 'error' => 'AWS SDK not installed.'], 400) : redirect()->route('user.share-messages.page')
-                ->with('error', 'AWS SDK not installed. Run: composer require aws/aws-sdk-php');
+        $twilioClientClass = 'Twilio\Rest\Client';
+        if (!class_exists($twilioClientClass)) {
+            return $request->wantsJson() ? response()->json(['success' => false, 'error' => 'Twilio SDK not installed.'], 400) : redirect()->route('user.share-messages.page')
+                ->with('error', 'Twilio SDK not installed. Run: composer require twilio/sdk');
         }
 
         $customMessage = $request->input('custom_message');
@@ -225,24 +225,18 @@ class ShareMessagesController extends Controller
         ]);
 
         try {
-            $client = new $snsClientClass([
-                'version' => 'latest',
-                'region'  => config('services.sns.region', 'us-east-1'),
-                'credentials' => [
-                    'key'    => config('services.sns.key'),
-                    'secret' => config('services.sns.secret'),
+            $client = new $twilioClientClass(
+                config('services.twilio.sid'),
+                config('services.twilio.token')
+            );
+
+            $client->messages->create(
+                $phone,
+                [
+                    'from' => config('services.twilio.from'),
+                    'body' => $body
                 ]
-            ]);
-            $client->publish([
-                'Message' => $body,
-                'PhoneNumber' => $phone,
-                'MessageAttributes' => [
-                    'AWS.SNS.SMS.SMSType' => [
-                        'DataType' => 'String',
-                        'StringValue' => 'Transactional'
-                    ]
-                ]
-            ]);
+            );
             $shareSend->update(['status' => 'sent', 'error_message' => null]);
         } catch (\Throwable $e) {
             $shareSend->update(['status' => 'failed', 'error_message' => $e->getMessage()]);
