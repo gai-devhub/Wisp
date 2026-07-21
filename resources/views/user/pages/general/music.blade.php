@@ -6,23 +6,25 @@
 <style>
     #music-library {
         background: #fafafa;
-        position: relative;
-        left: auto; /* override left: var(--sidebar-width) from global CSS */
-        margin: 4vh auto; /* Added space at the top and bottom of the card */
+        position: fixed;
+        top: 90px;
+        height: calc(100vh - 140px);
+        left: calc(var(--sidebar-width, 240px) + 24px);
+        right: 24px;
+        margin: 0 auto;
         max-width: 1000px;
-        height: 75vh; 
-        min-height: 450px;
         display: flex;
         flex-direction: column;
         border-radius: 16px;
         overflow: hidden;
         font-family: 'Outfit', sans-serif;
         box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        z-index: 50;
     }
     
     /* Fix global CSS overriding iframe height to auto */
     .spotify-iframe-container iframe {
-        height: 132px !important;
+        height: 80px !important;
     }
 
     .music-header {
@@ -127,7 +129,7 @@
         align-items: center;
         justify-content: center;
         height: 100%;
-        min-height: 400px;
+        min-height: 250px;
     }
 
     #empty-state i {
@@ -185,7 +187,7 @@
 
     .album-card h4 {
         font-weight: 600;
-        font-size: 0.95rem;
+        font-size: 0.85rem;
         color: #222;
         margin: 0 0 4px 0;
         white-space: nowrap;
@@ -194,7 +196,7 @@
     }
 
     .album-card p {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         color: #777;
         margin: 0;
         white-space: nowrap;
@@ -237,7 +239,7 @@
 
     .track-title {
         font-weight: 600;
-        font-size: 1rem;
+        font-size: 0.9rem;
         color: #222;
         margin: 0 0 4px 0;
         white-space: nowrap;
@@ -246,7 +248,7 @@
     }
 
     .track-artist {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         color: #777;
         margin: 0;
     }
@@ -300,9 +302,13 @@
         }
         
         #music-library {
+            top: calc(60px + 16px); /* 60px header + 16px gap */
+            height: calc(100vh - 60px - 32px); /* 100vh minus header minus top/bottom gaps */
+            left: 16px;
+            right: 16px;
             margin: 0;
-            border-radius: 0;
-            height: calc(100vh - 60px); /* Adjust for mobile headers */
+            border-radius: 16px;
+            max-width: none;
         }
         
         .view-container {
@@ -312,6 +318,22 @@
         .music-header {
             padding: 20px;
         }
+        
+        .album-card h4 {
+            font-size: 0.75rem;
+        }
+        
+        .album-card p {
+            font-size: 0.55rem;
+        }
+        
+        .track-title {
+            font-size: 0.9rem;
+        }
+        
+        .track-artist {
+            font-size: 0.75rem;
+        }
     }
 
     .spotify-iframe-container {
@@ -319,7 +341,7 @@
         overflow: hidden;
         background: transparent; 
         height: auto; 
-        min-height: 152px; /* Spotify's new compact widget height */
+        min-height: 80px;
         display: flex;
         align-items: center;
         justify-content: center;
