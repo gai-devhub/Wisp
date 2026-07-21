@@ -238,7 +238,7 @@ Route::middleware(['auth', 'user.role', 'require.passcode', 'billing'])->group(f
     Route::match(['put', 'patch'], '/messages/{id}', [WishMessagesController::class, 'update'])->name('messages.update');
     Route::delete('/messages/{id}', [WishMessagesController::class, 'destroy'])->name('messages.destroy');
     Route::get('/media', [MediaFilesController::class, 'show'])->name('media.show');
-    Route::post('/media', [MediaFilesController::class, 'store'])->name('media.store');
+    Route::post('/media-upload', [MediaFilesController::class, 'store'])->name('media.store');
     Route::get('/notifications', [UserNotificationsController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{id}/read', [UserNotificationsController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/read-all', [UserNotificationsController::class, 'markAllAsRead'])->name('notifications.readAll');
