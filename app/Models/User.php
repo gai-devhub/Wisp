@@ -154,12 +154,14 @@ class User extends Authenticatable
         $mediaFiles = $this->mediaFiles;
         $totalSize = 0;
         foreach ($mediaFiles as $file) {
-            if ($file->recipient_image && \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->exists($file->recipient_image)) {
-                $totalSize += \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->size($file->recipient_image);
-            }
-            if ($file->background_music && \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->exists($file->background_music)) {
-                $totalSize += \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->size($file->background_music);
-            }
+            try {
+                if ($file->recipient_image && \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->exists($file->recipient_image)) {
+                    $totalSize += \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->size($file->recipient_image);
+                }
+                if ($file->background_music && \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->exists($file->background_music)) {
+                    $totalSize += \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->size($file->background_music);
+                }
+            } catch (\Exception $e) {}
         }
         return $totalSize;
     }
