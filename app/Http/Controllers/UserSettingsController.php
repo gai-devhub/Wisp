@@ -50,10 +50,10 @@ class UserSettingsController extends Controller
             
             $oldFile = $user->profile_picture;
             $user->profile_picture = $path;
-                try {
-                    Storage::disk('public')->delete('profile-pictures/' . basename($oldFile));
-                } catch (\Throwable $e) {}
-            }
+            try {
+                Storage::disk('public')->delete('profile-pictures/' . basename($oldFile));
+            } catch (\Throwable $e) {}
+            
             $user->save();
         } else {
             $user->save();
