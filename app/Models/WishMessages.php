@@ -58,14 +58,9 @@ class WishMessages extends Model
             
             if (empty($message->expires_at)) {
                 $hours = (int) ($message->expiry_hours ?? 24);
-                if (!empty($message->receiving_date)) {
-                    $date = $message->receiving_date instanceof \DateTimeInterface
-                        ? Carbon::parse($message->receiving_date)
-                        : Carbon::parse((string) $message->receiving_date);
-                    $message->expires_at = $date->copy()->startOfDay()->addHours($hours);
-                } else {
-                    $message->expires_at = now()->addHours($hours);
-                }
+                $message->expires_at = $message->receiving_date
+                    ? Carbon::parse($message->receiving_date)->setTime(now()->hour, now()->minute, now()->second)->addHours($hours)
+                    : now()->addHours($hours);
             }
         });
     }

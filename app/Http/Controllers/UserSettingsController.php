@@ -133,9 +133,11 @@ class UserSettingsController extends Controller
             $msg->expiry_hours = $settings->page_expiry;
             $rd = $msg->receiving_date;
             if ($rd) {
-                $msg->expires_at = \Carbon\Carbon::parse($rd instanceof \DateTimeInterface ? $rd : (string) $rd)->startOfDay()->addHours((int) $msg->expiry_hours);
-                $msg->save();
+                $msg->expires_at = \Carbon\Carbon::parse($rd instanceof \DateTimeInterface ? $rd : (string) $rd)->setTime(now()->hour, now()->minute, now()->second)->addHours((int) $msg->expiry_hours);
+            } else {
+                $msg->expires_at = now()->addHours((int) $msg->expiry_hours);
             }
+            $msg->save();
         }
 
         return redirect()->route('user.settings.page')

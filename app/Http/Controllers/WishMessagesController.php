@@ -143,7 +143,7 @@ class WishMessagesController extends Controller
         
         $rd = $message->receiving_date;
         if ($rd) {
-            $message->expires_at = \Carbon\Carbon::parse($rd instanceof \DateTimeInterface ? $rd : (string) $rd)->startOfDay()->addHours((int) $message->expiry_hours);
+            $message->expires_at = \Carbon\Carbon::parse($rd instanceof \DateTimeInterface ? $rd : (string) $rd)->setTime(now()->hour, now()->minute, now()->second)->addHours((int) $message->expiry_hours);
         }
         
         $message->save();
@@ -228,7 +228,7 @@ class WishMessagesController extends Controller
         $message->expiry_hours = $settings->page_expiry ?? $message->expiry_hours ?? 24;
         $rd = $message->receiving_date;
         if ($rd) {
-            $message->expires_at = \Carbon\Carbon::parse($rd instanceof \DateTimeInterface ? $rd : (string) $rd)->startOfDay()->addHours((int) $message->expiry_hours);
+            $message->expires_at = \Carbon\Carbon::parse($rd instanceof \DateTimeInterface ? $rd : (string) $rd)->setTime(now()->hour, now()->minute, now()->second)->addHours((int) $message->expiry_hours);
         }
 
         $message->save();
