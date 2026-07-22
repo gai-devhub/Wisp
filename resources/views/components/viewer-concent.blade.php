@@ -71,7 +71,7 @@
         .container {
             background: var(--card-bg);
             border-radius: 24px;
-            padding: 56px 48px;
+            padding: 56px 48px 40px;
             max-width: 480px;
             width: 100%;
             box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
@@ -184,7 +184,7 @@
 
         @media (max-width: 480px) {
             .container {
-                padding: 40px 24px;
+                padding: 40px 24px 32px;
                 border-radius: 20px;
             }
             h1 {
@@ -223,7 +223,7 @@
 
                 <button type="submit" class="btn-agree">Agree</button>
                 @if(!empty($expiresAt))
-                    <p style="font-size: 13px; color: #666; margin-top: 15px; text-align: center;" id="expiry-text-container">
+                    <p style="font-size: 13px; color: #666; margin-top: 15px; margin-bottom: 0; text-align: center;" id="expiry-text-container">
                         This message will expire after <span id="expiry-countdown" style="color: #ff4444; font-weight: 600;">{{ $expiryHours }} {{ $expiryHours == 1 ? 'hour' : 'hours' }}</span>
                     </p>
                     <script>
@@ -256,7 +256,7 @@
                         });
                     </script>
                 @elseif(!empty($expiryHours))
-                    <p style="font-size: 13px; color: #666; margin-top: 15px; text-align: center;">
+                    <p style="font-size: 13px; color: #666; margin-top: 15px; margin-bottom: 0; text-align: center;">
                         This message will expire after <span style="color: #ff4444; font-weight: 600;">{{ $expiryHours }} {{ $expiryHours == 1 ? 'hour' : 'hours' }}</span>
                     </p>
                 @endif
