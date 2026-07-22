@@ -78,6 +78,8 @@ class MessageViewController extends Controller
                 'creatorName'          => $creatorName,
                 'messageTypeDisplay'   => $messageTypeDisplay,
                 'isVaulted'            => $message->is_vaulted,
+                'expiryHours'          => $message->expiry_hours,
+                'expiresAt'            => $message->expires_at ? \Carbon\Carbon::parse($message->expires_at)->toIso8601String() : null,
             ]);
         }
 

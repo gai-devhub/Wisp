@@ -124,9 +124,11 @@ class GuestMessageController extends Controller
                 
                     if ($request->hasFile('recipient_image')) {
                         $image = $request->file('recipient_image');
-                        try {
-                            \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->delete($mediaFile->recipient_image);
-                        } catch (\Exception $e) {}
+                        if ($mediaFile->recipient_image) {
+                            try {
+                                \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->delete($mediaFile->recipient_image);
+                            } catch (\Throwable $e) {}
+                        }
                         $filename = \Illuminate\Support\Str::random(20) . '.jpg';
                         $path = 'guest_media/recipient-images/' . $filename;
                         $encodedImage = \Intervention\Image\Laravel\Facades\Image::decode($image)->scaleDown(width: 1000)->encodeUsingFileExtension('jpg', quality: 75);

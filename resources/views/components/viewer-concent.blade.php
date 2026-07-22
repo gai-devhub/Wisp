@@ -222,6 +222,44 @@
                 @endif
 
                 <button type="submit" class="btn-agree">Agree</button>
+                @if(!empty($expiresAt))
+                    <p style="font-size: 13px; color: #666; margin-top: 15px; text-align: center;" id="expiry-text-container">
+                        This message will expire after <span id="expiry-countdown" style="color: #ff4444; font-weight: 600;">{{ $expiryHours }} {{ $expiryHours == 1 ? 'hour' : 'hours' }}</span>
+                    </p>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const expiresAt = new Date("{{ $expiresAt }}").getTime();
+                            const countdownElement = document.getElementById('expiry-countdown');
+                            const container = document.getElementById('expiry-text-container');
+
+                            const updateCountdown = () => {
+                                const now = new Date().getTime();
+                                const distance = expiresAt - now;
+
+                                if (distance <= 0) {
+                                    container.innerHTML = "<span style='color: #ff4444; font-weight: 600;'>This message has expired.</span>";
+                                    const btn = document.querySelector('.btn-agree');
+                                    if(btn) {
+                                        btn.disabled = true;
+                                        btn.style.opacity = '0.5';
+                                        btn.style.cursor = 'not-allowed';
+                                    }
+                                    return;
+                                }
+
+                                const hours = Math.ceil(distance / (1000 * 60 * 60));
+                                countdownElement.innerText = hours + (hours === 1 ? ' hour' : ' hours');
+                            };
+
+                            updateCountdown();
+                            setInterval(updateCountdown, 60000); // Check every minute
+                        });
+                    </script>
+                @elseif(!empty($expiryHours))
+                    <p style="font-size: 13px; color: #666; margin-top: 15px; text-align: center;">
+                        This message will expire after <span style="color: #ff4444; font-weight: 600;">{{ $expiryHours }} {{ $expiryHours == 1 ? 'hour' : 'hours' }}</span>
+                    </p>
+                @endif
             </form>
         @else
             <p class="text-muted small">Unable to load this message.</p>
