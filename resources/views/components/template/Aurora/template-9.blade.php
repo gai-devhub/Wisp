@@ -212,6 +212,23 @@
             .card { padding: 10px !important; border-radius: 16px !important; }
             .content-section { padding: 15px 10px !important;  overflow-y: auto; max-height: 100vh;  justify-content: flex-start !important; padding-top: 40px !important; }
         }
+            /* Global Mobile Scroll Fix */
+        @media (max-width: 768px) {
+            body, html {
+                overflow-y: auto !important;
+                height: auto !important;
+            }
+            .viewport, .container, .wrapper, .main-container {
+                height: auto !important;
+                min-height: 100vh;
+                overflow: visible !important;
+            }
+            .content-hub, .message-panel, .message-box, .letter-box, .content-area, .text-panel, .message-wrapper, .message-container, .content-section, .text-section, .message-content, .main-content, .card {
+                max-height: none !important;
+                overflow-y: visible !important;
+                height: auto !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -271,4 +288,5 @@
     </script>
 </body>
 </html>
+
 
