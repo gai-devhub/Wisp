@@ -653,8 +653,11 @@
 
         // Initialize based on URL parameter
         document.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            const tab = params.get('tab');
+            const serverTab = '{{ $activeTab ?? "" }}';
+            const url = new URL(window.location);
+            const params = new URLSearchParams(url.search);
+            const tab = serverTab || params.get('tab');
+            
             if (tab && document.getElementById(tab)) {
                 switchTab(tab);
             }

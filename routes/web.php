@@ -294,6 +294,14 @@ Route::get('/help', function () {
     return view('doc.index');
 })->name('help');
 
+Route::get('/help-policy', function () {
+    return view('doc.index', ['activeTab' => 'privacy']);
+})->name('help.policy');
+
+Route::get('/help-terms', function () {
+    return view('doc.index', ['activeTab' => 'terms']);
+})->name('help.terms');
+
 Route::get('/spotify/connect', [SpotifyPlaybackController::class, 'connect'])->name('spotify.connect');
 Route::get('/spotify/callback', [SpotifyPlaybackController::class, 'callback'])->name('spotify.callback');
 Route::get('/spotify/token', [SpotifyPlaybackController::class, 'token'])->name('spotify.token');
