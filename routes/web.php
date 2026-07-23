@@ -294,11 +294,11 @@ Route::get('/help', function () {
     return view('doc.index');
 })->name('help');
 
-Route::get('/help-policy', function () {
+Route::get('/privacy-policy', function () {
     return view('doc.index', ['activeTab' => 'privacy']);
 })->name('help.policy');
 
-Route::get('/help-terms', function () {
+Route::get('/privacy-terms', function () {
     return view('doc.index', ['activeTab' => 'terms']);
 })->name('help.terms');
 
