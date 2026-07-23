@@ -624,7 +624,7 @@
     </div>
 
     <script>
-        function switchTab(tabId) {
+        function switchTab(tabId, updateUrl = true) {
             // Update nav items
             document.querySelectorAll('.nav-item').forEach(el => {
                 el.classList.remove('active');
@@ -638,9 +638,11 @@
             document.getElementById(tabId).classList.add('active');
 
             // Update URL without reloading
-            const url = new URL(window.location);
-            url.searchParams.set('tab', tabId);
-            window.history.pushState({}, '', url);
+            if (updateUrl) {
+                const url = new URL(window.location);
+                url.searchParams.set('tab', tabId);
+                window.history.pushState({}, '', url);
+            }
 
             // On mobile, hide sidebar after selection
             if (window.innerWidth <= 992) {
@@ -659,7 +661,7 @@
             const tab = serverTab || params.get('tab');
             
             if (tab && document.getElementById(tab)) {
-                switchTab(tab);
+                switchTab(tab, false);
             }
         });
     </script>
