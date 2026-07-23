@@ -220,8 +220,6 @@ class AuthController extends Controller
             return redirect()->route('auth.login')->with('error', 'Google sign-in is not configured.');
         }
         return Socialite::driver('google')
-            ->scopes(['https://www.googleapis.com/auth/calendar.readonly'])
-            ->with(['access_type' => 'offline', 'prompt' => 'consent'])
             ->redirect();
     }
 

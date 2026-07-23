@@ -191,7 +191,6 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'user.role', 'require.passcode', 'billing'])->group(function () {
     Route::get('/user-page', [UserController::class, 'index'])->name('user.page');
-    Route::get('/user-page/google-calendar-events', [UserController::class, 'googleCalendarEvents'])->name('user.google-calendar-events');
     Route::get('/user-page/views-chart-data', [UserController::class, 'viewsChartData'])->name('user.views-chart-data');
     Route::get('/user-page/create', [UserController::class, 'createPage'])->name('user.create.page');
     Route::get('/user-page/edit-messages/{id}', [UserController::class, 'editMessagesPage'])->name('user.edit-messages.page');

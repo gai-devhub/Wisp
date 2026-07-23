@@ -160,20 +160,7 @@
                     {{-- Day grid rendered by JS --}}
                     <div id="calendar-days" class="db-cal-days-grid"></div>
 
-                    {{-- Google Calendar Events --}}
-                    <div class="db-cal-events">
-                        <div class="db-cal-events-header">
-                            <span class="db-cal-events-title"><i class="fab fa-google dashboard-inline-9" ></i>Google Calendar</span>
-                            @if(auth()->user()->google_token)
-                                <span class="db-cal-connected"><i class="fas fa-circle"></i> Connected</span>
-                            @else
-                                <a href="{{ route('auth.google') }}" class="db-cal-connect-btn">Connect</a>
-                            @endif
-                        </div>
-                        <div id="google-events-container" class="db-cal-events-body">
-                            Select a date to view events.
-                        </div>
-                    </div>
+
                 </div>
 
 
@@ -780,7 +767,7 @@
                                 });
                                 dayDiv.classList.add('selected');
                                 dayDiv.classList.remove('today');
-                                fetchGoogleEvents(year, month, i);
+                                // Removed Google Events trigger
                                 if (dayEvents && dayEvents.length > 0) {
                                     openCalendarModal(dateString, dayEvents);
                                 }
@@ -790,55 +777,7 @@
                         }
                     }
 
-                    const isGoogleConnected = @json(!empty(Auth::user()->google_token));
 
-                    function fetchGoogleEvents(year, month, day) {
-                        const container = document.getElementById('google-events-container');
-                        
-                        if (!isGoogleConnected) {
-                            container.innerHTML = '<div style="color:#94a3b8;padding:4px 0;">Connect your Google account above to view calendar events.</div>';
-                            return;
-                        }
-
-                        container.innerHTML = '<div style="display:flex;align-items:center;gap:8px;color:#94a3b8;"><i class="fas fa-spinner fa-spin"></i> Loading events...</div>';
-                        
-                        const dateStr = year + '-' + (month+1).toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
-                        fetch('{{ route("user.google-calendar-events") }}?date=' + dateStr)
-                            .then(res => {
-                                if (res.status === 401) throw new Error('not_connected');
-                                return res.json();
-                            })
-                            .then(data => {
-                                if (data.error) throw new Error(data.error);
-                                
-                                if (data.length === 0) {
-                                    container.innerHTML = '<div style="color:#94a3b8;padding:4px 0;">No events for this day.</div>';
-                                    return;
-                                }
-
-                                let html = '';
-                                data.forEach(event => {
-                                    let timeStr = 'All day';
-                                    if (event.start && event.start.dateTime) {
-                                        const d = new Date(event.start.dateTime);
-                                        timeStr = d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                                    }
-                                    html += '<div class="db-event-item">';
-                                    html += '<div class="db-event-dot"></div>';
-                                    html += '<div><div class="db-event-name">' + (event.summary || 'Busy') + '</div>';
-                                    html += '<div class="db-event-time">' + timeStr + '</div></div>';
-                                    html += '</div>';
-                                });
-                                container.innerHTML = html;
-                            })
-                            .catch(err => {
-                                if(err.message === 'not_connected') {
-                                    container.innerHTML = '<div style="color:#94a3b8;padding:4px 0;">Connect your Google account above to view calendar events.</div>';
-                                } else {
-                                    container.innerHTML = '<div style="color:#ef4444;padding:4px 0;font-size:0.8rem;">Could not load events.</div>';
-                                }
-                            });
-                    }
 
                     prevBtn.onclick = () => {
                         currentDate.setMonth(currentDate.getMonth() - 1);
@@ -853,7 +792,7 @@
                     
                     // Trigger fetch for today
                     const today = new Date();
-                    fetchGoogleEvents(today.getFullYear(), today.getMonth(), today.getDate());
+                    // Removed initial fetch
                 }
             }
 
