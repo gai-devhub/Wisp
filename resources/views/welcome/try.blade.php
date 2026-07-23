@@ -75,7 +75,7 @@
             @endif
 
             @if(session('success') && !session('generated_link'))
-                <div class="glass-card mb-6" style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.2); color: #4ade80; padding: 15px 20px; border-radius: 12px; text-align: center;">
+                <div class="glass-card mb-6" style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); color: var(--accent); padding: 15px 20px; border-radius: 12px; text-align: center;">
                     <i class="fas fa-check-circle"></i> {{ session('success') }}
                 </div>
             @endif
