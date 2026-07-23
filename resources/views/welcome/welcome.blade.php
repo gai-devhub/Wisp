@@ -270,7 +270,9 @@
             <div class="vibes-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
                 @php
                     $vibes = [
+                        'view' => ['icon' => 'fa-eye', 'color' => 'var(--info)', 'bg' => 'rgba(59,130,246,0.12)', 'desc' => 'Classic layout, flexible views.', 'defaultCount' => 6],
                         'aurora' => ['icon' => 'fa-sun', 'color' => 'var(--primary)', 'bg' => 'rgba(99,102,241,0.12)', 'desc' => 'Soft gradients, elegant serif.', 'defaultCount' => 14],
+                        'casual' => ['icon' => 'fa-coffee', 'color' => 'var(--accent)', 'bg' => 'rgba(245,158,11,0.12)', 'desc' => 'Relaxed, informal style.', 'defaultCount' => 22],
                         'confetti' => ['icon' => 'fa-birthday-cake', 'color' => 'var(--accent)', 'bg' => 'rgba(236,72,153,0.12)', 'desc' => 'Party vibes, bold colors.', 'defaultCount' => 12],
                         'minimal' => ['icon' => 'fa-feather', 'color' => 'var(--secondary)', 'bg' => 'rgba(168,85,247,0.12)', 'desc' => 'Clean lines, timeless.', 'defaultCount' => 18],
                         'garden' => ['icon' => 'fa-leaf', 'color' => 'var(--success)', 'bg' => 'rgba(16,185,129,0.12)', 'desc' => 'Nature-inspired, soft tones.', 'defaultCount' => 10],
