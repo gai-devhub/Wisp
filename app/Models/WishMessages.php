@@ -115,7 +115,16 @@ class WishMessages extends Model
     public function getMessageDisplayAttribute(): string
     {
         $raw = $this->getRawOriginal('message') ?? $this->getRawOriginal('wish_message') ?? '';
-        return nl2br(e($raw));
+        $text = e($raw);
+        
+        // Linkify URLs (ignoring trailing punctuation)
+        $text = preg_replace(
+            '/(https?:\/\/[^\s<]+[^<.,:;"\')\]\s])/',
+            '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline; font-weight: bold;">$1</a>',
+            $text
+        );
+
+        return nl2br($text);
     }
 
     /**
