@@ -29,8 +29,7 @@
             color: var(--text-light);
             font-family: 'Montserrat', sans-serif;
             margin: 0;
-            overflow-x: hidden;
-            min-height: 100vh;
+            overflow-x: hidden; overflow-y: auto; min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
@@ -137,7 +136,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-        }
+         overflow-y: auto; max-height: 100vh; }
 
         h1 {
             font-family: 'Cormorant Garamond', serif;

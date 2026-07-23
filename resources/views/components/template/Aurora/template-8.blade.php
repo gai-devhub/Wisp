@@ -126,7 +126,7 @@
 
         .intro { font-weight: 600; margin-bottom: 20px; font-size: 1.2rem; color: #7c3aed; }
 
-        .message-content { line-height: 1.8; color: #333; margin-bottom: 30px; }
+        .message-content { line-height: 1.8; color: #333; margin-bottom: 30px;  overflow-y: auto; max-height: 100vh; }
 
         .closing { font-family: 'Dancing Script', cursive; font-size: 1.8rem; color: #ac7834; }
 
@@ -153,7 +153,7 @@
         @media (max-width: 480px) {
             h1 { font-size: clamp(1.6rem, 6vw, 2rem) !important; }
             .card { padding: 10px !important; border-radius: 16px !important; }
-            .content-section { padding: 15px 10px !important; }
+            .content-section { padding: 15px 10px !important;  overflow-y: auto; max-height: 100vh; }
         }
     </style>
 </head>
