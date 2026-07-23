@@ -22,7 +22,7 @@
                         <input type="text" class="form-control" id="message-type" name="message_type" required maxlength="30" pattern="[A-Za-z\s]+" title="Letters and spaces only" value="{{ old('message_type', $message->message_type ?? '') }}" placeholder="e.g. Birthday Message">
                     </div>
                     <div class="form-group">
-                        <label for="page-title">Page Title</label>
+                        <label for="page-title">Message Title</label>
                         <input type="text" class="form-control" id="page-title" name="page_title"
                             value="{{ old('page_title', $message->title) }}" required>
                     </div>
