@@ -647,8 +647,7 @@
                         <div class="form-group">
                             <label class="checkbox-wrap">
                                 <input type="checkbox" name="terms" id="terms-agree" required>
-                                <span>I agree to the <a href="{{ url('/help?tab=terms') }}" target="_blank">Terms of Service</a> and <a href="{{ url('/help?tab=privacy') }}" target="_blank">Privacy
-                                        Policy</a></span>
+                                <span>I agree to the <a href="{{ route('help.terms') }}" target="_blank">Terms of Service</a> and <a href="{{ route('help.policy') }}" target="_blank">Privacy Policy</a></span>
                             </label>
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 12px;">

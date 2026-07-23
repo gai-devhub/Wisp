@@ -31,8 +31,8 @@
                 <div>
                     <h4>Legal</h4>
                     <ul style="list-style: none; margin-top: 20px;">
-                        <li style="margin-bottom: 12px;"><a href="{{ url('/help?tab=privacy') }}" style="color: var(--text-muted); text-decoration: none;">Privacy</a></li>
-                        <li style="margin-bottom: 12px;"><a href="{{ url('/help?tab=terms') }}" style="color: var(--text-muted); text-decoration: none;">Terms</a></li>
+                        <li style="margin-bottom: 12px;"><a href="{{ route('help.policy') }}" style="color: var(--text-muted); text-decoration: none;">Privacy</a></li>
+                        <li style="margin-bottom: 12px;"><a href="{{ route('help.terms') }}" style="color: var(--text-muted); text-decoration: none;">Terms</a></li>
                     </ul>
                 </div>
             </div>
