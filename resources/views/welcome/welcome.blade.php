@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" href="{{ asset('img/logo.png') }}">
     <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/png">   
     <title>WISP — Wishes that feel like magic</title>
-    <meta name="description" content="WISP is your personal wish studio. From birthdays to just because — craft stunning AI-powered greetings in seconds. Choose templates, add photos and music.">
+    <meta name="description" content="WISP is a digital keepsake and scheduled messaging platform. Craft meaningful AI-powered greetings, attach memories like photos and music, and schedule them for future delivery.">
     <meta name="keywords" content="WISP, wish studio, AI greetings, birthday wishes, digital cards, templates gallery, create wish">
     <link rel="canonical" href="{{ config('app.url') }}" />
 
@@ -130,7 +130,7 @@
                     <h1>
                         <span class="text-gradient">Wishes</span><br>that feel like<span style="color: var(--accent);"> magic.</span>
                     </h1>
-                    <p><strong>WISP</strong> is your personal wish studio. From birthdays to “just because” — craft stunning AI‑powered greetings in seconds. Choose templates, add photos and music, share a link or send via WhatsApp. Your moments, elevated.</p>
+                    <p><strong>WISP</strong> is a digital keepsake and scheduled messaging platform. Craft meaningful AI‑powered greetings, attach memories like photos and music, and schedule them for future delivery. Share your special moments with the people you care about.</p>
                     <div class="hero-actions">
                         <a href="{{ route('auth.login') }}?tab=signup" class="btn btn-primary btn-large"><i class="fas fa-wand-magic-sparkles"></i> Create your wish</a>
                         <a href="{{ route('guest.try') }}" class="btn btn-outline btn-large"><i class="fas fa-magic"></i> Try without account</a>
