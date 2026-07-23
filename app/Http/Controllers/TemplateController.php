@@ -183,10 +183,11 @@ class TemplateController extends Controller
             ]);
         }
 
-        if (Auth::user()->role === 'admin') {
-            return redirect()->route('admin.page')
+        if (Auth::user()->role === 'admin' && $message->user_id !== Auth::id()) {
+            return redirect()->route('admin.messages.page')
                 ->with('success', 'Template saved for message.');
         }
+
         return redirect()->route('user.my-messages.page')
             ->with('success', 'Message saved! It is no longer a draft.');
     }
