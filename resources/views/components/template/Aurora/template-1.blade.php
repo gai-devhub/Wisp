@@ -262,10 +262,19 @@
             .content-section { padding: 15px 10px !important; }
         }
             /* Global Mobile Scroll Fix */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             body, html {
                 overflow-y: auto !important;
                 height: auto !important;
+            }
+                        .visual-anchor, .hero-img-wrapper, .left-panel, .image-portal, .image-section {
+                height: auto !important;
+                min-height: 40vh;
+                position: relative !important;
+            }
+            .viewport, .container, .wrapper, .main-container {
+                display: flex !important;
+                flex-direction: column !important;
             }
             .viewport, .container, .wrapper, .main-container {
                 height: auto !important;
@@ -347,5 +356,6 @@
 </body>
 
 </html>
+
 
 
