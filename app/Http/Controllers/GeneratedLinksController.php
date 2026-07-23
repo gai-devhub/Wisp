@@ -30,7 +30,7 @@ class GeneratedLinksController extends Controller
         }
 
 
-        $typeSlug = $message->message_type; // e.g. birthday, vows, condolences
+        $typeSlug = \Illuminate\Support\Str::slug($message->message_type); // e.g. birthday, vows, condolences
         $path = '/' . $typeSlug . '/' . $message->slug;
         $generatedUrl = url($path);
 

@@ -343,7 +343,7 @@ class WishMessagesController extends Controller
 
         // Generate a new unique code and URL
         $uniqueCode = \Illuminate\Support\Str::random(10);
-        $url = config('app.url') . '/view/message/' . $message->message_type . '/' . $message->slug;
+        $url = config('app.url') . '/view/message/' . \Illuminate\Support\Str::slug($message->message_type) . '/' . $message->slug;
 
         $link = new \App\Models\GeneratedLinks();
         $link->wish_message_id = $message->id;
