@@ -283,23 +283,7 @@ class GuestMessageController extends Controller
         }
 
         try {
-            // Delete associated media files on S3 if present
-            if ($message->mediaFiles) {
-                $mf = $message->mediaFiles;
-                if ($mf->recipient_image) {
-                    try { \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->delete($mf->recipient_image); } catch (\Throwable $e) {}
-                }
-                if ($mf->background_music && !str_starts_with((string)$mf->background_music, 'http')) {
-                    try { \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->delete($mf->background_music); } catch (\Throwable $e) {}
-                }
-                $mf->delete();
-            }
-
-            // Remove generated links and template records
-            $message->generatedLinks()->delete();
-            $message->template()->delete();
-
-            // Soft-delete the message
+            // Soft-delete the message (maintains all related records in the database)
             $message->delete();
 
             if ($request->wantsJson() || $request->ajax()) {
