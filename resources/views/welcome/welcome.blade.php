@@ -318,12 +318,15 @@
                             <h2 style="font-size: 2.5rem; font-weight: 700; margin-top: 8px;">What is <span class="text-gradient">WISP</span>?</h2>
                         </div>
                     </div>
-                    <p style="color: var(--text-muted); line-height: 1.75; margin-bottom: 20px; font-size: 1.1rem;">WISP is a wish &amp; message creator built for real life. Whether it’s a birthday, graduation, thank-you note, or just because — you get beautiful templates, an AI writer, and one-tap sharing so your words hit different.</p>
-                    <p style="color: var(--text-muted); line-height: 1.75; margin-bottom: 24px;">We believe every moment deserves a thoughtful message. No more last-minute generic cards. Create a custom wish in under a minute, add a photo or song, set an expiry, and share via link or WhatsApp. Simple, personal, memorable.</p>
+                    <p style="color: var(--text-muted); line-height: 1.75; margin-bottom: 20px; font-size: 1.1rem;">WISP is a digital keepsake and scheduled messaging platform that helps users create meaningful messages, attach memories, and share them with people they care about.</p>
+                    <p style="color: var(--text-muted); line-height: 1.75; margin-bottom: 24px;">Users can create personalized messages, add photos, videos, and background music, then choose when those messages should be delivered. WISP helps preserve special moments such as birthdays, celebrations, encouragement messages, and personal memories.</p>
+                    <div style="color: var(--text-muted); line-height: 1.75; margin-bottom: 12px; font-weight: 600;">With WISP, users can:</div>
                     <ul style="list-style: none; color: var(--text-muted); line-height: 2;">
-                        <li><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Built by Gilbert Asare · GAI Corp</li>
-                        <li><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Privacy-first, no spam</li>
-                        <li><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Free to use, upgrade when you need more</li>
+                        <li><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Create and save personal messages</li>
+                        <li><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Attach photos, videos, and media</li>
+                        <li><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Schedule messages for future delivery</li>
+                        <li><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Protect private messages with secure access controls</li>
+                        <li><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Share meaningful moments with friends and family</li>
                     </ul>
                 </div>
                 <div style="display: grid; gap: 20px;">
