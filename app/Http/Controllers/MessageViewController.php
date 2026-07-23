@@ -19,9 +19,11 @@ class MessageViewController extends Controller
      */
     public function show(string $type, string $slug)
     {
-        $message = WishMessages::where('message_type', $type)
-            ->where('slug', $slug)
-            ->first();
+        $message = WishMessages::where('slug', $slug)->first();
+
+        if ($message && \Illuminate\Support\Str::slug($message->message_type) !== $type && $message->message_type !== $type) {
+            $message = null; // Type mismatch
+        }
 
         if (!$message) {
             return response()->view('sub-folder.wrong-link', [], 404);
@@ -147,9 +149,11 @@ class MessageViewController extends Controller
      */
     public function acceptConsent(\Illuminate\Http\Request $request, string $type, string $slug)
     {
-        $message = WishMessages::where('message_type', $type)
-            ->where('slug', $slug)
-            ->first();
+        $message = WishMessages::where('slug', $slug)->first();
+
+        if ($message && \Illuminate\Support\Str::slug($message->message_type) !== $type && $message->message_type !== $type) {
+            $message = null;
+        }
 
         if (!$message) {
             abort(404);
