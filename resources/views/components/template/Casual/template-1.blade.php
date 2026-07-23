@@ -163,9 +163,21 @@
                 min-height: 40vh;
                 position: relative !important;
             }
+                        .visual-anchor img, .hero-img-wrapper img, .left-panel img, .image-portal img, .image-section img {
+                height: 100% !important;
+                flex-grow: 1;
+                object-fit: cover !important;
+                min-height: 40vh !important;
+            }
             .viewport, .container, .wrapper, .main-container {
                 display: flex !important;
                 flex-direction: column !important;
+            }
+                        .visual-anchor img, .hero-img-wrapper img, .left-panel img, .image-portal img, .image-section img {
+                height: 100% !important;
+                flex-grow: 1;
+                object-fit: cover !important;
+                min-height: 40vh !important;
             }
             .viewport, .container, .wrapper, .main-container {
                 height: auto !important;
@@ -227,6 +239,7 @@
 </body>
 
 </html>
+
 
 
 
