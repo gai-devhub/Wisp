@@ -94,7 +94,7 @@
             border-radius: 40px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+         overflow-y: auto !important; max-height: 100vh !important; justify-content: flex-start !important; padding-top: 40px !important; }
 
         h1 {
             font-family: 'Cormorant Garamond', serif;
@@ -202,7 +202,7 @@
         @media (max-width: 480px) {
             h1 { font-size: clamp(1.6rem, 6vw, 2rem) !important; }
             .card { padding: 10px !important; border-radius: 16px !important; }
-            .content-section { padding: 15px 10px !important;  overflow-y: auto; max-height: 100vh; }
+            .content-section { padding: 15px 10px !important;  overflow-y: auto; max-height: 100vh;  justify-content: flex-start !important; padding-top: 40px !important; }
         }
     </style>
 </head>
@@ -253,3 +253,4 @@
 </body>
 
 </html>
+

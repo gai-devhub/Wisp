@@ -136,7 +136,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-         overflow-y: auto; max-height: 100vh; }
+         overflow-y: auto; max-height: 100vh;  justify-content: flex-start !important; padding-top: 40px !important; }
 
         h1 {
             font-family: 'Cormorant Garamond', serif;
@@ -330,3 +330,4 @@
 </body>
 
 </html>
+

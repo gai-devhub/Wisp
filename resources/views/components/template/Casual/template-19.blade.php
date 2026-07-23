@@ -144,7 +144,7 @@
         @media (max-width: 480px) {
             h1 { font-size: clamp(1.6rem, 6vw, 2rem) !important; }
             .card { padding: 10px !important; border-radius: 16px !important; }
-            .content-section { padding: 15px 10px !important;  overflow-y: auto; max-height: 100vh; }
+            .content-section { padding: 15px 10px !important;  overflow-y: auto; max-height: 100vh;  justify-content: flex-start !important; padding-top: 40px !important; }
         }
     </style>
 </head>
@@ -180,3 +180,4 @@
     </x-background-music>
 </body>
 </html>
+

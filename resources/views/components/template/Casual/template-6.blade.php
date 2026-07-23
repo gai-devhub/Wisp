@@ -72,7 +72,7 @@
             line-height: 2;
             font-weight: 300;
             min-height: 200px;
-        }
+         overflow-y: auto !important; max-height: 100vh !important; justify-content: flex-start !important; padding-top: 40px !important; }
 
         #typed-message {
             display: inline;
@@ -164,7 +164,7 @@
         @media (max-width: 480px) {
             h1 { font-size: clamp(1.6rem, 6vw, 2rem) !important; }
             .card { padding: 10px !important; border-radius: 16px !important; }
-            .content-section { padding: 15px 10px !important;  overflow-y: auto; max-height: 100vh; }
+            .content-section { padding: 15px 10px !important;  overflow-y: auto; max-height: 100vh;  justify-content: flex-start !important; padding-top: 40px !important; }
         }
     </style>
 </head>
@@ -243,3 +243,4 @@
     </script>
 </body>
 </html>
+

@@ -112,7 +112,7 @@
             border-left: 6px solid var(--accent-gold);
             box-shadow: 0 30px 60px rgba(0,0,0,0.4);
             color: #1e1b4b;
-        }
+         overflow-y: auto !important; max-height: 100vh !important; justify-content: flex-start !important; padding-top: 40px !important; }
 
         h1 {
             font-family: 'Dancing Script', cursive;
@@ -126,7 +126,7 @@
 
         .intro { font-weight: 600; margin-bottom: 20px; font-size: 1.2rem; color: #7c3aed; }
 
-        .message-content { line-height: 1.8; color: #333; margin-bottom: 30px;  overflow-y: auto; max-height: 100vh; }
+        .message-content { line-height: 1.8; color: #333; margin-bottom: 30px;  overflow-y: auto; max-height: 100vh;  justify-content: flex-start !important; padding-top: 40px !important; }
 
         .closing { font-family: 'Dancing Script', cursive; font-size: 1.8rem; color: #ac7834; }
 
@@ -153,7 +153,7 @@
         @media (max-width: 480px) {
             h1 { font-size: clamp(1.6rem, 6vw, 2rem) !important; }
             .card { padding: 10px !important; border-radius: 16px !important; }
-            .content-section { padding: 15px 10px !important;  overflow-y: auto; max-height: 100vh; }
+            .content-section { padding: 15px 10px !important;  overflow-y: auto; max-height: 100vh;  justify-content: flex-start !important; padding-top: 40px !important; }
         }
     </style>
 </head>
@@ -215,3 +215,4 @@
     </script>
 </body>
 </html>
+
