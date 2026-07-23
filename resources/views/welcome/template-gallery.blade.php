@@ -31,7 +31,6 @@
 
         <div class="template-tabs" role="tablist">
             <button type="button" class="template-tab active" data-filter="all">All</button>
-            <button type="button" class="template-tab" data-filter="view">Views</button>
             @foreach ($themes as $theme => $count)
                 <button type="button" class="template-tab" data-filter="{{ $theme }}">{{ ucfirst($theme) }}</button>
             @endforeach

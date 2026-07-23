@@ -62,3 +62,5 @@ Open up a marketplace where talented designers can upload their own premium WISP
 
 20. AI VIDEO AVATAR GENERATION
 Take the AI "Magic" to the absolute cutting edge by allowing users to generate a customized, lip-syncing AI avatar that speaks their written wish out loud to the recipient when they open the page.
+
+21. Flyer style that is downloadable as png
