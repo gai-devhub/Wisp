@@ -286,13 +286,6 @@
                             <p style="color: var(--text-muted); margin-bottom: 16px;">{{ $vibe['desc'] }}</p>
                             <a href="{{ route('templates.gallery') }}" style="color: var(--primary); font-weight: 600; text-decoration: none;">{{ $themes[$key] }} templates →</a>
                         </div>
-                    @else
-                        <!-- <div class="glass-card {{ $key === 'aurora' ? 'vibe-card' : '' }}" style="padding: 32px; text-align: center;">
-                            <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: {{ $vibe['bg'] }}; border-radius: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas {{ $vibe['icon'] }}" style="font-size: 2rem; color: {{ $vibe['color'] }};"></i></div>
-                            <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">{{ ucfirst($key) }}</h3>
-                            <p style="color: var(--text-muted); margin-bottom: 16px;">{{ $vibe['desc'] }}</p>
-                            <a href="{{ route('templates.gallery') }}" style="color: var(--primary); font-weight: 600; text-decoration: none;">{{ $vibe['defaultCount'] }} templates →</a>
-                        </div> -->
                     @endif
                 @endforeach
             </div>
