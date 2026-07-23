@@ -268,42 +268,33 @@
                 <p style="max-width: 400px; color: var(--text-muted); font-size: 1.1rem;">From elegant minimal to glitter bomb. All responsive.</p>
             </div>
             <div class="vibes-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
-                <div class="glass-card vibe-card" style="padding: 32px; text-align: center;">
-                    <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: rgba(99,102,241,0.12); border-radius: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-sun" style="font-size: 2rem; color: var(--primary);"></i></div>
-                    <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">Aurora</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 16px;">Soft gradients, elegant serif.</p>
-                    <a href="{{ route('templates.gallery') }}" style="color: var(--primary); font-weight: 600; text-decoration: none;">14 templates →</a>
-                </div>
-                <div class="glass-card" style="padding: 32px; text-align: center;">
-                    <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: rgba(236,72,153,0.12); border-radius: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-birthday-cake" style="font-size: 2rem; color: var(--accent);"></i></div>
-                    <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">Confetti</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 16px;">Party vibes, bold colors.</p>
-                    <a href="{{ route('templates.gallery') }}" style="color: var(--primary); font-weight: 600; text-decoration: none;">12 templates →</a>
-                </div>
-                <div class="glass-card" style="padding: 32px; text-align: center;">
-                    <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: rgba(168,85,247,0.12); border-radius: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-feather" style="font-size: 2rem; color: var(--secondary);"></i></div>
-                    <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">Minimal</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 16px;">Clean lines, timeless.</p>
-                    <a href="{{ route('templates.gallery') }}" style="color: var(--primary); font-weight: 600; text-decoration: none;">18 templates →</a>
-                </div>
-                <div class="glass-card" style="padding: 32px; text-align: center;">
-                    <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: rgba(16,185,129,0.12); border-radius: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-leaf" style="font-size: 2rem; color: var(--success);"></i></div>
-                    <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">Garden</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 16px;">Nature-inspired, soft tones.</p>
-                    <a href="{{ route('templates.gallery') }}" style="color: var(--primary); font-weight: 600; text-decoration: none;">10 templates →</a>
-                </div>
-                <div class="glass-card" style="padding: 32px; text-align: center;">
-                    <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: rgba(245,158,11,0.12); border-radius: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-star" style="font-size: 2rem; color: var(--warning);"></i></div>
-                    <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">Glitter</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 16px;">Shimmer and shine.</p>
-                    <a href="{{ route('templates.gallery') }}" style="color: var(--primary); font-weight: 600; text-decoration: none;">8 templates →</a>
-                </div>
-                <div class="glass-card" style="padding: 32px; text-align: center;">
-                    <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: rgba(99,102,241,0.12); border-radius: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-heart" style="font-size: 2rem; color: var(--accent);"></i></div>
-                    <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">Romance</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 16px;">Sweet and heartfelt.</p>
-                    <a href="{{ route('templates.gallery') }}" style="color: var(--primary); font-weight: 600; text-decoration: none;">15 templates →</a>
-                </div>
+                @php
+                    $vibes = [
+                        'aurora' => ['icon' => 'fa-sun', 'color' => 'var(--primary)', 'bg' => 'rgba(99,102,241,0.12)', 'desc' => 'Soft gradients, elegant serif.', 'defaultCount' => 14],
+                        'confetti' => ['icon' => 'fa-birthday-cake', 'color' => 'var(--accent)', 'bg' => 'rgba(236,72,153,0.12)', 'desc' => 'Party vibes, bold colors.', 'defaultCount' => 12],
+                        'minimal' => ['icon' => 'fa-feather', 'color' => 'var(--secondary)', 'bg' => 'rgba(168,85,247,0.12)', 'desc' => 'Clean lines, timeless.', 'defaultCount' => 18],
+                        'garden' => ['icon' => 'fa-leaf', 'color' => 'var(--success)', 'bg' => 'rgba(16,185,129,0.12)', 'desc' => 'Nature-inspired, soft tones.', 'defaultCount' => 10],
+                        'glitter' => ['icon' => 'fa-star', 'color' => 'var(--warning)', 'bg' => 'rgba(245,158,11,0.12)', 'desc' => 'Shimmer and shine.', 'defaultCount' => 8],
+                        'romance' => ['icon' => 'fa-heart', 'color' => 'var(--accent)', 'bg' => 'rgba(99,102,241,0.12)', 'desc' => 'Sweet and heartfelt.', 'defaultCount' => 15]
+                    ];
+                @endphp
+                @foreach($vibes as $key => $vibe)
+                    @if(isset($themes[$key]))
+                        <div class="glass-card {{ $key === 'aurora' ? 'vibe-card' : '' }}" style="padding: 32px; text-align: center;">
+                            <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: {{ $vibe['bg'] }}; border-radius: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas {{ $vibe['icon'] }}" style="font-size: 2rem; color: {{ $vibe['color'] }};"></i></div>
+                            <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">{{ ucfirst($key) }}</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 16px;">{{ $vibe['desc'] }}</p>
+                            <a href="{{ route('templates.gallery') }}" style="color: var(--primary); font-weight: 600; text-decoration: none;">{{ $themes[$key] }} templates →</a>
+                        </div>
+                    @else
+                        <!-- <div class="glass-card {{ $key === 'aurora' ? 'vibe-card' : '' }}" style="padding: 32px; text-align: center;">
+                            <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: {{ $vibe['bg'] }}; border-radius: 24px; display: flex; align-items: center; justify-content: center;"><i class="fas {{ $vibe['icon'] }}" style="font-size: 2rem; color: {{ $vibe['color'] }};"></i></div>
+                            <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">{{ ucfirst($key) }}</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 16px;">{{ $vibe['desc'] }}</p>
+                            <a href="{{ route('templates.gallery') }}" style="color: var(--primary); font-weight: 600; text-decoration: none;">{{ $vibe['defaultCount'] }} templates →</a>
+                        </div> -->
+                    @endif
+                @endforeach
             </div>
         </section>
 

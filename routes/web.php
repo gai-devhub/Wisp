@@ -167,7 +167,9 @@ Route::get('/', function () use ($appLocked) {
         }
         return redirect()->route('user.page');
     }
-    return view('welcome.welcome');
+    return view('welcome.welcome', [
+        'themes' => \App\Http\Controllers\TemplateGalleryController::THEMES,
+    ]);
 })->name('home');
 
 Route::get('/app-locked', function () {
