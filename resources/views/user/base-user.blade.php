@@ -221,10 +221,10 @@
                     </a>
                 </div>
                 <a href="{{ route('user.settings.user.page') }}" class="user-profile" style="text-decoration: none; color: inherit;">
-                    <img src="{{ route('profile.picture') }}" alt="{{ $user->username ?? 'User' }}"
-                        data-fallback-src="https://ui-avatars.com/api/?name={{ urlencode($user->username ?? 'User') }}&color=7F9CF5&background=EBF4FF"
+                    <img src="{{ route('profile.picture') }}" alt="{{ auth()->user()->username ?? auth()->user()->name ?? 'User' }}"
+                        data-fallback-src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->username ?? auth()->user()->name ?? 'User') }}&color=7F9CF5&background=EBF4FF"
                         onerror="if(this.dataset.fallbackSrc) this.src=this.dataset.fallbackSrc">
-                    <span><b>{{ $user->username ?? $user->username ?? 'User' }}</b></span>
+                    <span><b>{{ auth()->user()->username ?? auth()->user()->name ?? 'User' }}</b></span>
                 </a>
             </div>
         </div>

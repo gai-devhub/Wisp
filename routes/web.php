@@ -210,7 +210,7 @@ Route::middleware(['auth', 'user.role', 'require.passcode', 'billing'])->group(f
     Route::get('/user-page/search', [UserController::class, 'searchPage'])->name('user.search.page');
     Route::get('/user-page/control-center/security', [UserController::class, 'controlCenterSecurity'])->name('user.control-center.security.page');
     Route::get('/user-page/settings/user', [UserController::class, 'userSettingsPage'])->name('user.settings.user.page');
-    Route::get('/user-page/help-support', function () {return view('user.pages.settings.help-support');})->name('user.help-support.page');
+    Route::get('/user-page/help-support', [UserController::class, 'helpSupportPage'])->name('user.help-support.page');
     Route::post('/user-page/settings/delete-account', [UserController::class, 'deleteAccount'])->name('user.settings.delete-account');
     Route::post('/user-page/settings/passcode', [UserSettingsController::class, 'updatePasscode'])->name('user.settings.passcode');
     Route::post('/user/github/update', [GithubUpdateController::class, 'userUpdate'])->name('user.github.update');

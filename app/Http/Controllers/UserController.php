@@ -193,6 +193,11 @@ class UserController extends Controller
         return $this->renderSection($request, 'user-settings');
     }
 
+    public function helpSupportPage(Request $request): View|RedirectResponse
+    {
+        return $this->renderSection($request, 'help-support');
+    }
+
     private function renderSection(Request $request, string $section): View|RedirectResponse|JsonResponse
     {
         if ($this->appLocked()) {
@@ -495,6 +500,7 @@ class UserController extends Controller
             'message-settings' => 'settings.message-settings',
             'settings' => 'settings.settings',
             'user-settings' => 'settings.user-settings',
+            'help-support' => 'settings.help-support',
             
             'dashboard' => 'general.dashboard',
             'links' => 'general.links',

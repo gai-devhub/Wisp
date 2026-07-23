@@ -12,7 +12,7 @@
             padding: 0 0 40px 0;
         }
         .feedback-header-card {
-            background: linear-gradient(135deg, var(--primary, #6c63ff) 0%, var(--primary-dark, #4f46e5) 100%);
+            background: linear-gradient(135deg, var(--primary, #6c63ff) 0%, var(--secondary, #4f46e5) 100%);
             border-radius: 16px;
             padding: 36px 32px 28px 32px;
             color: #fff;
@@ -104,16 +104,17 @@
         .feedback-field textarea:focus,
         .feedback-field select:focus {
             border-color: var(--primary, #6c63ff);
-            box-shadow: 0 0 0 3px rgba(108,99,255,0.1);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
         }
         .feedback-field textarea {
             resize: vertical;
             min-height: 100px;
+            font-family: inherit;
         }
         /* Rating row */
-        .rating-row {
+        .radio-group, .rating-row {
             display: flex;
-            gap: 12px;
+            gap: 16px;
             align-items: center;
             flex-wrap: wrap;
         }
@@ -130,9 +131,9 @@
             cursor: pointer;
         }
         .rating-option span {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-muted, #6b7280);
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted, #9ca3af);
         }
         /* Yes/No radios */
         .radio-group {
@@ -292,7 +293,7 @@
         .feedback-submit-btn {
             width: 100%;
             padding: 13px 24px;
-            background: linear-gradient(135deg, var(--primary, #6c63ff), var(--primary-dark, #4f46e5));
+            background: linear-gradient(135deg, var(--primary, #6c63ff), var(--secondary, #4f46e5));
             color: #fff;
             border: none;
             border-radius: 12px;
@@ -353,8 +354,8 @@
                     <p class="feedback-section-title">Your Information</p>
 
                     <div class="feedback-field">
-                        <label for="fb_name">Full Name <span class="required-star">*</span></label>
-                        <input type="text" id="fb_name" name="fb_name" placeholder="Enter your full name" required value="{{ auth()->user()->name ?? '' }}">
+                        <label for="fb_name">Username <span class="required-star">*</span></label>
+                        <input type="text" id="fb_name" name="fb_name" placeholder="Enter your username" required value="{{ auth()->user()->username ?? auth()->user()->name ?? '' }}">
                     </div>
 
                     <div class="feedback-field">
