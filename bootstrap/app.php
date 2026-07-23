@@ -20,6 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'require.passcode' => \App\Http\Middleware\RequirePasscode::class,
             'billing' => \App\Http\Middleware\EnsureSubscriptionIsActive::class,
         ]);
+        
+        $middleware->trustProxies(at: '*');
+
         // Apply systemOnline middleware globally
         $middleware->append(\App\Http\Middleware\SystemOnline::class);
         $middleware->web(append: [
