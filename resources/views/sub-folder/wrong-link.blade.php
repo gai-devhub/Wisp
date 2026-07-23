@@ -97,41 +97,13 @@
         }
 
         p {
-            margin: 0 0 32px;
+            margin: 0;
             font-size: 1.05rem;
             line-height: 1.6;
             color: var(--text-muted);
         }
 
-        .btn-home {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 14px 40px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #fff;
-            background: linear-gradient(135deg, var(--accent), #7c3aed);
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: inherit;
-            text-decoration: none;
-            margin-top: 1rem;
-        }
 
-        .btn-home:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 14px 24px -5px rgba(99, 102, 241, 0.5);
-            filter: brightness(1.05);
-        }
-
-        .btn-home:active {
-            transform: translateY(1px);
-            box-shadow: 0 4px 10px -3px rgba(99, 102, 241, 0.4);
-        }
 
         @media (max-width: 480px) {
             .container {
@@ -157,7 +129,6 @@
     <div class="container">
         <h1>Wrong or Disabled Link</h1>
         <p>The link you opened is incorrect, disabled, or no longer exists. Please ask the sender for the correct link.</p>
-        <a href="{{ route('home') }}" class="btn-home"><i class="fas fa-home"></i> Back to home</a>
     </div>
 </body>
 </html>
