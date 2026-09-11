@@ -43,42 +43,88 @@ class UserController extends Controller
 
     public function viewsChartData(Request $request)
     {
-        $userId = Auth::id();
-        $period = $request->query('period', 'week');
+        $user = $request->user();
+        $userId = $user ? $user->id : Auth::id();
+        $period = strtolower($request->query('period', 'week'));
+
+        $messageIds = \App\Models\WishMessages::where('user_id', $userId)->pluck('id');
 
         $data = [];
         switch ($period) {
             case 'day':
-                for ($h = 23; $h >= 0; $h--) {
-                    $hour = Carbon::now()->subHours($h);
+                $startOfDay = \Carbon\Carbon::today();
+                for ($h = 0; $h <= 22; $h += 2) {
+                    $startHour = $startOfDay->copy()->addHours($h);
+                    $endHour = $startHour->copy()->addHours(1)->endOfHour();
+                    $count = \App\Models\MessageViews::where(function($q) use ($userId, $messageIds) {
+                            $q->where('user_id', $userId)->orWhereIn('wish_message_id', $messageIds);
+                        })
+                        ->where(function($q) use ($startHour, $endHour) {
+                            $q->whereBetween('viewed_at', [$startHour, $endHour])
+                              ->orWhereBetween('created_at', [$startHour, $endHour]);
+                        })
+                        ->count();
+
                     $data[] = [
-                        'label' => $hour->format('H:i'),
-                        'count' => \App\Models\MessageViews::where('user_id', $userId)
-                            ->whereBetween('viewed_at', [$hour->copy()->startOfHour(), $hour->copy()->endOfHour()])
-                            ->count(),
+                        'label' => $startHour->format('H:i'),
+                        'count' => $count,
                     ];
                 }
                 break;
             case 'month':
-                for ($d = 29; $d >= 0; $d--) {
-                    $date = Carbon::today()->subDays($d)->toDateString();
+                $startOfMonth = \Carbon\Carbon::now()->startOfMonth();
+                $endOfMonth = \Carbon\Carbon::now()->endOfMonth();
+                $daysInMonth = $endOfMonth->day;
+
+                for ($d = 1; $d <= $daysInMonth; $d += 2) {
+                    $startDate = $startOfMonth->copy()->addDays($d - 1);
+                    $endDate = $startDate->copy()->addDay()->endOfDay();
+                    
+                    if ($endDate->gt($endOfMonth)) {
+                        $endDate = $endOfMonth->copy();
+                    }
+
+                    $count = \App\Models\MessageViews::where(function($q) use ($userId, $messageIds) {
+                            $q->where('user_id', $userId)->orWhereIn('wish_message_id', $messageIds);
+                        })
+                        ->where(function($q) use ($startDate, $endDate) {
+                            $q->whereBetween('viewed_at', [$startDate->copy()->startOfDay(), $endDate])
+                              ->orWhereBetween('created_at', [$startDate->copy()->startOfDay(), $endDate])
+                              ->orWhereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]);
+                        })
+                        ->count();
+
                     $data[] = [
-                        'label' => Carbon::parse($date)->format('j/n'),
-                        'count' => \App\Models\MessageViews::where('user_id', $userId)->whereDate('viewed_at', $date)->count(),
+                        'label' => $startDate->format('j/n'),
+                        'count' => $count,
                     ];
                 }
                 break;
             default:
-                for ($i = 6; $i >= 0; $i--) {
-                    $date = Carbon::today()->subDays($i)->toDateString();
+                $startOfWeek = \Carbon\Carbon::today()->startOfWeek(\Carbon\Carbon::SUNDAY);
+                for ($i = 0; $i < 7; $i++) {
+                    $date = $startOfWeek->copy()->addDays($i)->toDateString();
+                    $count = \App\Models\MessageViews::where(function($q) use ($userId, $messageIds) {
+                            $q->where('user_id', $userId)->orWhereIn('wish_message_id', $messageIds);
+                        })
+                        ->where(function($q) use ($date) {
+                            $q->whereDate('viewed_at', $date)
+                              ->orWhereDate('created_at', $date)
+                              ->orWhere('date', $date);
+                        })
+                        ->count();
+
                     $data[] = [
-                        'label' => Carbon::parse($date)->format('D'),
-                        'count' => \App\Models\MessageViews::where('user_id', $userId)->whereDate('viewed_at', $date)->count(),
+                        'label' => \Carbon\Carbon::parse($date)->format('D'),
+                        'count' => $count,
                     ];
                 }
         }
 
-        return response()->json($data);
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
     }
 
 
@@ -183,11 +229,6 @@ class UserController extends Controller
         return $this->renderSection($request, 'search');
     }
 
-    public function controlCenterSecurity(Request $request): View|RedirectResponse
-    {
-        return $this->renderSection($request, 'control-center-security');
-    }
-
     public function userSettingsPage(Request $request): View|RedirectResponse
     {
         return $this->renderSection($request, 'user-settings');
@@ -196,6 +237,16 @@ class UserController extends Controller
     public function helpSupportPage(Request $request): View|RedirectResponse
     {
         return $this->renderSection($request, 'help-support');
+    }
+
+    public function helpAssistancePage(Request $request): View|RedirectResponse
+    {
+        return $this->renderSection($request, 'help-assistance');
+    }
+
+    public function helpGrowthPage(Request $request): View|RedirectResponse
+    {
+        return $this->renderSection($request, 'help-growth');
     }
 
     private function renderSection(Request $request, string $section): View|RedirectResponse|JsonResponse
@@ -260,18 +311,21 @@ class UserController extends Controller
             $title = $v->wishMessage ? $v->wishMessage->title : 'Message';
             $activityItems->push((object)['time' => $v->viewed_at, 'activity' => 'Page viewed', 'details' => 'Someone viewed "' . $title . '"']);
         }
-        $activityItems = $activityItems->sortByDesc(fn ($item) => $item->time instanceof \DateTimeInterface ? $item->time->getTimestamp() : strtotime((string) $item->time))->values();
+        $activityItems = $activityItems->sortByDesc(function ($item) {
+            return $item->time instanceof \DateTimeInterface ? $item->time->getTimestamp() : strtotime((string) $item->time);
+        })->values();
         $activityTotal = $activityItems->count();
         $recentActivity = $activityItems->forPage($activityPage, 20)->values();
         $activityHasPrev = $activityPage > 1;
         $activityHasNext = ($activityPage * 20) < $activityTotal;
 
         $viewsLast7Days = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $date = Carbon::today()->subDays($i)->toDateString();
+        $startOfWeek = Carbon::today()->startOfWeek(Carbon::SUNDAY);
+        for ($i = 0; $i < 7; $i++) {
+            $date = $startOfWeek->copy()->addDays($i)->toDateString();
             $viewsLast7Days[] = [
                 'date' => $date,
-                'label' => Carbon::parse($date)->format('j/n'),
+                'label' => Carbon::parse($date)->format('D'),
                 'count' => MessageViews::where('user_id', $userId)->whereDate('viewed_at', $date)->count(),
             ];
         }
@@ -437,13 +491,6 @@ class UserController extends Controller
                 'keywords' => ['expiry', 'lifecycle', 'auto-delete', 'notifications', 'email', 'alerts', 'whatsapp']
             ],
             [
-                'title' => 'Security settings',
-                'url' => route('user.control-center.security.page'),
-                'icon' => 'fas fa-shield-alt',
-                'description' => 'Monitor active logins, parsed browser details, and masked IP logs.',
-                'keywords' => ['security', 'sessions', 'logins', 'active sessions', 'browsers', 'ip address']
-            ],
-            [
                 'title' => 'Notifications',
                 'url' => route('user.notifications.page'),
                 'icon' => 'fas fa-bell',
@@ -481,9 +528,7 @@ class UserController extends Controller
             ]);
         }
 
-        $activeAds = \App\Models\Ad::active()->whereIn('display_location', ['dashboard', 'all'])->get();
-
-        $isPremium = $user->isPremium();
+        $isPremium = true; // PREMIUM GATING DISABLED — $user->isPremium();
 
         $folderMap = [
             'create' => 'messages.create',
@@ -498,9 +543,10 @@ class UserController extends Controller
             'vault-auth' => 'security.vault-auth',
             
             'message-settings' => 'settings.message-settings',
-            'settings' => 'settings.settings',
             'user-settings' => 'settings.user-settings',
             'help-support' => 'settings.help-support',
+            'help-assistance' => 'doc.assistance',
+            'help-growth' => 'doc.growth',
             
             'dashboard' => 'general.dashboard',
             'links' => 'general.links',
@@ -513,18 +559,20 @@ class UserController extends Controller
         ];
 
         $viewPath = $folderMap[$section] ?? $section;
+        $fullViewName = str_starts_with($viewPath, 'doc.') ? $viewPath : 'user.pages.' . $viewPath;
 
         // Fetch themes data for template gallery (all themes come from backend)
         $themes = TemplateGalleryController::THEMES;
+        $activeAds = collect();
 
-        return view('user.pages.' . $viewPath, compact(
+        return view($fullViewName, compact(
             'user', 'userSettings', 'message', 'messages', 'allMessagesForSelect', 'allMessagesForEdit', 'lastTwoMessages', 'notifications', 'templateList', 'generatedLinks', 'messageTemplates',
             'dashboardStats', 'recentActivity', 'viewsLast7Days', 'recentShareSends', 'allShareSends',
             'shareMessagesLink', 'shareMessagesRecipientName', 'shareMessagesRecipientPhone', 'shareMessagesMessageText', 'shareMessagesId', 'messagesWithLink',
             'activityTotal', 'activityHasPrev', 'activityHasNext', 'activityPage',
             'imagesSize', 'audioSize',
             'scheduledSends', 'activeSessions', 'searchQuery', 'searchResults', 'matchedSystemPages',
-            'activeAds', 'isPremium', 'themes'
+            'themes'
         ));
     }
 
@@ -632,15 +680,30 @@ class UserController extends Controller
     {
         $messages = $request->user()->wishMessages()
             ->withCount('views')
-            ->with('generatedLinks')
+            ->with(['generatedLinks', 'template', 'mediaFiles'])
             ->get()
-            ->append(['generated_link', 'is_link_active', 'status']);
+            ->append(['generated_link', 'is_link_active', 'status', 'template_name', 'media_image', 'media_music', 'apple_music_url']);
             
         return response()->json([
             'success' => true,
             'data' => $messages
         ]);
     }
+
+    public function showMessage(Request $request, $id)
+    {
+        $message = $request->user()->wishMessages()
+            ->withCount('views')
+            ->with(['generatedLinks', 'template', 'mediaFiles'])
+            ->findOrFail($id)
+            ->append(['generated_link', 'is_link_active', 'status', 'template_name', 'media_image', 'media_music', 'apple_music_url']);
+            
+        return response()->json([
+            'success' => true,
+            'data' => $message
+        ]);
+    }
+
 
     public function listTrash(Request $request)
     {
@@ -690,8 +753,8 @@ class UserController extends Controller
         $user = $request->user();
         $messages = $user->wishMessages()->get();
 
-        $savedMessages = $messages->filter(function($m) { return in_array($m->status, ['draft', 'active', 'expiring_soon']); })->count();
-        $expiredMessages = $messages->filter(function($m) { return $m->status === 'expired'; })->count();
+        $savedMessages = $messages->filter(function($m) { return is_null($m->expires_at) || $m->expires_at > now(); })->count();
+        $expiredMessages = $messages->filter(function($m) { return !is_null($m->expires_at) && $m->expires_at < now(); })->count();
         
         $messageIds = $messages->pluck('id');
         $linksGenerated = \App\Models\GeneratedLinks::whereIn('wish_message_id', $messageIds)->count();
@@ -704,6 +767,8 @@ class UserController extends Controller
                 'expiredMessages' => $expiredMessages,
                 'linksGenerated' => $linksGenerated,
                 'totalViews' => $totalViews,
+                'user_id' => $user->id,
+                'message_count' => $messages->count(),
             ]
         ]);
     }
@@ -711,23 +776,24 @@ class UserController extends Controller
     {
         $user = $request->user();
 
-        // Verify passcode
-        $userSettings = UserSettings::where('user_id', $user->id)->first();
-        if (!$userSettings || !\Illuminate\Support\Facades\Hash::check($request->confirm_passcode, $userSettings->login_passcode)) {
-            return redirect()->back()->with('error', 'Passcode (2FA) verification failed.');
+        // Verify username
+        if (strtolower($request->confirm_username) !== strtolower($user->username)) {
+            return redirect()->back()->with('error', 'Username verification failed. The entered username does not match.');
         }
+
+        $userSettings = UserSettings::where('user_id', $user->id)->first();
+        $userId = $user->id;
 
         try {
             DB::beginTransaction();
 
             // 1. Delete Media Files (Storage & DB)
-            $mediaFiles = \App\Models\MediaFiles::where('user_id', $user->id)->get();
+            $mediaFiles = \App\Models\MediaFiles::where('user_id', $userId)->get();
             foreach ($mediaFiles as $file) {
                 try {
                     if ($file->recipient_image) \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->delete($file->recipient_image);
                     if ($file->background_music) \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->delete($file->background_music);
                 } catch (\Exception $e) {}
-                
                 $file->delete();
             }
 
@@ -737,7 +803,7 @@ class UserController extends Controller
             }
 
             // 3. Delete Messages & Associated Data
-            $messages = WishMessages::where('user_id', $user->id)->withTrashed()->get();
+            $messages = WishMessages::where('user_id', $userId)->withTrashed()->get();
             foreach ($messages as $msg) {
                 MessageViews::where('wish_message_id', $msg->id)->delete();
                 GeneratedLinks::where('wish_message_id', $msg->id)->delete();
@@ -746,23 +812,33 @@ class UserController extends Controller
 
             // 4. Delete Notifications
             if (Schema::hasTable('notifications')) {
-                DB::table('notifications')->where('user_id', $user->id)->delete();
+                DB::table('notifications')->where('user_id', $userId)->delete();
             }
             if (Schema::hasTable('user_notifications')) {
-                UserNotification::where('user_id', $user->id)->orWhere('sender_id', $user->id)->delete();
+                UserNotification::where('user_id', $userId)->orWhere('sender_id', $userId)->delete();
             }
 
             // 5. Delete Other Data
             if (Schema::hasTable('share_sends')) {
-                ShareSend::where('user_id', $user->id)->delete();
+                ShareSend::where('user_id', $userId)->delete();
             }
-            
 
             // 6. Delete Settings
             if ($userSettings) $userSettings->delete();
 
-            // 7. Delete User
+            // 7. Delete Sanctum API Tokens (prevents FK constraint on personal_access_tokens)
+            DB::table('personal_access_tokens')
+                ->where('tokenable_type', 'App\\Models\\User')
+                ->where('tokenable_id', $userId)
+                ->delete();
+
+            // 8. Delete any password reset tokens
+            DB::table('password_reset_tokens')->where('email', $user->email)->delete();
+
+            // 9. Delete the user (disable FK checks to avoid any remaining constraint issues)
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
             $user->delete();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
             DB::commit();
 
@@ -774,9 +850,11 @@ class UserController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Account deletion failed for user ' . $userId . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString());
+            return redirect()->back()->with('error', 'Account deletion failed: ' . $e->getMessage());
         }
     }
+
 
     public static function sectionRoute(string $section): string
     {
@@ -789,7 +867,7 @@ class UserController extends Controller
             'share-messages' => 'user.share-messages.page',
             'my-messages' => 'user.my-messages.page',
             'notifications' => 'user.notifications.page',
-            'settings' => 'user.settings.page',
+            'settings' => 'user.settings.messages.page',
             default => 'user.page',
         };
     }
@@ -801,6 +879,78 @@ class UserController extends Controller
         }
         return (bool) DB::table('system_settings')->where('key', 'app_locked')->value('value');
     }
+
+    public function deleteAccountApi(Request $request)
+    {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Unauthenticated.'], 401);
+        }
+
+        $userId = $user->id;
+        $userSettings = \App\Models\UserSettings::where('user_id', $userId)->first();
+
+        try {
+            \Illuminate\Support\Facades\DB::beginTransaction();
+
+            $mediaFiles = \App\Models\MediaFiles::where('user_id', $userId)->get();
+            foreach ($mediaFiles as $file) {
+                try {
+                    if ($file->recipient_image) \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->delete($file->recipient_image);
+                    if ($file->background_music) \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->delete($file->background_music);
+                } catch (\Exception $e) {}
+                $file->delete();
+            }
+
+            if ($user->profile_picture) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete('profile-pictures/' . $user->profile_picture);
+            }
+
+            $messages = \App\Models\WishMessages::where('user_id', $userId)->withTrashed()->get();
+            foreach ($messages as $msg) {
+                \App\Models\MessageViews::where('wish_message_id', $msg->id)->delete();
+                \App\Models\GeneratedLinks::where('wish_message_id', $msg->id)->delete();
+                $msg->forceDelete();
+            }
+
+            if (\Illuminate\Support\Facades\Schema::hasTable('notifications')) {
+                \Illuminate\Support\Facades\DB::table('notifications')->where('user_id', $userId)->delete();
+            }
+            if (\Illuminate\Support\Facades\Schema::hasTable('user_notifications')) {
+                \App\Models\UserNotification::where('user_id', $userId)->orWhere('sender_id', $userId)->delete();
+            }
+
+            if (\Illuminate\Support\Facades\Schema::hasTable('share_sends')) {
+                \App\Models\ShareSend::where('user_id', $userId)->delete();
+            }
+
+            if ($userSettings) $userSettings->delete();
+
+            \Illuminate\Support\Facades\DB::table('personal_access_tokens')
+                ->where('tokenable_type', 'App\Models\User')
+                ->where('tokenable_id', $userId)
+                ->delete();
+
+            \Illuminate\Support\Facades\DB::table('password_reset_tokens')->where('email', $user->email)->delete();
+
+            \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=0');
+            $user->delete();
+            \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
+            \Illuminate\Support\Facades\DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Your account and all associated data have been permanently deleted.'
+            ]);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            \Illuminate\Support\Facades\Log::error('API Account deletion failed: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Account deletion failed: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
 }
-
-

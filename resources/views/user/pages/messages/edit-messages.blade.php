@@ -17,50 +17,52 @@
             </div>
             <div class="card messages-form-card">
                 <div class="card-body">
-                    <div class="form-group">
-                        <label for="message-type">Message Type</label>
-                        <input type="text" class="form-control" id="message-type" name="message_type" required maxlength="30" pattern="[A-Za-z\s]+" title="Letters and spaces only" value="{{ old('message_type', $message->message_type ?? '') }}" placeholder="e.g. Birthday Message">
-                    </div>
-                    <div class="form-group">
-                        <label for="page-title">Message Title</label>
-                        <input type="text" class="form-control" id="page-title" name="page_title"
-                            value="{{ old('page_title', $message->title) }}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="recipient-full-name">Recipient's Full name</label>
-                        <input type="text" class="form-control" id="recipient-full-name" name="recipient_full_name"
-                            value="{{ old('recipient_full_name', $message->recipient_name) }}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="recipient-name">Recipient's Special Name</label>
-                        <input type="text" class="form-control" id="recipient-name" name="recipient_name"
-                            value="{{ old('recipient_name', $message->recipient_special_name) }}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="greeting">Greeting</label>
-                        <input type="text" class="form-control" id="greeting" name="greeting"
-                            value="{{ old('greeting', $message->greeting) }}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="wish-message">Message Content</label>
-                        <textarea class="form-control" id="wish-message" name="wish_message" rows="6"
-                            required>{{ old('wish_message', $message->message ?? $message->wish_message) }}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="Last-note">Last Notes</label>
-                        <input type="text" class="form-control" id="Last-note" name="last_note"
-                            value="{{ old('last_note', $message->last_note) }}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="receiving-date">Receiving Date</label>
-                        <input type="date" class="form-control" id="receiving-date" name="receiving_date"
-                            value="{{ old('receiving_date', $message->receiving_date ? \Carbon\Carbon::parse($message->receiving_date)->format('Y-m-d') : '') }}"
-                            required>
-                    </div>
-                    <div class="form-group">
-                        <label for="sender-name">Your Name</label>
-                        <input type="text" class="form-control" id="sender-name" name="sender_name"
-                            value="{{ old('sender_name', $message->sender_name) }}" required>
+                    <div class="form-grid-2col">
+                        <div class="form-group">
+                            <label for="message-type">Message Type</label>
+                            <input type="text" class="form-control" id="message-type" name="message_type" required maxlength="30" pattern="[A-Za-z\s]+" title="Letters and spaces only" value="{{ old('message_type', $message->message_type ?? '') }}" placeholder="e.g. Birthday Message">
+                        </div>
+                        <div class="form-group">
+                            <label for="page-title">Message Title</label>
+                            <input type="text" class="form-control" id="page-title" name="page_title"
+                                value="{{ old('page_title', $message->title) }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-full-name">Recipient's Full name</label>
+                            <input type="text" class="form-control" id="recipient-full-name" name="recipient_full_name"
+                                value="{{ old('recipient_full_name', $message->recipient_name) }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name">Recipient's Special Name</label>
+                            <input type="text" class="form-control" id="recipient-name" name="recipient_name"
+                                value="{{ old('recipient_name', $message->recipient_special_name) }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="greeting">Greeting</label>
+                            <input type="text" class="form-control" id="greeting" name="greeting"
+                                value="{{ old('greeting', $message->greeting) }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sender-name">Your Name</label>
+                            <input type="text" class="form-control" id="sender-name" name="sender_name"
+                                value="{{ old('sender_name', $message->sender_name) }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="receiving-date">Receiving Date</label>
+                            <input type="date" class="form-control" id="receiving-date" name="receiving_date"
+                                value="{{ old('receiving_date', $message->receiving_date ? \Carbon\Carbon::parse($message->receiving_date)->format('Y-m-d') : '') }}"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Last-note">Last Notes</label>
+                            <input type="text" class="form-control" id="Last-note" name="last_note"
+                                value="{{ old('last_note', $message->last_note) }}" required>
+                        </div>
+                        <div class="form-group form-grid-full">
+                            <label for="wish-message">Message Content</label>
+                            <textarea class="form-control" id="wish-message" name="wish_message" rows="6"
+                                required>{{ old('wish_message', $message->message ?? $message->wish_message) }}</textarea>
+                        </div>
                     </div>
 
                     <div class="form-group vault-section-container">
@@ -78,7 +80,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Update Message</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle"></i> Update Message</button>
                 </div>
             </div>
         </form>

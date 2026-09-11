@@ -12,17 +12,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --primary-light: rgba(99, 102, 241, 0.08);
-            --secondary: #a855f7;
-            --accent: #ec4899;
+            --primary: #E8674A;
+            --primary-hover: #d4543a;
+            --primary-light: rgba(232, 103, 74, 0.08);
+            --secondary: #F28C76;
+            --accent: #f59e6b;
             --text: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
             --bg: #ffffff;
             --bg-subtle: #f8fafc;
-            --bg-glass: rgba(255, 255, 255, 0.8);
+            --bg-glass: rgba(255, 255, 255, 0.85);
             --radius: 12px;
             --radius-lg: 20px;
             --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
@@ -30,17 +30,8 @@
             --transition: 0.2s ease;
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --text: #f8fafc;
-                --text-muted: #94a3b8;
-                --border: #334155;
-                --bg: #0f172a;
-                --bg-subtle: #1e293b;
-                --bg-glass: rgba(15, 23, 42, 0.8);
-                --primary-light: rgba(99, 102, 241, 0.15);
-            }
-        }
+
+
 
         * {
             margin: 0;
@@ -199,18 +190,21 @@
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border);
+            padding: 24px 28px;
+            background: linear-gradient(135deg, #ffffff 0%, #fffdfa 50%, #faf5ee 100%);
+            border: 1px solid #f1e5d5;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
         }
 
         .content-header h1 {
             font-size: 2.5rem;
-            color: var(--text);
+            color: #1e293b;
             margin-bottom: 8px;
         }
 
         .content-header p {
-            color: var(--text-muted);
+            color: #64748b;
             font-size: 1.1rem;
         }
 

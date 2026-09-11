@@ -124,9 +124,7 @@
                                 <span  class="message-settings-inline-36">ShareMessages notifications</span>
                             </label>
                         </div>
-                        <button type="submit" class="btn message-settings-inline-37"
-                            >Save
-                            Preferences</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle"></i> Save Preferences</button>
                     </form>
                 </div>
             </div>
@@ -140,7 +138,7 @@
                 </div>
                 <div class="card-body message-settings-inline-41">
                     <p style="color:#64748b;font-size:0.88rem;margin-bottom:16px;">Set default expiry rules and auto-delete behaviours for generated pages.</p>
-                    <form method="POST" action="{{ route('user.settings.general') }}">
+                    <form method="POST" action="{{ route('settings.page') }}">
                         @csrf
                         <div class="form-group message-settings-inline-42">
                             <label class="message-settings-inline-43">Page Expiry Duration <span class="message-settings-inline-44">(Hours)</span></label>
@@ -162,7 +160,7 @@
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary" style="margin-top:20px;">
-                            <i class="fas fa-save"></i> Save Configuration
+                            <i class="fas fa-check-circle"></i> Save Configuration
                         </button>
                     </form>
                 </div>
@@ -207,9 +205,7 @@
                         </div>
 
                         <div  class="message-settings-inline-51">
-                            <button type="submit" class="btn message-settings-inline-52"
-                                >Save
-                                Rules</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle"></i> Save Rules</button>
                                 <a href="{{ route('settings.lifecycle.run_archive') }}" class="btn message-settings-inline-53"
                                 
                                 onclick="event.preventDefault(); showTypedConfirmModal('Are you sure you want to manually run the archive process now?', () => window.location.href = this.href);">Run

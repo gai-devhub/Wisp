@@ -16,7 +16,7 @@
     <div class="stats-container">
         {{-- Stat Card 1 --}}
         <div class="stat-card">
-            <div class="stat-icon" style="background: rgba(99, 102, 241, 0.1); color: #6366f1;">
+            <div class="stat-icon" style="background: rgba(232, 103, 74, 0.05); color: var(--primary);">
                 <i class="fas fa-users text-xl"></i>
             </div>
             <div class="stat-info">
@@ -26,7 +26,7 @@
         </div>
         {{-- Stat Card 2 --}}
         <div class="stat-card">
-            <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+            <div class="stat-icon" style="background: rgba(232, 103, 74, 0.10); color: var(--primary);">
                 <i class="fas fa-envelope text-xl"></i>
             </div>
             <div class="stat-info">
@@ -36,7 +36,7 @@
         </div>
         {{-- Stat Card 3 --}}
         <div class="stat-card">
-            <div class="stat-icon" style="background: rgba(217, 70, 239, 0.1); color: #d946ef;">
+            <div class="stat-icon" style="background: rgba(232, 103, 74, 0.15); color: var(--primary);">
                 <i class="fas fa-eye text-xl"></i>
             </div>
             <div class="stat-info">
@@ -46,7 +46,7 @@
         </div>
         {{-- Stat Card 4 --}}
         <div class="stat-card">
-            <div class="stat-icon" style="background: rgba(244, 63, 94, 0.1); color: #f43f5e;">
+            <div class="stat-icon" style="background: rgba(232, 103, 74, 0.20); color: var(--primary);">
                 <i class="fas fa-exclamation-triangle text-xl"></i>
             </div>
             <div class="stat-info">
@@ -56,7 +56,7 @@
         </div>
         {{-- Stat Card 5 --}}
         <div class="stat-card">
-            <div class="stat-icon" style="background: rgba(234, 179, 8, 0.1); color: #eab308;">
+            <div class="stat-icon" style="background: rgba(232, 103, 74, 0.25); color: var(--primary);">
                 <i class="fas fa-coins text-xl"></i>
             </div>
             <div class="stat-info">
@@ -108,21 +108,21 @@
                         <div class="db-donut-legend">
                             <div class="db-legend-item">
                                 <div class="db-legend-label-row">
-                                    <span class="db-legend-dot" style="background:#10b981;"></span>
+                                    <span class="db-legend-dot" style="background:rgba(232, 103, 74, 1.0);"></span>
                                     <span class="db-legend-name">Published</span>
                                 </div>
                                 <div class="db-legend-val">{{ number_format($stats['published_messages'] ?? 0) }}</div>
                             </div>
                             <div class="db-legend-item">
                                 <div class="db-legend-label-row">
-                                    <span class="db-legend-dot" style="background:#94a3b8;"></span>
+                                    <span class="db-legend-dot" style="background:rgba(232, 103, 74, 0.4);"></span>
                                     <span class="db-legend-name">Draft</span>
                                 </div>
                                 <div class="db-legend-val">{{ number_format($stats['draft_messages'] ?? 0) }}</div>
                             </div>
                             <div class="db-legend-item">
                                 <div class="db-legend-label-row">
-                                    <span class="db-legend-dot" style="background:#f43f5e;"></span>
+                                    <span class="db-legend-dot" style="background:rgba(232, 103, 74, 0.7);"></span>
                                     <span class="db-legend-name">Expired</span>
                                 </div>
                                 <div class="db-legend-val">{{ number_format($stats['expired_messages'] ?? 0) }}</div>
@@ -147,14 +147,14 @@
                         <div class="db-donut-legend">
                             <div class="db-legend-item">
                                 <div class="db-legend-label-row">
-                                    <span class="db-legend-dot" style="background:#334155;"></span>
+                                    <span class="db-legend-dot" style="background:rgba(232, 103, 74, 0.8);"></span>
                                     <span class="db-legend-name">Media Files</span>
                                 </div>
                                 <div class="db-legend-val">{{ number_format($stats['total_media'] ?? 0) }}</div>
                             </div>
                             <div class="db-legend-item">
                                 <div class="db-legend-label-row">
-                                    <span class="db-legend-dot" style="background:#94a3b8;"></span>
+                                    <span class="db-legend-dot" style="background:rgba(232, 103, 74, 0.4);"></span>
                                     <span class="db-legend-name">AI Chats</span>
                                 </div>
                                 <div class="db-legend-val">{{ number_format($stats['total_ai'] ?? 0) }}</div>
@@ -254,14 +254,15 @@
             border-color: var(--border);
         }
         .cal-day.today {
-            background-color: var(--primary, #6366f1);
+            background-color: var(--primary, #F28C76);
             color: #ffffff;
             font-weight: 700;
-            box-shadow: 0 2px 6px rgba(99,102,241,0.4);
+            box-shadow: 0 2px 6px rgba(232, 103, 74, 0.4);
         }
         .cal-day.selected {
-            background-color: var(--text);
-            color: var(--bg);
+            background-color: var(--primary, #F28C76);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(232, 103, 74, 0.4);
         }
         .db-event-item {
             display: flex;
@@ -315,7 +316,7 @@
                             aiCount > 0 ? aiCount : (total === 0 ? 0.001 : 0),
                             total === 0 ? 1 : 0
                         ],
-                        backgroundColor: ['#334155', '#94a3b8', '#e2e8f0'],
+                        backgroundColor: ['rgba(232, 103, 74, 0.8)', 'rgba(232, 103, 74, 0.4)', '#e2e8f0'],
                         borderWidth: 0,
                         borderRadius: 6,
                         spacing: 4,
@@ -352,8 +353,8 @@
             
             var ctx = chartEl.getContext('2d');
             var gradient = ctx.createLinearGradient(0, 0, 0, 300);
-            gradient.addColorStop(0, 'rgba(99, 102, 241, 0.25)');
-            gradient.addColorStop(1, 'rgba(99, 102, 241, 0.0)');
+            gradient.addColorStop(0, 'rgba(232, 103, 74, 0.25)');
+            gradient.addColorStop(1, 'rgba(232, 103, 74, 0.0)');
 
             viewsChartInstance = new Chart(chartEl, {
                 type: 'line',
@@ -362,10 +363,10 @@
                     datasets: [{
                         label: 'Views',
                         data: counts,
-                        borderColor: '#6366f1',
+                        borderColor: '#F28C76',
                         backgroundColor: gradient,
                         pointBackgroundColor: '#ffffff',
-                        pointBorderColor: '#6366f1',
+                        pointBorderColor: '#F28C76',
                         pointBorderWidth: 2,
                         pointRadius: 4,
                         tension: 0.35,
@@ -458,7 +459,7 @@
                             exp > 0 ? exp : (totMsg === 0 ? 0.001 : 0),
                             totMsg === 0 ? 1 : 0
                         ],
-                        backgroundColor: ['#10b981', '#94a3b8', '#f43f5e', '#e2e8f0'],
+                        backgroundColor: ['rgba(232, 103, 74, 1.0)', 'rgba(232, 103, 74, 0.4)', 'rgba(232, 103, 74, 0.7)', '#e2e8f0'],
                         borderWidth: 0,
                         borderRadius: 6,
                         spacing: 4,

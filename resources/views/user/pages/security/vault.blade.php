@@ -91,7 +91,7 @@
                 </div>
                 <div class="modal-footer vault-modal-footer">
                     <button type="button" class="btn btn-light vault-modal-btn" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary vault-modal-btn">Save PIN</button>
+                    <button type="submit" class="btn btn-primary vault-modal-btn"><i class="fas fa-check-circle"></i> Save PIN</button>
                 </div>
             </form>
         </div>

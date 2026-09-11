@@ -6,9 +6,9 @@
                         <img src="{{ asset('img/logo.png') }}" alt="WISP" style="width: 40px; height: 40px; object-fit: contain;">
                         WISP
                     </h2>
-                    <p style="margin-top: 18px; color: var(--text-muted); max-width: 280px;">Wishes that feel like magic. Create, personalize, and share in seconds — by Gilbert Asare · GAI Corp.</p>
-                    <div style="margin-top: 28px; background: var(--primary-light); padding: 12px 24px; border-radius: 60px; display: inline-block;">
-                        <span style="font-weight: 600; color: var(--text-main);">WISP · Gilbert Asare</span>
+                    <p style="margin-top: 18px; color: var(--text-muted); max-width: 280px;">Wishes that feel like magic. Create, personalize, and share in seconds — by Gilbert Asare.</p>
+                    <div style="margin-top: 28px; background: rgba(253, 246, 236, 0.08); padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(253, 246, 236, 0.15); display: inline-block;">
+                        <span style="font-weight: 600; font-size: 0.88rem; color: var(--cream);">WISP · Gilbert Asare</span>
                     </div>
                 </div>
                 <div>
@@ -22,10 +22,9 @@
                 <div>
                     <h4>Company</h4>
                     <ul style="list-style: none; margin-top: 20px;">
-                        <li style="margin-bottom: 12px;"><a href="{{ url('/') }}#about" style="color: var(--text-muted); text-decoration: none;">About WISP</a></li>
-                        <li style="margin-bottom: 12px;"><a href="{{ url('/') }}#team" style="color: var(--text-muted); text-decoration: none;">Team</a></li>
-                        <li style="margin-bottom: 12px;"><a href="{{ url('/') }}#stories" style="color: var(--text-muted); text-decoration: none;">Stories</a></li>
-                        <li style="margin-bottom: 12px;"><a href="{{ url('/') }}#faq" style="color: var(--text-muted); text-decoration: none;">FAQ</a></li>
+                        <li style="margin-bottom: 12px;"><a href="{{ route('welcome.about') }}" style="color: var(--text-muted); text-decoration: none;">About WISP</a></li>
+                        <li style="margin-bottom: 12px;"><a href="{{ route('welcome.about') }}#team" style="color: var(--text-muted); text-decoration: none;">Team</a></li>
+                        <li style="margin-bottom: 12px;"><a href="{{ route('welcome.faq') }}" style="color: var(--text-muted); text-decoration: none;">FAQ &amp; Contact</a></li>
                     </ul>
                 </div>
                 <div>
@@ -37,7 +36,7 @@
                 </div>
             </div>
             <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--glass-border);">
-                <p style="color: var(--text-muted);">&copy; {{ date('Y') }} WISP. All rights reserved. A GAI Corp project.</p>
+                <p style="color: var(--text-muted);">&copy; {{ date('Y') }} WISP. All rights reserved.</p>
                 <div style="display: flex; gap: 20px;">
                     <a href="#"><i class="fab fa-twitter" style="color: var(--text-muted);"></i></a>
                     <a href="#"><i class="fab fa-instagram" style="color: var(--text-muted);"></i></a>

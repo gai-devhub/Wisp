@@ -222,7 +222,7 @@
 
     <div class="document-frame">
         <div class="meta-header">
-            <div>{{ $message->title ?? 'GAI Corp' }} // Commemorative Portfolio</div>
+            <div>{{ $message->title ?? 'WISP' }} // Commemorative Portfolio</div>
             <div>Ref: {{ $message->receiving_date ? \Carbon\Carbon::parse($message->receiving_date)->format('M Y') : '' }}</div>
         </div>
 

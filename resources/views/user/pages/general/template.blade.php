@@ -25,36 +25,9 @@
                 @endif
             </div>
         </div>
-        <div style="display: flex; gap: 10px; align-items: center;">
-            <!-- {{--
-            @if(!($isPremium ?? false))
-                <a href="{{ route('user.billing.index') }}" class="template-upgrade-pill">
-                    <i class="fas fa-crown"></i> Upgrade for 200+ Templates
-                </a>
-            @endif
-            --}} -->
-        </div>
     </div>
 
-    <!-- {{--
-    @if(!($isPremium ?? false))
-    <div class="template-free-notice">
-        <i class="fas fa-info-circle"></i>
-        <span>You're on the <strong>Free plan</strong>. You have access to <strong>View</strong>, <strong>Aurora</strong> &amp; <strong>Casual</strong> templates.
-        <a href="{{ route('user.billing.index') }}">Upgrade to Premium</a> to unlock all 200+ templates.</span>
-    </div>
-    <style>
-    .template-free-notice {
-        background: linear-gradient(90deg,#fdf4ff,#f0f4ff);
-        border: 1px solid #f5d0fe; padding: 12px 18px; border-radius: 12px;
-        margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #701a75; font-size: 0.95rem;
-    }
-    .template-free-notice i { font-size: 1.1rem; color: #d946ef; }
-    .template-free-notice a { color: #d946ef; font-weight: 600; text-decoration: none; margin-left: 4px; }
-    .template-free-notice a:hover { text-decoration: underline; }
-    </style>
-    @endif
-    --}} -->
+   
     <style>
     .template-upgrade-pill {
         display: inline-flex; align-items: center; gap: 6px;
@@ -100,7 +73,7 @@
             <div class="template-grid-wrapper" id="template-grid-wrapper" {!! $selectedMessage ? '' : 'style="display: none;"' !!}>
 
             @php
-                $premiumUser = $isPremium ?? false;
+                $premiumUser = true; // PREMIUM GATING DISABLED — $isPremium ?? false;
                 // Tabs available to free users
                 $freeTabs = ['view', 'aurora', 'casual'];
             @endphp
@@ -110,55 +83,32 @@
                 @foreach($themes as $theme => $count)
                     <button type="button" class="template-tab" data-filter="{{ $theme }}">{{ ucfirst($theme) }}</button>
                 @endforeach
-                <!-- @if($premiumUser)
-                    <button type="button" class="template-tab" data-filter="confetti" role="tab" aria-selected="false">Confetti</button>
-                    <button type="button" class="template-tab" data-filter="minimal" role="tab" aria-selected="false">Minimal</button>
-                    <button type="button" class="template-tab" data-filter="garden" role="tab" aria-selected="false">Garden</button>
-                    <button type="button" class="template-tab" data-filter="glitter" role="tab" aria-selected="false">Glitter</button>
-                    <button type="button" class="template-tab" data-filter="romance" role="tab" aria-selected="false">Romance</button>
-                @else
-                    {{-- Show locked tabs for premium themes --}}
-                    @foreach(['confetti','minimal','garden','glitter','romance'] as $lockedTab)
-                        <button type="button" class="template-tab template-tab-locked" data-filter="{{ $lockedTab }}" role="tab" aria-selected="false">
-                            {{ ucfirst($lockedTab) }} <i class="fas fa-lock" style="font-size:10px;margin-left:4px;"></i>
-                        </button>
-                    @endforeach
-                @endif -->
             </div>
 
             <div class="template-grid" id="template-grid">
                 @php
-                // Free users can see these two themes
-                $freeThemes = ['view', 'aurora', 'casual']; 
-                $premiumUser = true; // $isPremium ?? false; // Make all templates available
+                // PREMIUM GATING DISABLED — all themes are available to all users.
+                // $freeThemes = ['view', 'aurora', 'casual'];
+                $premiumUser = true;
                 $counter = 0;
                 $globalTemplateIndex = 0;
                 @endphp
 
                 @foreach($themes as $theme => $count)
-                    @php $isPremiumTheme = !in_array($theme, $freeThemes); @endphp
                     @for($n = 1; $n <= $count; $n++)
                         @php $counter++; $templateIndex = $globalTemplateIndex; $globalTemplateIndex++; @endphp
                         <div class="template-card-container" style="display: flex; flex-direction: column; height: 100%;">
-                            <div class="template-card {{ (!$premiumUser && $isPremiumTheme) ? 'template-card-locked' : '' }}"
+                            <div class="template-card"
                                  data-theme="{{ $theme }}"
                                  data-template-num="{{ $n }}"
                                  data-template-index="{{ $templateIndex }}"
-                                 role="{{ (!$premiumUser && $isPremiumTheme) ? 'presentation' : 'button' }}"
-                                 tabindex="{{ (!$premiumUser && $isPremiumTheme) ? '-1' : '0' }}">
-                                @if(!$premiumUser && $isPremiumTheme)
-                                    <div class="template-card-placeholder" style="background: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #94a3b8;">
-                                        <i class="fas fa-lock" style="font-size: 28px; margin-bottom: 12px; color: #cbd5e1;"></i>
-                                        <span style="font-size: 13px; font-weight: 600; text-align: center; padding: 0 10px;">Requires<br>Premium Access</span>
-                                    </div>
-                                    <a href="{{ route('user.billing.index') }}" class="template-lock-overlay" title="Upgrade to unlock" style="background: rgba(15,10,40,0.1);">
-                                    </a>
-                                @else
-                                    <div class="template-card-placeholder">
-                                        <div class="template-radio-btn" style="position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; border: 2px solid #cbd5e1; border-radius: 50%; z-index: 10; background: rgba(255,255,255,0.5); display: flex; align-items: center; justify-content: center; transition: all 0.2s;"></div>
-                                        <iframe class="template-iframe" src="{{ route('templates.gallery.preview', $theme . '-' . $n) }}" scrolling="no" tabindex="-1"></iframe>
-                                    </div>
-                                @endif
+                                 role="button"
+                                 tabindex="0">
+                                {{-- PREMIUM GATING DISABLED: lock overlay removed --}}
+                                <div class="template-card-placeholder">
+                                    <div class="template-radio-btn" style="position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; border: 2px solid #cbd5e1; border-radius: 50%; z-index: 10; background: rgba(255,255,255,0.5); display: flex; align-items: center; justify-content: center; transition: all 0.2s;"></div>
+                                    <iframe class="template-iframe" src="{{ route('templates.gallery.preview', $theme . '-' . $n) }}" scrolling="no" tabindex="-1"></iframe>
+                                </div>
                                 <span class="template-card-label">#{{ str_pad($counter, 3, '0', STR_PAD_LEFT) }}</span>
                                 <span class="template-card-title">{{ ucfirst($theme) }} - {{ $n }}</span>
                             </div>

@@ -305,7 +305,7 @@
                             toggleAudio.classList.toggle('playing', playing);
                         }
                         if (musicTrigger) {
-                            musicTrigger.textContent = playing ? 'PAUSE' : (musicTrigger.dataset.idleLabel || 'ENABLE AUDIO');
+                            musicTrigger.textContent = playing ? '❚❚' : (musicTrigger.dataset.idleLabel || 'ENABLE AUDIO');
                         }
                         if (audioTrigger) {
                             audioTrigger.textContent = playing ? 'SUSPEND AUDIO' : (audioTrigger.dataset.idleLabel || 'INITIATE AUDIO');
@@ -313,10 +313,10 @@
                         if (iconState) {
                             iconState.textContent = playing ? '❚❚' : '♫';
                         } else if (musicToggle) {
-                            musicToggle.textContent = playing ? 'PAUSE' : (musicToggle.dataset.idleLabel || musicToggle.textContent || 'PLAY');
+                            musicToggle.textContent = playing ? '❚❚' : (musicToggle.dataset.idleLabel || musicToggle.textContent || 'PLAY');
                         }
                         if (playBtn) {
-                            playBtn.textContent = playing ? '⏸ Pause' : (playBtn.dataset.idleLabel || '🎵 Play Music');
+                            playBtn.textContent = playing ? '❚❚' : (playBtn.dataset.idleLabel || '♪');
                         }
                         if (playBtnAlt) {
                             playBtnAlt.textContent = playing ? 'PAUSE ATMOSPHERE' : (playBtnAlt.dataset.idleLabel || 'Play');
@@ -333,11 +333,11 @@
                         }
                         const playControl = document.getElementById('play-control');
                         if (playControl) {
-                            playControl.textContent = playing ? 'PAUSE MUSIC' : (playControl.dataset.idleLabel || 'PLAY MUSIC');
+                            playControl.textContent = playing ? '❚❚' : (playControl.dataset.idleLabel || 'PLAY MUSIC');
                         }
                         const audioBtn = document.getElementById('audio-btn');
                         if (audioBtn) {
-                            audioBtn.textContent = playing ? 'PAUSE' : (audioBtn.dataset.idleLabel || 'AUDIO');
+                            audioBtn.textContent = playing ? '❚❚' : (audioBtn.dataset.idleLabel || '♪');
                         }
                         const audioToggle = document.getElementById('audio-toggle');
                         if (audioToggle && audioToggle.id !== 'toggleAudio') {

@@ -22,9 +22,6 @@
     </div>
     <div class="col">
         <div class="card">
-            <div class="card-header">
-                <h3>Generated Links</h3>
-            </div>
             <div class="card-body">
                 @forelse(($generatedLinks ?? []) as $link)
                     @php $msg = $link->wishMessage; @endphp

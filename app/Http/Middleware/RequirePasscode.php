@@ -32,7 +32,10 @@ class RequirePasscode
                 if ($request->session()->get('passcode_verified', false) === false) {
                     
                     // Prevent redirect loops
-                    if (!$request->routeIs('auth.passcode.verify') && !$request->routeIs('auth.passcode.verify.post')) {
+                    if (!$request->routeIs('auth.logout') &&
+                        !$request->routeIs('user.settings.delete-account') &&
+                        !$request->routeIs('auth.passcode.verify') &&
+                        !$request->routeIs('auth.passcode.verify.post')) {
                         return redirect()->route('auth.passcode.verify');
                     }
                 }

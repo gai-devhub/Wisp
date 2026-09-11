@@ -90,28 +90,6 @@ class User extends Authenticatable
         return $this->hasMany(WishMessages::class);
     }
 
-    /**
-     * Returns true if the user has an active premium subscription
-     * (either paid or admin-granted).
-     */
-    public function isPremium(): bool
-    {
-        return \App\Models\Subscription::where('user_id', $this->id)
-            ->where('status', 'active')
-            ->where(function ($q) {
-                $q->where('expires_at', '>', now())
-                  ->orWhere('admin_granted', true);
-            })
-            ->exists();
-    }
-
-    /**
-     * Returns the number of non-deleted messages owned by this user.
-     */
-    public function freeMessageCount(): int
-    {
-        return \App\Models\WishMessages::where('user_id', $this->id)->count();
-    }
 
     public function views()
     {

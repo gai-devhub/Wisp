@@ -24,10 +24,10 @@
     transition: all 0.2s ease-in-out;
 }
 .search-result-item:hover {
-    border-color: var(--primary, #6366f1) !important;
+    border-color: var(--primary, #F28C76) !important;
     background: #fcfdfe !important;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(99,102,241,0.06);
+    box-shadow: 0 4px 12px rgba(242, 140, 118,0.06);
 }
 </style>
 

@@ -13,9 +13,6 @@
     </div>
     <div class="col">
         <div class="card">
-            <div class="card-header">
-                <h3>Shared Messages History</h3>
-            </div>
             <div class="card-body">
                 @forelse(($allShareSends ?? []) as $share)
                     @php $msg = $share->wishMessage; @endphp

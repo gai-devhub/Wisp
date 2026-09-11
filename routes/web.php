@@ -121,12 +121,6 @@ Route::middleware(['auth', 'admin', 'require.passcode'])->group(function () {
     Route::post('/admin/notifications/{id}/reply', [AdminController::class, 'replyToInquiry'])->name('admin.notifications.reply');
     Route::delete('/admin/notifications/broadcast/{id}', [AdminController::class, 'deleteBroadcast'])->name('admin.notifications.deleteBroadcast');
 
-    // Advertisements
-    Route::get('/admin-page/ads', [AdminController::class, 'adsPage'])->name('admin.ads.page');
-    Route::post('/admin/ads', [AdminController::class, 'storeAd'])->name('admin.ads.store');
-    Route::match(['put', 'patch'], '/admin/ads/{id}', [AdminController::class, 'updateAd'])->name('admin.ads.update');
-    Route::delete('/admin/ads/{id}', [AdminController::class, 'deleteAd'])->name('admin.ads.destroy');
-
     // Billing
     Route::get('/admin-page/billing', [\App\Http\Controllers\AdminBillingController::class, 'index'])->name('admin.billing.index');
     Route::get('/admin-page/billing/users', [\App\Http\Controllers\AdminBillingController::class, 'users'])->name('admin.billing.users');
@@ -191,6 +185,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/auth/verify-passcode', [PasscodeController::class, 'verify'])->name('auth.passcode.verify.post');
 });
 
+// Delete account — only requires auth (no billing/passcode/role blocking)
+Route::post('/user-page/settings/delete-account', [UserController::class, 'deleteAccount'])
+    ->name('user.settings.delete-account')
+    ->middleware('auth');
+
 Route::middleware(['auth', 'user.role', 'require.passcode', 'billing'])->group(function () {
     Route::get('/user-page', [UserController::class, 'index'])->name('user.page');
     Route::get('/user-page/views-chart-data', [UserController::class, 'viewsChartData'])->name('user.views-chart-data');
@@ -208,10 +207,11 @@ Route::middleware(['auth', 'user.role', 'require.passcode', 'billing'])->group(f
     Route::get('/user-page/notifications-page', [UserController::class, 'notificationsPage'])->name('user.notifications.page');
     Route::get('/user-page/settings/messages', [UserController::class, 'messageSettingsPage'])->name('user.settings.messages.page');
     Route::get('/user-page/search', [UserController::class, 'searchPage'])->name('user.search.page');
-    Route::get('/user-page/control-center/security', [UserController::class, 'controlCenterSecurity'])->name('user.control-center.security.page');
     Route::get('/user-page/settings/user', [UserController::class, 'userSettingsPage'])->name('user.settings.user.page');
     Route::get('/user-page/help-support', [UserController::class, 'helpSupportPage'])->name('user.help-support.page');
-    Route::post('/user-page/settings/delete-account', [UserController::class, 'deleteAccount'])->name('user.settings.delete-account');
+    Route::get('/user-page/help-support/assistance', [UserController::class, 'helpAssistancePage'])->name('doc.assistance');
+    Route::get('/user-page/help-support/growth', [UserController::class, 'helpGrowthPage'])->name('doc.growth');
+
     Route::post('/user-page/settings/passcode', [UserSettingsController::class, 'updatePasscode'])->name('user.settings.passcode');
     Route::post('/user/github/update', [GithubUpdateController::class, 'userUpdate'])->name('user.github.update');
     Route::post('/user-page/settings/general', [UserSettingsController::class, 'updateGeneral'])->name('user.settings.general');
@@ -289,6 +289,18 @@ Route::get('/try', [GuestMessageController::class, 'index'])->name('guest.try');
 Route::post('/try/create', [GuestMessageController::class, 'store'])->name('guest.try.create');
 Route::delete('/try/message/{id}', [GuestMessageController::class, 'destroy'])->name('guest.try.delete');
 Route::get('/try/spotify/search', [\App\Http\Controllers\SpotifyController::class, 'search'])->name('try.spotify.search');
+
+Route::get('/about-wisp', function () {
+    return view('welcome.about');
+})->name('welcome.about');
+
+Route::get('/faq-contact', function () {
+    return view('welcome.faq');
+})->name('welcome.faq');
+
+Route::get('/features-roadmap', function () {
+    return view('welcome.features');
+})->name('welcome.features');
 
 // ===================== PUBLIC =====================
 Route::get('/help', function () {

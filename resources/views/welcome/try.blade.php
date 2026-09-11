@@ -3,17 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#6366f1">
+    <meta name="theme-color" content="#E8674A">
     <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/png">   
     <title>Try WISP — Send a message</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Base styles -->
     <link rel="stylesheet" href="{{ asset('css/welcome.css') }}?v={{ filemtime(public_path('css/welcome.css')) }}">
     <style>
@@ -37,10 +35,12 @@
         .notification-toast-content p { margin: 0; font-size: 0.8rem; color: #64748b; line-height: 1.4; }
         .notification-toast-close { background: none; border: none; font-size: 1rem; color: #94a3b8; cursor: pointer; padding: 4px; }
         .notification-toast-close:hover { color: #ef4444; }
+        html, body { font-family: var(--font-body); }
+        h1, h2, h3, h4 { font-family: var(--font-display); }
     </style>
 </head>
 <body>
-    <div id="notificationContainer" class="fixed top-20 right-5 z-[1100] flex flex-col gap-2 w-80"></div>
+    <div id="notificationContainer" class="try-notification-container"></div>
 
     <!-- Ambient background -->
     <div class="ambient-grid">
@@ -53,16 +53,16 @@
 
     @include('welcome.components.header')
 
-    <main class="main pt-6 sm:pt-16 pb-12 md:pt-32 md:pb-24 min-h-screen">
-        <section class="w-[98%] mx-auto px-0 md:w-[95%] md:px-4" style="max-width: 1400px;">
+    <main class="main try-main">
+        <section class="try-section">
             
             <div style="text-align: center; margin-bottom: 40px;">
                 <span class="badge"><i class="fas fa-magic"></i> Try WISP Free</span>
-                <h1 class="text-3xl sm:text-4xl md:text-[3rem] font-bold mt-4 mb-3 text-[var(--text-main)] leading-tight">Create a magical message</h1>
-                <p class="text-base sm:text-lg text-[var(--text-muted)]">Experience the magic of WISP before signing up. You can create up to 2 free messages right here.</p>
+                <h1 class="try-hero-title">Create a magical message</h1>
+                <p class="try-hero-subtitle">Experience the magic of WISP before signing up. You can create up to 2 free messages right here.</p>
                 
                 @if($messageCount < 2)
-                    <div style="margin-top: 12px; font-size: 0.9rem; color: var(--accent);">
+                    <div style="margin-top: 12px; font-size: 0.9rem; color: var(--coral);">
                         You have used {{ $messageCount }} of your 2 trial messages.
                     </div>
                 @endif
@@ -75,98 +75,98 @@
             @endif
 
             @if(session('success') && !session('generated_link'))
-                <div class="glass-card mb-6" style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); color: var(--accent); padding: 15px 20px; border-radius: 12px; text-align: center;">
+                <div class="glass-card mb-6" style="background: rgba(232, 103, 74, 0.1); border: 1px solid rgba(232, 103, 74, 0.2); color: var(--coral); padding: 15px 20px; border-radius: 12px; text-align: center;">
                     <i class="fas fa-check-circle"></i> {{ session('success') }}
                 </div>
             @endif
 
             @if($messageCount >= 2)
-                <div class="glass-card w-full max-w-2xl mx-auto" style="padding: 40px; text-align: center;">
-                    <i class="fas fa-lock" style="font-size: 3rem; color: var(--accent); margin-bottom: 20px;"></i>
+                <div class="glass-card w-full max-w-2xl mx-auto" style="padding: 40px; text-align: center; max-width: 672px; margin: 0 auto;">
+                    <i class="fas fa-lock" style="font-size: 3rem; color: var(--coral); margin-bottom: 20px;"></i>
                     <h2 style="font-size: 1.8rem; margin-bottom: 12px;">You've reached the limit</h2>
                     <p style="color: var(--text-muted); margin-bottom: 24px;">We hope you enjoyed trying WISP! To create unlimited messages, schedule sends, and edit them later, please create a free account.</p>
-                    <a href="{{ route('auth.login') }}" class="bg-[var(--primary)] text-white py-4 px-8 w-full md:w-auto rounded-[44px] font-semibold text-[1.1rem] cursor-pointer transition-all duration-300 inline-flex items-center justify-center shadow-[0_4px_15px_rgba(99,102,241,0.2)] hover:-translate-y-[2px] hover:shadow-[0_10px_20px_rgba(99,102,241,0.4)]" style="text-decoration: none;">Create Free Account</a>
+                    <a href="{{ route('auth.login') }}" class="btn-generate-main" style="text-decoration: none;">Create Free Account</a>
                 </div>
             @else
                 <form action="{{ route('guest.try.create') }}" method="POST" enctype="multipart/form-data" class="w-full" id="guestMessageForm">
                     @csrf
                     <input type="hidden" name="message_id" id="current_message_id" value="">
                     
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start w-full">
+                    <div class="try-form-grid-2col">
                         
                         <!-- Column 1 -->
-                        <div class="flex flex-col gap-6 w-full">
+                        <div class="try-column">
                             
                             <!-- Message Basics Card -->
-                            <div class="glass-card w-full overflow-hidden transition-all duration-500" id="messageAccordionCard">
+                            <div class="glass-card accordion-card" id="messageAccordionCard">
                                  <!-- Clickable Header -->
-                                 <div class="p-5 md:p-8 cursor-pointer hover:bg-black/5 transition-colors flex items-center justify-between" onclick="toggleMessageAccordion()">
-                                     <div class="flex items-center gap-3 md:gap-4">
-                                         <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 text-lg md:text-xl shrink-0">
+                                 <div class="accordion-header" onclick="toggleMessageAccordion()">
+                                     <div class="accordion-header-left">
+                                         <div class="accordion-icon-box accordion-icon-coral">
                                              <i class="fas fa-envelope-open-text"></i>
                                          </div>
                                          <div>
-                                             <h3 class="text-base md:text-lg font-bold text-[var(--text-main)] mb-1">Create Message</h3>
-                                             <p class="text-xs md:text-sm text-[var(--text-muted)] m-0" id="messageBasicsSubtitle">The core details of your magical message.</p>
+                                             <h3 class="accordion-title">Create Message</h3>
+                                             <p class="accordion-subtitle" id="messageBasicsSubtitle">The core details of your magical message.</p>
                                          </div>
                                      </div>
                                      <div class="flex items-center gap-4">
-                                         <i class="fas fa-chevron-down text-gray-400 transition-transform duration-300" id="messageAccordionIcon"></i>
+                                         <i class="fas fa-chevron-down accordion-chevron" id="messageAccordionIcon"></i>
                                      </div>
                                  </div>
 
                                  <!-- Hidden Content -->
-                                 <div id="messageAccordionContent" class="hidden border-t border-gray-100 bg-slate-50/30">
-                                     <div class="p-5 md:p-8 pt-6">
-                                         <div class="mb-4">
-                                             <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">MESSAGE TYPE</label>
-                                             <input type="text" name="message_type" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]" placeholder="e.g. Birthday Message" required>
-                                         </div>
-                                         
-                                         <div class="mb-4">
-                                             <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">MESSAGE TITLE</label>
-                                             <input type="text" name="title" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]" placeholder="Enter preferred view title" required>
-                                         </div>
-
-                                         <div class="mb-4">
-                                             <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">RECIPIENT'S FULL NAME</label>
-                                             <input type="text" name="recipient_name" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]" placeholder="Enter recipient's full name" required>
-                                         </div>
-                                         
-                                         <div class="mb-4">
-                                             <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">RECIPIENT'S SPECIAL NAME</label>
-                                             <input type="text" name="recipient_special_name" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]" placeholder="Enter recipient's special name">
-                                         </div>
-                                         
-                                         <div class="mb-4">
-                                             <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">GREETING</label>
-                                             <input type="text" name="greeting" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]" placeholder="Hello there" required>
-                                         </div>
-
-                                         <div class="mb-0">
-                                             <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">MESSAGE CONTENT</label>
-                                             <textarea name="message_body" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]" rows="3" placeholder="Write your heartfelt message here..." required></textarea>
-                                         </div>
-
-                                         <div class="mb-4">
-                                             <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">YOUR NAME (SENDER)</label>
-                                             <input type="text" name="sender_name" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]" placeholder="Gilbert Asare" required>
-                                         </div>
-
-                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                                             <div class="mb-0">
-                                                 <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">LAST NOTES</label>
-                                                 <input type="text" name="last_note" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]" placeholder="eg. Happy birthday...">
+                                 <div id="messageAccordionContent" class="hidden accordion-content">
+                                     <div class="accordion-body">
+                                         <div class="wisp-form-fields-grid">
+                                             <div class="wisp-form-group">
+                                                 <label class="wisp-form-label">MESSAGE TYPE</label>
+                                                 <input type="text" name="message_type" class="wisp-form-input" placeholder="e.g. Birthday Message" required>
                                              </div>
                                              
-                                             <div class="mb-0">
-                                                 <label class="block mb-2 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">RECEIVING DATE</label>
-                                                 <input type="date" name="receiving_date" class="w-full bg-black/5 border border-black/10 text-[var(--text-main)] py-2 px-3 rounded-lg text-sm font-[inherit] text-base transition-all duration-300 focus:outline-none focus:border-[var(--accent)] focus:bg-black/5 focus:ring-[3px] focus:ring-indigo-500/20 [&>option]:text-[#1a1a2e]">
+                                             <div class="wisp-form-group">
+                                                 <label class="wisp-form-label">MESSAGE TITLE</label>
+                                                 <input type="text" name="title" class="wisp-form-input" placeholder="Enter preferred view title" required>
+                                             </div>
+
+                                             <div class="wisp-form-group">
+                                                 <label class="wisp-form-label">RECIPIENT'S FULL NAME</label>
+                                                 <input type="text" name="recipient_name" class="wisp-form-input" placeholder="Enter recipient's full name" required>
+                                             </div>
+                                             
+                                             <div class="wisp-form-group">
+                                                 <label class="wisp-form-label">RECIPIENT'S SPECIAL NAME</label>
+                                                 <input type="text" name="recipient_special_name" class="wisp-form-input" placeholder="Enter recipient's special name">
+                                             </div>
+                                             
+                                             <div class="wisp-form-group">
+                                                 <label class="wisp-form-label">GREETING</label>
+                                                 <input type="text" name="greeting" class="wisp-form-input" placeholder="Hello there" required>
+                                             </div>
+
+                                             <div class="wisp-form-group">
+                                                 <label class="wisp-form-label">YOUR NAME (SENDER)</label>
+                                                 <input type="text" name="sender_name" class="wisp-form-input" placeholder="Gilbert Asare" required>
+                                             </div>
+
+                                             <div class="wisp-form-group">
+                                                 <label class="wisp-form-label">LAST NOTES</label>
+                                                 <input type="text" name="last_note" class="wisp-form-input" placeholder="eg. Happy birthday...">
+                                             </div>
+                                             
+                                             <div class="wisp-form-group">
+                                                 <label class="wisp-form-label">RECEIVING DATE</label>
+                                                 <input type="date" name="receiving_date" class="wisp-form-input">
+                                             </div>
+
+                                             <div class="wisp-form-group col-span-2">
+                                                 <label class="wisp-form-label">MESSAGE CONTENT</label>
+                                                 <textarea name="message_body" class="wisp-form-input" rows="3" placeholder="Write your heartfelt message here..." required></textarea>
                                              </div>
                                          </div>
 
-                                         <div class="flex justify-end border-t border-gray-100 pt-6">
-                                             <button type="submit" id="innerSaveBtn" class="bg-[var(--primary)] text-white py-2.5 px-6 rounded-lg font-semibold text-sm cursor-pointer transition-all hover:bg-indigo-600 shadow-sm flex items-center gap-2">
+                                         <div class="flex justify-end" style="border-top: 1px solid #f1f5f9; padding-top: 24px;">
+                                             <button type="submit" id="innerSaveBtn" class="btn-wisp-save">
                                                  <i class="fas fa-save"></i> <span id="innerSaveText">Save Message</span>
                                              </button>
                                          </div>
@@ -177,43 +177,43 @@
                         </div>
 
                         <!-- Column 2 -->
-                        <div class="flex flex-col gap-6 w-full">
+                        <div class="try-column">
 
                             <!-- Appearance & Media Card -->
-                             <div class="glass-card w-full overflow-hidden transition-all duration-500" id="mediaAccordionCard">
+                             <div class="glass-card accordion-card" id="mediaAccordionCard">
                                  <!-- Clickable Header -->
-                                 <div class="p-5 md:p-8 cursor-pointer hover:bg-black/5 transition-colors flex items-center justify-between" onclick="toggleMediaAccordion()">
-                                     <div class="flex items-center gap-3 md:gap-4">
-                                         <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-500 text-lg md:text-xl shrink-0">
+                                 <div class="accordion-header" onclick="toggleMediaAccordion()">
+                                     <div class="accordion-header-left">
+                                         <div class="accordion-icon-box accordion-icon-rose">
                                              <i class="fas fa-image"></i>
                                          </div>
                                          <div>
-                                             <h3 class="text-base md:text-lg font-bold text-[var(--text-main)] mb-1">Add Media Files</h3>
-                                             <p class="text-xs md:text-sm text-[var(--text-muted)] m-0" id="mediaSubtitle">Personalize how your message looks.</p>
+                                             <h3 class="accordion-title">Add Media Files</h3>
+                                             <p class="accordion-subtitle" id="mediaSubtitle">Personalize how your message looks.</p>
                                          </div>
                                      </div>
                                      <div class="flex items-center gap-4">
-                                         <i class="fas fa-chevron-down text-gray-400 transition-transform duration-300" id="mediaAccordionIcon"></i>
+                                         <i class="fas fa-chevron-down accordion-chevron" id="mediaAccordionIcon"></i>
                                      </div>
                                  </div>
 
                                  <!-- Hidden Content -->
-                                 <div id="mediaAccordionContent" class="hidden border-t border-gray-100 bg-slate-50/30">
-                                     <div class="p-5 md:p-8 pt-6">
-                                         <div class="mb-0">
-                                             <label class="block mb-3 font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px]">ADD A PHOTO (OPTIONAL)</label>
-                                             <div class="relative border-2 border-dashed border-gray-300 rounded-lg py-4 px-4 text-center hover:bg-black/5 transition-colors cursor-pointer">
-                                                 <span class="text-sm font-semibold text-slate-700"><i class="fas fa-cloud-upload-alt mr-2"></i> Choose an image</span>
+                                 <div id="mediaAccordionContent" class="hidden accordion-content">
+                                     <div class="accordion-body">
+                                         <div class="wisp-form-group">
+                                             <label class="wisp-form-label">ADD A PHOTO (OPTIONAL)</label>
+                                             <div class="wisp-file-upload-box">
+                                                 <span class="wisp-file-upload-text"><i class="fas fa-cloud-upload-alt" style="margin-right: 8px;"></i> Choose an image</span>
                                                  <input type="file" name="recipient_image" id="recipient_image" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*">
                                              </div>
-                                             <div class="bg-slate-50 border border-gray-100 rounded-lg p-3 mt-2 text-sm text-slate-500" id="recipient-image-info">No file selected</div>
+                                             <div class="wisp-file-info" id="recipient-image-info">No file selected</div>
                                          </div>
 
-                                         <div class="mt-8 mb-0">
-                                             <div class="flex items-center justify-between mb-3">
-                                                 <label class="block font-bold text-[var(--text-main)] text-[0.85rem] uppercase tracking-[0.5px] m-0">UPLOAD MUSIC FILE</label>
-                                                 <button type="button" onclick="toggleSpotifySearch()" class="w-10 h-10 rounded-full bg-[#1DB954] text-white flex items-center justify-center hover:scale-110 transition-transform shadow-md" title="Search on Spotify">
-                                                     <i class="fab fa-spotify text-xl"></i>
+                                         <div class="wisp-form-group" style="margin-top: 16px;">
+                                             <div class="flex items-center justify-between" style="margin-bottom: 8px;">
+                                                 <label class="wisp-form-label" style="margin: 0;">UPLOAD MUSIC FILE</label>
+                                                 <button type="button" onclick="toggleSpotifySearch()" class="btn-spotify-icon" title="Search on Spotify">
+                                                     <i class="fab fa-spotify" style="font-size: 1.1rem;"></i>
                                                  </button>
                                              </div>
 
@@ -221,26 +221,26 @@
                                              <input type="hidden" name="spotify_name" id="spotify_name">
 
                                              <!-- Spotify Search Dropdown (Hidden by default) -->
-                                             <div id="spotify-search-container" class="hidden mb-4 border border-gray-100 rounded-xl bg-slate-50 p-4">
-                                                 <div class="relative mb-4">
-                                                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                                                     <input type="text" id="spotify-search-input" class="w-full bg-white border border-gray-200 text-slate-700 py-2 pl-10 pr-3 rounded-lg text-sm focus:outline-none focus:border-[#1DB954] focus:ring-[2px] focus:ring-[#1DB954]/20" placeholder="Search for tracks on Spotify...">
+                                             <div id="spotify-search-container" class="hidden spotify-search-container">
+                                                 <div class="relative" style="margin-bottom: 12px;">
+                                                     <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af;"></i>
+                                                     <input type="text" id="spotify-search-input" class="spotify-search-input" placeholder="Search for tracks on Spotify...">
                                                  </div>
-                                                 <div id="spotify-search-results" class="max-h-[250px] overflow-y-auto space-y-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent">
-                                                     <p class="text-xs text-gray-500 text-center py-4">Type to search for tracks</p>
+                                                 <div id="spotify-search-results" class="spotify-search-results">
+                                                     <p style="font-size: 0.75rem; color: #64748b; text-align: center; padding: 12px 0;">Type to search for tracks</p>
                                                  </div>
                                              </div>
 
-                                             <div class="relative border-2 border-dashed border-gray-300 rounded-lg py-4 px-4 text-center hover:bg-black/5 transition-colors cursor-pointer">
-                                                 <span class="text-sm font-semibold text-slate-700"><i class="fas fa-cloud-upload-alt mr-2"></i> Choose an audio file</span>
+                                             <div class="wisp-file-upload-box">
+                                                 <span class="wisp-file-upload-text"><i class="fas fa-cloud-upload-alt" style="margin-right: 8px;"></i> Choose an audio file</span>
                                                  <input type="file" name="background_music" id="background_music" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="audio/*">
                                              </div>
-                                             <div class="bg-slate-50 border border-gray-100 rounded-lg p-3 mt-2 text-sm text-slate-500 flex items-center justify-between" id="music-file-info">
+                                             <div class="wisp-file-info flex items-center justify-between" id="music-file-info">
                                                  <span>No file selected</span>
                                              </div>
                                          </div>
-                                         <div class="flex justify-end border-t border-gray-100 pt-6 mt-6">
-                                             <button type="submit" id="mediaSaveBtn" class="bg-[var(--primary)] text-white py-2.5 px-6 rounded-lg font-semibold text-sm cursor-pointer transition-all hover:bg-indigo-600 shadow-sm flex items-center gap-2">
+                                         <div class="flex justify-end" style="border-top: 1px solid #f1f5f9; padding-top: 16px; margin-top: 16px;">
+                                             <button type="submit" id="mediaSaveBtn" class="btn-wisp-save">
                                                  <i class="fas fa-save"></i> <span id="mediaSaveText">Save Media</span>
                                              </button>
                                          </div>
@@ -249,34 +249,34 @@
                              </div>
 
                             <!-- Templates Accordion Card -->
-                            <div class="glass-card w-full overflow-hidden transition-all duration-500" id="templatesAccordionCard">
+                            <div class="glass-card accordion-card" id="templatesAccordionCard">
                                 <!-- Clickable Header -->
-                                <div class="p-5 md:p-8 cursor-pointer hover:bg-black/5 transition-colors flex items-center justify-between" onclick="toggleTemplatesAccordion()">
-                                    <div class="flex items-center gap-3 md:gap-4">
-                                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 text-lg md:text-xl shrink-0">
+                                <div class="accordion-header" onclick="toggleTemplatesAccordion()">
+                                    <div class="accordion-header-left">
+                                        <div class="accordion-icon-box accordion-icon-emerald">
                                             <i class="fas fa-th-large"></i>
                                         </div>
                                         <div>
-                                             <h3 class="text-base md:text-lg font-bold text-[var(--text-main)] mb-1">Template & Appearance</h3>
-                                             <p class="text-xs md:text-sm text-[var(--text-muted)] m-0" id="templateSubtitle">Select an option</p>
+                                             <h3 class="accordion-title">Template & Appearance</h3>
+                                             <p class="accordion-subtitle" id="templateSubtitle">Select an option</p>
                                         </div>
                                     </div>
-                                    <div class="flex items-center gap-2 md:gap-4">
-                                        <div id="accordionTemplatePreview" class="hidden items-center gap-1 md:gap-2">
-                                            <div id="accordionThumbnail" class="w-5 h-5 md:w-6 md:h-6 rounded border border-black/10 shadow-sm"></div>
-                                            <span id="accordionTemplateName" class="text-xs md:text-sm font-semibold text-slate-700"></span>
+                                    <div class="flex items-center gap-2">
+                                        <div id="accordionTemplatePreview" class="hidden items-center gap-2">
+                                            <div id="accordionThumbnail" style="width: 24px; height: 24px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 1px 2px rgba(0,0,0,0.05);"></div>
+                                            <span id="accordionTemplateName" class="accordion-subtitle"></span>
                                         </div>
-                                        <i class="fas fa-chevron-down text-gray-400 transition-transform duration-300" id="templatesAccordionIcon"></i>
+                                        <i class="fas fa-chevron-down accordion-chevron" id="templatesAccordionIcon"></i>
                                     </div>
                                 </div>
                                 
                                 <!-- Hidden Content (Grid) -->
-                                <div id="templatesAccordionContent" class="hidden border-t border-gray-100 bg-slate-50/30">
-                                    <div class="p-4 md:p-6">
+                                <div id="templatesAccordionContent" class="hidden accordion-content">
+                                    <div class="accordion-body">
                                         <input type="hidden" name="template_name" id="selectedTemplateInput" value="view-1">
                                         
                                         <!-- Tabs -->
-                                        <div class="template-tabs [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]" style="display: flex; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; white-space: nowrap; padding-bottom: 8px; gap: 8px;">
+                                        <div class="template-tabs" style="display: flex; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; white-space: nowrap; padding-bottom: 8px; gap: 8px;">
                                             <button type="button" class="template-tab active" data-filter="all">All</button>
                                             @foreach($themes as $theme => $count)
                                                 <button type="button" class="template-tab" data-filter="{{ $theme }}">{{ ucfirst($theme) }}</button>
@@ -284,11 +284,11 @@
                                         </div>
 
                                         <!-- Grid -->
-                                        <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent" id="accordionTemplateGrid" style="max-height: 400px; overflow-y: auto; padding-right: 8px;">
+                                        <div class="template-grid-accordion" id="accordionTemplateGrid">
                                             <!-- Cards generated by JS -->
                                         </div>
-                                        <div class="flex justify-end border-t border-gray-100 pt-6 mt-6">
-                                            <button type="submit" id="templateSaveBtn" class="bg-[var(--primary)] text-white py-2.5 px-6 rounded-lg font-semibold text-sm cursor-pointer transition-all hover:bg-indigo-600 shadow-sm flex items-center gap-2">
+                                        <div class="flex justify-end" style="border-top: 1px solid #f1f5f9; padding-top: 24px; margin-top: 24px;">
+                                            <button type="submit" id="templateSaveBtn" class="btn-wisp-save">
                                                 <i class="fas fa-save"></i> <span id="templateSaveText">Save Template</span>
                                             </button>
                                         </div>
@@ -297,12 +297,12 @@
                             </div>
 
                             <!-- Generate Card -->
-                            <div class="glass-card p-6 md:p-8 w-full text-center border-2 border-[var(--accent)] bg-indigo-500/5">
-                                <h3 class="text-lg md:text-xl font-bold text-[var(--text-main)] mb-2 md:mb-3">Ready to Share?</h3>
-                                <p class="text-[0.95rem] text-[var(--text-muted)] mb-6">Generate your unique magic link and share it instantly.</p>
-                                <button type="submit" id="mainSubmitBtn" class="bg-[var(--primary)] text-white py-4 px-10 w-auto rounded-[44px] font-semibold text-[1.1rem] cursor-pointer transition-all duration-300 inline-flex items-center justify-center shadow-[0_4px_15px_rgba(99,102,241,0.2)] hover:-translate-y-[2px] hover:shadow-[0_10px_20px_rgba(99,102,241,0.4)] relative">
-                                    <span id="mainBtnLoader" class="hidden absolute left-4 w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                                    <i class="fas fa-magic mr-2" id="mainSubmitIcon"></i> <span id="mainSubmitText">Generate Magic Link</span>
+                            <div class="glass-card try-generate-card">
+                                <h3 class="accordion-title" style="font-size: 1.25rem; margin-bottom: 8px;">Ready to Share?</h3>
+                                <p class="try-hero-subtitle" style="font-size: 0.95rem; margin-bottom: 24px;">Generate your unique magic link and share it instantly.</p>
+                                <button type="submit" id="mainSubmitBtn" class="btn-generate-main">
+                                    <span id="mainBtnLoader" class="hidden btn-spinner animate-spin"></span>
+                                    <i class="fas fa-magic" id="mainSubmitIcon" style="margin-right: 8px;"></i> <span id="mainSubmitText">Generate Magic Link</span>
                                 </button>
                             </div>
 
@@ -313,18 +313,18 @@
             @endif
 
             @if(isset($messages) && $messages->count() > 0)
-                <div class="mt-12 w-full mx-auto" style="max-width: 1200px;">
-                    <h3 class="text-xl font-bold text-[var(--text-main)] mb-6">Your Recent Magic Messages</h3>
-                    <div class="glass-card">
+                <div class="recent-messages-wrapper">
+                    <h3 class="accordion-title" style="font-size: 1.25rem; margin-bottom: 24px;">Your Recent Magic Messages</h3>
+                    <div class="wisp-table-card">
                         <div class="w-full">
-                            <table class="w-full text-left border-collapse">
+                            <table class="wisp-table">
                                 <thead>
-                                    <tr class="border-b border-black/5 bg-black/5">
-                                        <th class="py-4 px-4 md:px-6 text-sm font-semibold text-[var(--text-main)] whitespace-nowrap rounded-tl-2xl">Title</th>
-                                        <th class="py-4 px-4 md:px-6 text-sm font-semibold text-[var(--text-main)] whitespace-nowrap">Recipient</th>
-                                        <th class="hidden md:table-cell py-4 px-6 text-sm font-semibold text-[var(--text-main)] whitespace-nowrap">Type</th>
-                                        <th class="hidden md:table-cell py-4 px-6 text-sm font-semibold text-[var(--text-main)] whitespace-nowrap">Created</th>
-                                        <th class="py-4 px-4 md:px-6 text-sm font-semibold text-[var(--text-main)] text-right whitespace-nowrap rounded-tr-2xl">Actions</th>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Recipient</th>
+                                        <th class="hide-mobile">Type</th>
+                                        <th class="hide-mobile">Created</th>
+                                        <th style="text-align: right;">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -332,36 +332,36 @@
                                         @php
                                             $link = $msg->generatedLinks()->where('is_active', true)->first();
                                         @endphp
-                                        <tr class="border-b border-black/5 last:border-0 hover:bg-black/5 transition-colors group/row">
-                                            <td class="py-4 px-4 md:px-6 text-sm font-medium text-[var(--text-main)]">{{ $msg->title ?? 'Untitled' }}</td>
-                                            <td class="py-4 px-4 md:px-6 text-sm text-[var(--text-muted)]">{{ $msg->recipient_name ?? 'Unknown' }}</td>
-                                            <td class="hidden md:table-cell py-4 px-6 text-sm text-[var(--text-muted)]">{{ ucfirst(str_replace('_', ' ', $msg->message_type)) }}</td>
-                                            <td class="hidden md:table-cell py-4 px-6 text-sm text-[var(--text-muted)]">{{ $msg->created_at->diffForHumans() }}</td>
-                                            <td class="py-4 px-4 md:px-6 text-sm text-right relative">
-                                                <div class="inline-block relative group">
-                                                    <button type="button" class="text-gray-400 hover:text-[var(--primary)] transition-colors p-2 focus:outline-none">
+                                        <tr>
+                                            <td style="font-weight: 500;">{{ $msg->title ?? 'Untitled' }}</td>
+                                            <td style="color: var(--text-muted);">{{ $msg->recipient_name ?? 'Unknown' }}</td>
+                                            <td class="hide-mobile" style="color: var(--text-muted);">{{ ucfirst(str_replace('_', ' ', $msg->message_type)) }}</td>
+                                            <td class="hide-mobile" style="color: var(--text-muted);">{{ $msg->created_at->diffForHumans() }}</td>
+                                            <td style="text-align: right;">
+                                                <div class="table-dropdown-container">
+                                                    <button type="button" style="background: none; border: none; color: #9ca3af; padding: 8px; cursor: pointer;">
                                                         <i class="fas fa-ellipsis-v"></i>
                                                     </button>
                                                     
                                                     <!-- Dropdown Menu -->
-                                                    <div class="absolute right-0 mt-1 w-40 md:w-48 bg-white rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.15)] border border-gray-100 py-2 z-[9999] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right scale-95 group-hover:scale-100">
+                                                    <div class="table-dropdown-menu">
                                                         @if($link)
-                                                            <a href="{{ $link->generated_url }}" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors text-left">
-                                                                <i class="fas fa-eye w-5 text-center mr-2"></i> View
+                                                            <a href="{{ $link->generated_url }}" target="_blank" class="table-dropdown-item">
+                                                                <i class="fas fa-eye" style="width: 20px; text-align: center; margin-right: 8px;"></i> View
                                                             </a>
                                                         @else
-                                                            <span class="block px-4 py-2 text-sm text-gray-400 italic text-left">
-                                                                <i class="fas fa-eye-slash w-5 text-center mr-2"></i> Not Generated
+                                                            <span class="table-dropdown-item" style="color: #9ca3af; font-style: italic;">
+                                                                <i class="fas fa-eye-slash" style="width: 20px; text-align: center; margin-right: 8px;"></i> Not Generated
                                                             </span>
                                                         @endif
                                                         
-                                                        <div class="h-[1px] bg-gray-100 my-1"></div>
+                                                        <div style="height: 1px; background-color: #f1f5f9; margin: 4px 0;"></div>
                                                         
-                                                        <form action="{{ route('guest.try.delete', $msg->id) }}" method="POST" class="m-0">
+                                                        <form action="{{ route('guest.try.delete', $msg->id) }}" method="POST" style="margin: 0;">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                                                                <i class="fas fa-trash-alt w-5 text-center mr-2"></i> Delete
+                                                            <button type="submit" class="table-dropdown-item danger">
+                                                                <i class="fas fa-trash-alt" style="width: 20px; text-align: center; margin-right: 8px;"></i> Delete
                                                             </button>
                                                         </form>
                                                     </div>
@@ -609,7 +609,7 @@
         document.getElementById('recipient_image').addEventListener('change', function(e) {
             const fileInfo = document.getElementById('recipient-image-info');
             if (this.files && this.files[0]) {
-                fileInfo.innerHTML = `<span class="text-indigo-600 font-semibold"><i class="fas fa-check-circle mr-1"></i> ${this.files[0].name}</span>`;
+                fileInfo.innerHTML = `<span class="text-[#C7502F] font-semibold"><i class="fas fa-check-circle mr-1"></i> ${this.files[0].name}</span>`;
             } else {
                 fileInfo.innerHTML = 'No file selected';
             }
@@ -623,7 +623,7 @@
                 document.getElementById('spotify_name').value = '';
                 
                 fileInfo.innerHTML = `
-                    <span class="text-indigo-600 font-semibold flex items-center gap-2">
+                    <span class="text-[#C7502F] font-semibold flex items-center gap-2">
                         <i class="fas fa-check-circle"></i> 
                         <span class="truncate max-w-[200px]">${this.files[0].name}</span>
                     </span>
@@ -833,16 +833,13 @@
             if(mobileNav) mobileNav.classList.add('active');
             if(navOverlay) navOverlay.classList.add('active');
             if(mobileNav) mobileNav.setAttribute('aria-hidden', 'false');
-            document.body.style.overflow = 'hidden';
         };
         const closeNav = () => {
             if(mobileNav) mobileNav.classList.remove('active');
             if(navOverlay) navOverlay.classList.remove('active');
             if(mobileNav) mobileNav.setAttribute('aria-hidden', 'true');
-            document.body.style.overflow = '';
         };
         if (navToggle) navToggle.addEventListener('click', openNav);
-        if (navClose) navClose.addEventListener('click', closeNav);
         if (navOverlay) navOverlay.addEventListener('click', closeNav);
         if (mobileNav) {
             mobileNav.querySelectorAll('.mobile-nav-link').forEach(link => {

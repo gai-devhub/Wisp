@@ -9,22 +9,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --primary-light: rgba(99, 102, 241, 0.08);
-            --secondary: #a855f7;
-            --accent: #ec4899;
-            --text: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
+            --primary: #F28C76;
+            --primary-hover: #E8674A;
+            --primary-light: rgba(242, 140, 118, 0.08);
+            --secondary: #2B1F3D;
+            --accent: #4A3A63;
+            --text: #2B1F3D;
+            --text-muted: #6E6178;
+            --border: rgba(43, 31, 61, 0.10);
             --bg: #ffffff;
-            --bg-subtle: #f8fafc;
-            --success-bg: #f0fdf4;
-            --success-text: #166534;
+            --bg-subtle: #FDF6EC;
+            --success-bg: rgba(60, 122, 94, 0.10);
+            --success-text: #3C7A5E;
             --error-bg: #fef2f2;
             --error-text: #b91c1c;
             --radius: 12px;
@@ -41,12 +41,11 @@
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: var(--bg);
             background-image:
-                radial-gradient(circle at 0% 30%, rgba(99, 102, 241, 0.06) 0%, transparent 50%),
-                radial-gradient(circle at 100% 70%, rgba(236, 72, 153, 0.06) 0%, transparent 50%),
-                radial-gradient(circle at 20% 90%, rgba(168, 85, 247, 0.04) 0%, transparent 45%);
+                radial-gradient(circle at 5% 10%, rgba(242, 140, 118, 0.07) 0%, transparent 25%),
+                radial-gradient(circle at 95% 90%, rgba(43, 31, 61, 0.06) 0%, transparent 25%);
             color: var(--text);
             min-height: 100vh;
             min-height: 100dvh;
@@ -84,6 +83,7 @@
             color: var(--text);
             font-weight: 700;
             font-size: 1.35rem;
+            font-family: 'Fraunces', Georgia, serif;
         }
 
         .auth-header-logo img {
@@ -140,9 +140,9 @@
         }
 
         .auth-tab.active {
-            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
             color: #fff;
-            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 4px 14px rgba(242, 140, 118, 0.4);
         }
 
         .auth-content {
@@ -289,7 +289,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
             color: #fff;
             margin-top: 8px;
         }
@@ -380,6 +380,7 @@
             font-size: 1.25rem;
             margin-bottom: 24px;
             color: var(--text);
+            font-family: 'Fraunces', Georgia, serif;
         }
 
         /* Terms link in signup */
@@ -446,38 +447,58 @@
         .ambient-grid .blob {
             position: absolute;
             border-radius: 50%;
-            filter: blur(110px);
-            opacity: 0.2;
-            animation: floatBlob 26s infinite alternate;
+            filter: blur(120px);
+            opacity: 0.22;
+            animation: floatBlob 24s infinite alternate;
         }
 
         .ambient-grid .blob-1 {
-            top: -5%;
-            left: -5%;
-            width: 45vw;
-            height: 45vw;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
             background: var(--primary);
-            animation-duration: 28s;
+            animation-duration: 26s;
         }
 
         .ambient-grid .blob-2 {
-            bottom: -10%;
-            right: -5%;
+            bottom: -15%;
+            right: -10%;
             width: 55vw;
             height: 55vw;
-            background: var(--secondary);
+            background: #2B1F3D;
             animation-delay: -6s;
-            animation-duration: 34s;
+            animation-duration: 32s;
         }
 
         .ambient-grid .blob-3 {
-            top: 30%;
-            left: 40%;
+            top: 35%;
+            left: 45%;
             width: 40vw;
             height: 40vw;
+            background: #C7502F;
+            animation-delay: -10s;
+            animation-duration: 28s;
+        }
+
+        .ambient-grid .blob-4 {
+            top: 65%;
+            left: -5%;
+            width: 35vw;
+            height: 35vw;
+            background: #4A3A63;
+            animation-delay: -16s;
+            animation-duration: 30s;
+        }
+
+        .ambient-grid .blob-5 {
+            top: 10%;
+            right: 5%;
+            width: 35vw;
+            height: 35vw;
             background: var(--accent);
-            animation-delay: -12s;
-            opacity: 0.15;
+            animation-delay: -4s;
+            animation-duration: 24s;
         }
 
         @keyframes floatBlob {
@@ -493,12 +514,11 @@
 </head>
 
 <body>
-    <div class="ambient-grid">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
-    <div class="auth-wrap">
+    <div style="position: relative; width: 100%; max-width: min(460px, 96vw);">
+        <!-- Backdrop decorative color dot at top right corner -->
+        <div style="position: absolute; top: -60px; right: -40px; width: 190px; height: 190px; background: #F28C76; border-radius: 50%; filter: blur(65px); opacity: 0.15; z-index: -1;"></div>
+
+        <div class="auth-wrap" style="position: relative; z-index: 1;">
         <header class="auth-header">
             <a href="{{ route('home') }}" class="auth-header-logo">
                 <img src="{{ asset('img/logo.png') }}" alt="WISP">
@@ -780,7 +800,6 @@
                         <i class="fas fa-arrow-left"></i> Back to sign in
                     </button>
                 </div>
-            </div>
         </div>
     </div>
 

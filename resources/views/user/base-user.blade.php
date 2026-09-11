@@ -21,12 +21,10 @@
     @stack('styles')
 
     @php
-        $activeTheme = $userSettings->theme_preference ?? 'theme-default';
         $privacyEnabled = $userSettings->privacy_blur_enabled ?? false;
-        $themeBgEnabled = $userSettings->theme_bg_enabled ?? true;
+        $themeBgEnabled = true; // always on, Apply to background removed
         $isUserSettingsNav = request()->routeIs(
             'user.settings.messages.page',
-            'user.control-center.security.page',
             'user.settings.user.page',
         );
         $enableUpdates = \Illuminate\Support\Facades\DB::table('system_settings')->where('key', 'enable_system_updates')->value('value') === '1';
@@ -125,7 +123,7 @@
 </head>
 
 <body data-active-section="@yield('user-section', 'dashboard')"
-    class="{{ $activeTheme }} {{ $privacyEnabled ? 'privacy-blur-active' : '' }} {{ !$themeBgEnabled ? 'theme-no-bg' : '' }}">
+    class="{{ $privacyEnabled ? 'privacy-blur-active' : '' }} {{ !$themeBgEnabled ? 'theme-no-bg' : '' }}">
     <div class="notification-container" id="notificationContainer"></div>
 
     <!-- Global System Update Loading Overlay -->
@@ -212,7 +210,7 @@
                             ->where('deleted_by_user', false)
                             ->count();
                     @endphp
-                    <a href="{{ route('user.notifications.page') }}" class="notification-bell" id="notificationBell"
+                    <a href="{{ route('user.notifications.page') }}" class="notification-bell header-notification-bell" id="notificationBell"
                         aria-label="Open notifications">
                         <i class="fas fa-bell"></i>
                         @if($unreadCount > 0)
@@ -249,13 +247,6 @@
                                 class="nav-link {{ request()->routeIs('user.my-messages.page') ? 'active' : '' }}"
                                 data-section="my-messages"><i class="fas fa-envelope"></i> <span>My Messages</span></a>
                         </li>
-                        <!-- <li><a href="{{ route('user.create.page') }}" class="nav-link {{ request()->routeIs('user.create.page') ? 'active' : '' }}" data-section="create"><i class="fas fa-edit"></i> <span>Create Message</span></a></li> -->
-                        <!-- <li><a href="{{ route('user.media.page') }}"
-                                class="nav-link {{ request()->routeIs('user.media.page') ? 'active' : '' }}"
-                                data-section="media"><i class="fas fa-image"></i> <span>Media</span></a></li> -->
-                        <!-- <li><a href="{{ route('user.template.page') }}"
-                                class="nav-link {{ request()->routeIs('user.template.page') ? 'active' : '' }}"
-                                data-section="template"><i class="fas fa-palette"></i> <span>Template</span></a></li> -->
                         <li><a href="{{ route('user.links.page') }}"
                                 class="nav-link {{ request()->routeIs('user.links.page') ? 'active' : '' }}"
                                 data-section="links"><i class="fas fa-link"></i> <span>Generated Links</span></a></li>
@@ -295,9 +286,6 @@
                                 <li><a href="{{ route('user.settings.messages.page') }}"
                                         class="nav-link {{ request()->routeIs('user.settings.messages.page') ? 'active' : '' }}"
                                         data-section="settings-messages"><i class="fas fa-envelope-open-text fa-fw text-muted me-2" style="font-size: 0.9em; opacity: 0.7;"></i> <span>Message Settings</span></a></li>
-                                <li><a href="{{ route('user.control-center.security.page') }}"
-                                        class="nav-link {{ request()->routeIs('user.control-center.security.page') ? 'active' : '' }}"
-                                        data-section="control-center-security"><i class="fas fa-shield-alt fa-fw text-muted me-2" style="font-size: 0.9em; opacity: 0.7;"></i> <span>Security & Privacy</span></a></li>
                                 <li><a href="{{ route('user.settings.user.page') }}"
                                         class="nav-link {{ request()->routeIs('user.settings.user.page') ? 'active' : '' }}"
                                         data-section="settings-user"><i class="fas fa-user-cog fa-fw text-muted me-2" style="font-size: 0.9em; opacity: 0.7;"></i> <span>User Settings</span></a></li>
@@ -330,8 +318,109 @@
                     @endif
                     @yield('content')
                 </div>
+
+                {{-- Small User Pages Footer --}}
+                <footer class="user-page-footer">
+                    <div class="user-footer-container">
+                        <div class="user-footer-brand">
+                            <img src="{{ asset('img/logo.png') }}" alt="WISP" class="user-footer-logo">
+                            <span>&copy; {{ date('Y') }} WISP. All rights reserved.</span>
+                        </div>
+                        <div class="user-footer-links">
+                            <a href="{{ route('help') }}">Documentation</a>
+                            <span class="dot-sep">&bull;</span>
+                            <a href="{{ route('user.help-support.page') }}">Help &amp; Support</a>
+                            <span class="dot-sep">&bull;</span>
+                            <a href="{{ route('user.settings.user.page') }}">Settings</a>
+                        </div>
+                    </div>
+                </footer>
             </div>
         </div>
+    </div>
+
+    {{-- Mobile Bottom Navigation (icons only, no Notifications) --}}
+    <nav class="bottom-nav" id="bottomNav" aria-label="Mobile navigation">
+        <div class="bottom-nav-inner">
+            @if(auth()->user()->role === 'admin')
+            <a href="{{ route('admin.page') }}"
+               class="{{ request()->routeIs('admin.page') ? 'active' : '' }}"
+               aria-label="Admin Dashboard" title="Admin Dashboard">
+                <i class="fas fa-crown"></i>
+            </a>
+            @endif
+
+            <a href="{{ route('user.page') }}"
+               class="{{ request()->routeIs('user.page') ? 'active' : '' }}"
+               aria-label="Dashboard" title="Dashboard">
+                <i class="fas fa-home"></i>
+            </a>
+
+            <a href="{{ route('user.my-messages.page') }}"
+               class="{{ request()->routeIs('user.my-messages.page') ? 'active' : '' }}"
+               aria-label="My Messages" title="My Messages">
+                <i class="fas fa-envelope"></i>
+            </a>
+
+            <a href="{{ route('user.links.page') }}"
+               class="{{ request()->routeIs('user.links.page') ? 'active' : '' }}"
+               aria-label="Generated Links" title="Generated Links">
+                <i class="fas fa-link"></i>
+            </a>
+
+            <button type="button" id="bottomNavControlCenterBtn"
+               class="bottom-nav-cc-btn {{ $isUserSettingsNav ? 'active' : '' }}"
+               aria-label="Control Center" title="Control Center"
+               aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-layer-group"></i>
+            </button>
+        </div>
+    </nav>
+
+    {{-- Mobile Control Center Popup Sheet --}}
+    <div id="bottomNavCCOverlay" class="bn-cc-overlay" aria-hidden="true"></div>
+    <div id="bottomNavCCSheet" class="bn-cc-sheet" role="dialog" aria-label="Control Center" aria-modal="true">
+        <div class="bn-cc-sheet-handle"></div>
+        <div class="bn-cc-sheet-title">
+            <i class="fas fa-layer-group"></i>
+            Control Center
+        </div>
+        <ul class="bn-cc-sheet-list">
+            <li>
+                <a href="{{ route('user.settings.messages.page') }}"
+                   class="bn-cc-sheet-link {{ request()->routeIs('user.settings.messages.page') ? 'active' : '' }}">
+                    <span class="bn-cc-sheet-icon"><i class="fas fa-envelope-open-text"></i></span>
+                    <span>Message Settings</span>
+                    <i class="fas fa-chevron-right bn-cc-sheet-arrow"></i>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('user.settings.user.page') }}"
+                   class="bn-cc-sheet-link {{ request()->routeIs('user.settings.user.page') ? 'active' : '' }}">
+                    <span class="bn-cc-sheet-icon"><i class="fas fa-user-cog"></i></span>
+                    <span>User Settings</span>
+                    <i class="fas fa-chevron-right bn-cc-sheet-arrow"></i>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('user.help-support.page') }}"
+                   class="bn-cc-sheet-link {{ request()->routeIs('user.help-support.page') ? 'active' : '' }}">
+                    <span class="bn-cc-sheet-icon"><i class="fas fa-headset"></i></span>
+                    <span>Help &amp; Support</span>
+                    <i class="fas fa-chevron-right bn-cc-sheet-arrow"></i>
+                </a>
+            </li>
+            <li>
+                <form method="POST" action="{{ route('auth.logout') }}" id="mobile-logout-form" style="display:none;">
+                    @csrf
+                </form>
+                <a href="#" onclick="event.preventDefault(); document.getElementById('mobile-logout-form').submit();" class="bn-cc-sheet-link" style="color: #dc3545;">
+                    <span class="bn-cc-sheet-icon" style="color: #dc3545;"><i class="fas fa-sign-out-alt"></i></span>
+                    <span>Logout</span>
+                    <i class="fas fa-chevron-right bn-cc-sheet-arrow" style="color: #dc3545;"></i>
+                </a>
+            </li>
+        </ul>
     </div>
 
     <div class="preview-popup" id="preview-popup" data-preview-base-url="{{ route('templates.preview') }}">
@@ -495,6 +584,39 @@
             }
         });
     }
+})();
+
+// ===== Bottom Nav — Control Center Sheet =====
+(function () {
+    var btn     = document.getElementById('bottomNavControlCenterBtn');
+    var sheet   = document.getElementById('bottomNavCCSheet');
+    var overlay = document.getElementById('bottomNavCCOverlay');
+    if (!btn || !sheet || !overlay) return;
+
+    function openSheet() {
+        overlay.classList.add('open');
+        sheet.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSheet() {
+        overlay.classList.remove('open');
+        sheet.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+
+    btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        sheet.classList.contains('open') ? closeSheet() : openSheet();
+    });
+
+    overlay.addEventListener('click', closeSheet);
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && sheet.classList.contains('open')) closeSheet();
+    });
 })();
 
 // Template Preview Popup Functionality (component-based)

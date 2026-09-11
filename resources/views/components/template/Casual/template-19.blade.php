@@ -207,7 +207,7 @@
 
         @auth
             <div class="signature">{{ auth()->user()->name }}</div>
-            <p style="font-size: 0.5rem; letter-spacing: 2px; color: #ccc; margin-top: 10px;">{{ $message->title ?? 'GAI TECH' }} // {{ auth()->user()->title }}</p>
+            <p style="font-size: 0.5rem; letter-spacing: 2px; color: #ccc; margin-top: 10px;">{{ $message->title ?? 'WISP' }} // {{ auth()->user()->title }}</p>
         @endauth
     </div>
 

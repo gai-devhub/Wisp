@@ -167,49 +167,9 @@
             </div>{{-- /db-col-right --}}
         </div>{{-- /db-main-grid --}}
 
-        {{-- Promo Banner Slot (Long span under dashboard) --}}
+        {{-- Feedback Banner --}}
         <div class="db-promo-slot">
-            @foreach($activeAds as $ad)
-            <div class="dashboard-promo-banner" 
-                 data-title="{{ $ad->title }}"
-                 data-content="{{ $ad->content ?? 'Check out this latest update from WISP.' }}"
-                 data-details="{{ $ad->details ?? '' }}"
-                 data-image="{{ $ad->image_path ? s3_url($ad->image_path) : '' }}"
-                 data-link="{{ $ad->link_url }}"
-                 onclick="openDynamicAdModal(this)">
-                <div class="promo-content">
-                    <div class="promo-icon">
-                        @if($ad->image_path)
-                            <img src="{{ s3_url($ad->image_path) }}" alt="{{ $ad->title }}" class="dashboard-ad-img">
-                        @else
-                            <i class="fas fa-bullhorn"></i>
-                        @endif
-                    </div>
-                    <div class="promo-text">
-                        <h3>{{ $ad->title }}</h3>
-                        <p>{!! nl2br(e($ad->content ?? 'Check out this latest update from WISP.')) !!}</p>
-                    </div>
-                </div>
-                @if($ad->link_url)
-                <div class="promo-cta"><span>Learn More <i class="fas fa-arrow-right"></i></span></div>
-                @endif
-            </div>
-            @endforeach
-
-            @if($activeAds->isEmpty())
-            <!-- {{-- Premium Banner (commented out)
-            <div class="dashboard-promo-banner" onclick="openPromoModal()">
-                <div class="promo-content">
-                    <div class="promo-icon"><i class="fas fa-rocket"></i></div>
-                    <div class="promo-text">
-                        <h3>Unlock WISP Premium</h3>
-                        <p>Unlimited links, advanced analytics, and priority support.</p>
-                    </div>
-                </div>
-                <div class="promo-cta"><span>Learn More <i class="fas fa-arrow-right"></i></span></div>
-            </div>
-            --}} -->
-            <a href="{{ route('user.help-support.page') }}" class="dashboard-promo-banner" style="text-decoration: none; display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+            <a href="{{ route('user.help-support.page') }}" class="db-feedback-banner hs-header-card" style="text-decoration: none; display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; margin-top: 32px;">
                 <div class="promo-content">
                     <div class="promo-icon"><i class="fas fa-comment-dots"></i></div>
                     <div class="promo-text">
@@ -219,144 +179,7 @@
                 </div>
                 <div class="promo-cta"><span>Give Feedback <i class="fas fa-arrow-right"></i></span></div>
             </a>
-            @endif
         </div>
-
-        
-
-
-        @if($activeAds->isEmpty())
-        <!-- Default Promo Modal -->
-        <div id="promo-fullscreen-modal" class="promo-modal-overlay">
-            <div class="promo-modal-content fullscreen-media">
-                <button class="promo-close-btn" onclick="closePromoModal()"><i class="fas fa-times"></i></button>
-                <div class="promo-modal-flex">
-                    <div class="promo-media-col">
-                        <img src="{{ asset('img/pro-image.jpeg') }}" alt="WISP Premium Promotional Flyer">
-                    </div>
-                    <div class="promo-text-col">
-                        <div class="promo-modal-header text-left">
-                            <h2>WISP Premium Experience</h2>
-                            <p class="text-muted">Unlock the full potential of your messaging with high-end tools designed for creators and businesses.</p>
-                        </div>
-                        <div class="promo-modal-features compact">
-                            <div class="promo-feature">
-                                <div class="feature-icon"><i class="fas fa-check"></i></div>
-                                <div><h4>Unlimited Links</h4><p>Create as many custom message links as you need.</p></div>
-                            </div>
-                            <div class="promo-feature">
-                                <div class="feature-icon"><i class="fas fa-check"></i></div>
-                                <div><h4>Advanced Analytics</h4><p>Real-time view tracking and audience insights.</p></div>
-                            </div>
-                        </div>
-                        <div class="promo-modal-footer text-left mt-4">
-                            <button class="btn btn-primary btn-lg dashboard-inline-10"  onclick="alert('Redirecting...')">
-                                Upgrade Now <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endif
-
-        <!-- Dynamic Ad Modal -->
-        <div id="dynamic-ad-modal" class="promo-modal-overlay">
-            <div class="promo-modal-content fullscreen-media">
-                <button class="promo-close-btn" onclick="closeDynamicAdModal()"><i class="fas fa-times"></i></button>
-                <div class="promo-modal-flex">
-                    <div class="promo-media-col" id="dynamic-ad-media-col">
-                        <img id="dynamic-ad-img" src="" alt="Ad Image"  class="dashboard-inline-11">
-                        <div id="dynamic-ad-icon" class="promo-icon dashboard-inline-12" >
-                            <i class="fas fa-bullhorn"></i>
-                        </div>
-                    </div>
-                    <div class="promo-text-col">
-                        <div class="promo-modal-header text-left">
-                            <h2 id="dynamic-ad-title"></h2>
-                            <p class="text-muted dashboard-inline-13" id="dynamic-ad-desc" ></p>
-                        </div>
-                        <div id="dynamic-ad-details"  class="dashboard-inline-14"></div>
-                        <div class="promo-modal-footer text-left dashboard-inline-15" id="dynamic-ad-footer" >
-                            <button id="dynamic-ad-btn" class="btn btn-primary btn-lg dashboard-inline-16" >
-                                Learn More <i class="fas fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script>
-            // Move modals to body so they are not trapped by parent container CSS (transform, overflow, etc.)
-            document.addEventListener('DOMContentLoaded', function() {
-                var promoModal = document.getElementById('promo-fullscreen-modal');
-                var dynamicModal = document.getElementById('dynamic-ad-modal');
-                if (promoModal) document.body.appendChild(promoModal);
-                if (dynamicModal) document.body.appendChild(dynamicModal);
-            });
-
-            function openPromoModal() {
-                document.getElementById('promo-fullscreen-modal').classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closePromoModal() {
-                document.getElementById('promo-fullscreen-modal').classList.remove('active');
-                document.body.style.overflow = '';
-            }
-
-            function openDynamicAdModal(el) {
-                const title = el.getAttribute('data-title');
-                const content = el.getAttribute('data-content');
-                const details = el.getAttribute('data-details');
-                const image = el.getAttribute('data-image');
-                const link = el.getAttribute('data-link');
-
-                document.getElementById('dynamic-ad-title').textContent = title;
-                document.getElementById('dynamic-ad-desc').textContent = content;
-
-                const detailsEl = document.getElementById('dynamic-ad-details');
-                if (details) {
-                    detailsEl.textContent = details;
-                    detailsEl.style.display = 'block';
-                } else {
-                    detailsEl.style.display = 'none';
-                }
-
-                const imgEl = document.getElementById('dynamic-ad-img');
-                const iconEl = document.getElementById('dynamic-ad-icon');
-
-                if (image) {
-                    imgEl.src = image;
-                    imgEl.style.display = 'block';
-                    iconEl.style.display = 'none';
-                } else {
-                    imgEl.style.display = 'none';
-                    iconEl.style.display = 'flex';
-                }
-
-                const footerEl = document.getElementById('dynamic-ad-footer');
-                const btnEl = document.getElementById('dynamic-ad-btn');
-                
-                if (link) {
-                    footerEl.style.display = 'block';
-                    btnEl.onclick = function() {
-                        window.open(link, '_blank');
-                    };
-                } else {
-                    footerEl.style.display = 'none';
-                }
-
-                document.getElementById('dynamic-ad-modal').classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeDynamicAdModal() {
-                document.getElementById('dynamic-ad-modal').classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        </script>
     </div>
 
 <!-- Calendar Event Modal (Scheduled Messages) -->
@@ -498,13 +321,10 @@
             function renderDashboardCharts() {
                 var dashboardStats = window.WISP_DASHBOARD_STATS || {};
 
-                // Multi-color palette for bars
+                // Multi-color palette for bars (variations of coral, 6-character hex)
                 var BAR_COLORS = [
-                    '#4361ee', '#7c3aed', '#2563eb', '#0891b2', '#059669',
-                    '#16a34a', '#ca8a04', '#ea580c', '#dc2626', '#9333ea',
-                    '#0284c7', '#0d9488', '#65a30d', '#d97706', '#c026d3',
-                    '#e11d48', '#7c3aed', '#4f46e5', '#0369a1', '#047857',
-                    '#b45309', '#c2410c', '#be123c', '#6d28d9', '#1d4ed8'
+                    '#F8D2C8', '#F4B9A9', '#F0A08B', '#EC876D', 
+                    '#F28C76', '#D15D43', '#BA523B', '#A24834'
                 ];
 
                 var viewsChartInstance = null;
@@ -518,6 +338,8 @@
                 }
 
                 function renderViewsChart(data) {
+                    if (data && data.data) { data = data.data; }
+                    if (data && data.data) { data = data.data; }
                     var chartEl = document.getElementById('dashboardViewsChart');
                     if (!chartEl || typeof Chart === 'undefined') return;
 
@@ -630,7 +452,7 @@
                                     expiredMessages > 0 ? expiredMessages : (totalMsg === 0 ? 0.001 : 0),
                                     totalMsg === 0 ? 1 : 0  // ghost track when no data at all
                                 ],
-                                backgroundColor: ['#22c55e', '#f97316', '#e2e8f0'],
+                                backgroundColor: ['rgba(242, 140, 118, 1.0)', 'rgba(242, 140, 118, 0.5)', '#e2e8f0'],
                                 borderWidth: 0,
                                 borderRadius: 6,
                                 spacing: 4,
@@ -671,7 +493,7 @@
                                     totalViews     > 0 ? totalViews     : (totalLinks === 0 ? 0.001 : 0),
                                     totalLinks === 0 ? 1 : 0  // ghost track when no data at all
                                 ],
-                                backgroundColor: ['#334155', '#94a3b8', '#e2e8f0'],
+                                backgroundColor: ['rgba(242, 140, 118, 0.8)', 'rgba(242, 140, 118, 0.3)', '#e2e8f0'],
                                 borderWidth: 0,
                                 borderRadius: 6,
                                 spacing: 4,
@@ -720,7 +542,7 @@
 
                         // Build map of scheduled messages by date (YYYY-MM-DD)
                         const eventsByDate = {};
-                        scheduledSends.forEach(send => {
+                        scheduledSends.forEach(function(send) {
                             if (send.scheduled_at) {
                                 const datePart = (send.scheduled_at.split('T')[0] || send.scheduled_at.split(' ')[0]);
                                 if (!eventsByDate[datePart]) eventsByDate[datePart] = [];
@@ -758,8 +580,8 @@
                                 dayDiv.appendChild(dot);
                             }
 
-                            dayDiv.onclick = () => {
-                                document.querySelectorAll('#calendar-days .cal-day').forEach(d => {
+                            dayDiv.onclick = function() {
+                                document.querySelectorAll('#calendar-days .cal-day').forEach(function(d) {
                                     d.classList.remove('selected', 'today');
                                     if (year === today.getFullYear() && month === today.getMonth() && parseInt(d.getAttribute('data-day')) === today.getDate()) {
                                         d.classList.add('today');
@@ -779,11 +601,11 @@
 
 
 
-                    prevBtn.onclick = () => {
+                    prevBtn.onclick = function() {
                         currentDate.setMonth(currentDate.getMonth() - 1);
                         renderCalendar();
                     };
-                    nextBtn.onclick = () => {
+                    nextBtn.onclick = function() {
                         currentDate.setMonth(currentDate.getMonth() + 1);
                         renderCalendar();
                     };
@@ -820,11 +642,11 @@
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             title.textContent = dateObj.toLocaleDateString(undefined, options);
             list.innerHTML = '';
-            events.forEach(event => {
+            events.forEach(function(event) {
                 const item = document.createElement('div');
                 item.className = 'event-modal-item';
                 if (event.wish_message_id) {
-                    item.onclick = () => window.location.href = `/user-page/message-preview/${event.wish_message_id}`;
+                    item.onclick = function() { window.location.href = `/user-page/message-preview/${event.wish_message_id}`; };
                 }
                 const msgTitle = event.wish_message ? event.wish_message.title : 'Unknown Message';
                 const recipient = event.recipient_masked || (event.wish_message ? event.wish_message.recipient_name : 'Unknown');

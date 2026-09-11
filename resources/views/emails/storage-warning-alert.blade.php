@@ -1,76 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
+    <title>Critical Storage Warning — WISP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Outfit', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f8fafc; color: #334155; margin: 0; padding: 40px 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; border: 1px solid #fecaca; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.08); overflow: hidden; }
-        .header { background: linear-gradient(135deg, #ef4444, #b91c1c); padding: 32px 24px; text-align: center; color: #ffffff; }
-        .header h1 { margin: 0; font-size: 1.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .body { padding: 32px 24px; line-height: 1.6; }
-        .alert-box { background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 16px; border-radius: 8px; margin-bottom: 24px; }
-        .alert-title { font-weight: 700; color: #991b1b; margin-bottom: 4px; }
-        .alert-text { font-size: 0.9rem; color: #7f1d1d; margin: 0; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-        .stat-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-align: center; }
-        .stat-label { font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 600; margin-bottom: 4px; }
-        .stat-value { font-size: 1.25rem; font-weight: 700; color: #0f172a; }
-        .steps { background-color: #f8fafc; border-radius: 12px; padding: 24px; margin-bottom: 24px; border: 1px solid #e2e8f0; }
-        .steps h3 { margin-top: 0; font-size: 1.05rem; font-weight: 700; color: #1e293b; }
-        .steps ol { padding-left: 20px; margin: 0; }
-        .steps li { margin-bottom: 12px; font-size: 0.9rem; }
-        .btn { display: inline-block; background: #6366f1; color: #ffffff !important; font-weight: 600; text-decoration: none; padding: 12px 24px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2); }
-        .btn:hover { background: #4f46e5; }
-        .footer { padding: 24px; text-align: center; font-size: 0.8rem; color: #94a3b8; border-top: 1px solid #f1f5f9; }
+        * { box-sizing: border-box; -webkit-text-size-adjust: 100%; }
+        body { margin: 0; padding: 0; width: 100% !important; background-color: #F8FAFC; font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #334155; }
+        table { border-collapse: collapse; }
+        .wrapper { width: 100%; background-color: #F8FAFC; padding: 24px 12px; }
+        .email-container { max-width: 580px; width: 100%; margin: 0 auto; background: #ffffff; border-radius: 16px; border: 1px solid #FECACA; overflow: hidden; box-shadow: 0 4px 20px rgba(239, 68, 68, 0.08); }
+        .header { background: linear-gradient(135deg, #EF4444, #B91C1C); padding: 22px 24px; text-align: center; color: #ffffff; }
+        .header h1 { margin: 0; font-size: 1.25rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .content { padding: 32px 28px; line-height: 1.6; }
+        .alert-box { background-color: #FEF2F2; border-left: 4px solid #EF4444; padding: 14px 16px; border-radius: 8px; margin-bottom: 20px; }
+        .alert-title { font-weight: 700; color: #991B1B; margin-bottom: 4px; font-size: 14px; }
+        .alert-text { font-size: 13px; color: #7F1D1D; margin: 0; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .stat-card { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 14px; text-align: center; }
+        .stat-label { font-size: 11px; text-transform: uppercase; color: #64748B; font-weight: 700; margin-bottom: 4px; }
+        .stat-value { font-size: 1.25rem; font-weight: 800; color: #EF4444; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .steps { background-color: #F8FAFC; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #E2E8F0; }
+        .steps h3 { margin-top: 0; font-size: 14px; font-weight: 700; color: #0F172A; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .steps ol { padding-left: 18px; margin: 0; }
+        .steps li { margin-bottom: 10px; font-size: 13px; color: #475569; }
+        .btn-wrap { text-align: center; margin: 24px 0 12px; }
+        .btn { display: inline-block; width: 100%; max-width: 280px; background: #EF4444; color: #ffffff !important; font-weight: 700; text-decoration: none; padding: 13px 24px; border-radius: 10px; text-align: center; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25); }
+        .footer { padding: 18px 24px; text-align: center; font-size: 12px; color: #94A3B8; border-top: 1px solid #F1F5F9; background-color: #FAFAFA; }
+        
+        @media only screen and (max-width: 600px) {
+            .wrapper { padding: 8px 4px !important; }
+            .email-container { width: 100% !important; border-radius: 12px !important; }
+            .content { padding: 20px 16px !important; }
+            .stats-grid { grid-template-columns: 1fr !important; }
+            .btn { width: 100% !important; max-width: 100% !important; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Critical Storage Warning</h1>
-        </div>
-        <div class="body">
-            <div class="alert-box">
-                <div class="alert-title">AWS Storage Usage Exceeded 90%</div>
-                <p class="alert-text">The system storage has reached a critical threshold. Action is required immediately to prevent service disruptions and upload failures.</p>
+    <div class="wrapper">
+        <div class="email-container">
+            <div class="header">
+                <h1>Critical Storage Warning</h1>
             </div>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label">Total Storage Used</div>
-                    <div class="stat-value" style="color: #ef4444;">{{ $formattedSize }}</div>
+            <div class="content">
+                <div class="alert-box">
+                    <div class="alert-title">AWS Storage Usage Exceeded 90%</div>
+                    <p class="alert-text">The system storage has reached a critical threshold. Immediate action is required to prevent service disruptions.</p>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-label">Percentage Used</div>
-                    <div class="stat-value" style="color: #ef4444;">{{ number_format($percentage, 2) }}%</div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Storage Used</div>
+                        <div class="stat-value">{{ $formattedSize }}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Percentage Used</div>
+                        <div class="stat-value">{{ number_format($percentage, 2) }}%</div>
+                    </div>
+                </div>
+
+                <div class="steps">
+                    <h3>Recommended Actions (AWS Hosting):</h3>
+                    <ol>
+                        <li><strong>Run Cleanup Tools:</strong> Log in to the <a href="{{ route('admin.maintenance.page') }}" style="color: #E8674A; font-weight: 600;">WISP Admin Panel</a> and execute the **Clean Expired Messages** tool to purge expired media.</li>
+                        <li><strong>Resize EBS Volumes:</strong> Expand EC2 partition using `sudo resize2fs` or `sudo xfs_growfs`.</li>
+                        <li><strong>Set Up S3 Lifecycle Rules:</strong> Automatically transition older files to Glacier or expire them.</li>
+                    </ol>
+                </div>
+
+                <div class="btn-wrap">
+                    <a href="{{ route('admin.maintenance.page') }}" class="btn">Access Admin Panel</a>
                 </div>
             </div>
-
-            <div class="steps">
-                <h3>Recommended Actions (AWS Hosting):</h3>
-                <ol>
-                    <li><strong>Run Cleanup Tools:</strong> Log in to the <a href="{{ route('admin.maintenance.page') }}" style="color: #6366f1; font-weight: 600;">WISP Admin Panel</a> and execute the **Clean Expired Messages** tool to purge expired messages and their media files from S3/EBS.</li>
-                    <li><strong>Resize EBS Volumes (EBS Storage):</strong> If you are using EBS for files:
-                        <ul>
-                            <li>Go to the **AWS EC2 Console > Elastic Block Store > Volumes**.</li>
-                            <li>Select your volume, click **Actions > Modify Volume**, and increase the size.</li>
-                            <li>Run `sudo resize2fs` or `sudo xfs_growfs` inside the EC2 instance to expand the partition.</li>
-                        </ul>
-                    </li>
-                    <li><strong>Set Up S3 Lifecycle Rules (S3 Storage):</strong> If media files are stored on Amazon S3:
-                        <ul>
-                            <li>Configure a lifecycle policy to automatically transition older files to **Glacier** or permanently delete them after expiry.</li>
-                        </ul>
-                    </li>
-                    <li><strong>Rotate and Compress System Logs:</strong> Run the **Clear Old Activity Logs** tool, or configure `logrotate` on your AWS instance to compress log files.</li>
-                </ol>
+            <div class="footer">
+                WISP Automated System Health Monitor &bull; AWS Cloud Integration
             </div>
-
-            <div style="text-align: center; margin-top: 32px;">
-                <a href="{{ route('admin.maintenance.page') }}" class="btn">Access Admin Control Center</a>
-            </div>
-        </div>
-        <div class="footer">
-            WISP Automated System Health Monitor &bull; AWS Cloud Integration
         </div>
     </div>
 </body>

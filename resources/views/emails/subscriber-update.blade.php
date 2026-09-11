@@ -1,30 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
     <title>{{ $updateSubject }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f6f7ff; color: #333; line-height: 1.6; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .header { text-align: center; margin-bottom: 30px; }
-        .header img { max-width: 80px; }
-        h1 { color: #6366f1; font-size: 24px; margin-bottom: 20px; text-align: center; }
-        .content { font-size: 16px; margin-bottom: 20px; color: #555; white-space: pre-wrap; }
-        .footer { margin-top: 40px; text-align: center; font-size: 12px; color: #999; }
-        .unsubscribe { color: #999; text-decoration: underline; }
+        * { box-sizing: border-box; -webkit-text-size-adjust: 100%; }
+        body { margin: 0; padding: 0; width: 100% !important; background-color: #F8FAFC; font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #334155; }
+        table { border-collapse: collapse; }
+        .wrapper { width: 100%; background-color: #F8FAFC; padding: 24px 12px; }
+        .email-container { max-width: 580px; width: 100%; margin: 0 auto; background: #ffffff; border-radius: 16px; border: 1px solid #E2E8F0; overflow: hidden; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04); }
+        .content { padding: 32px 28px; }
+        .eyebrow { display: inline-block; background: #FFF3EB; color: #E8674A; font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; padding: 5px 12px; border-radius: 50px; margin-bottom: 16px; }
+        h1.title { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 21px; font-weight: 800; color: #0F172A; margin: 0 0 14px; line-height: 1.3; }
+        p { font-size: 14px; line-height: 1.6; color: #475569; margin: 0 0 14px; }
+        .footer { padding: 20px 24px 24px; text-align: center; font-size: 12px; color: #94A3B8; border-top: 1px solid #F1F5F9; background-color: #FAFAFA; }
+        .footer a { color: #E8674A; text-decoration: none; font-weight: 600; }
+        .footer p { font-size: 12px; color: #94A3B8; margin: 0 0 4px; }
+        
+        @media only screen and (max-width: 600px) {
+            .wrapper { padding: 8px 4px !important; }
+            .email-container { width: 100% !important; border-radius: 12px !important; }
+            .content { padding: 20px 16px !important; }
+            .footer { padding: 16px 16px 20px !important; }
+            h1.title { font-size: 19px !important; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h2>WISP</h2>
-        </div>
-        <h1>{{ $updateSubject }}</h1>
-        <div class="content">{{ $messageContent }}</div>
-        
-        <div class="footer">
-            <p>You received this email because you are subscribed to the WISP newsletter.</p>
-            <p><a href="{{ route('unsubscribe', $subscriber->token) }}" class="unsubscribe">Unsubscribe</a></p>
+    <div class="wrapper">
+        <div class="email-container">
+            <div class="content">
+                <span class="eyebrow">Newsletter Update</span>
+                <h1 class="title">{{ $updateSubject }}</h1>
+                <p style="white-space: pre-wrap;">{{ $messageContent }}</p>
+            </div>
+            <div class="footer">
+                <p>&copy; {{ date('Y') }} WISP. All rights reserved.</p>
+                <p>You're receiving this email because you subscribed to WISP updates.</p>
+                <p><a href="{{ route('unsubscribe', $subscriber->token) }}">Unsubscribe</a></p>
+            </div>
         </div>
     </div>
 </body>

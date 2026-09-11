@@ -46,12 +46,16 @@ class UserSettingsController extends Controller
             $name = 'user-' . $user->id . '-' . time() . '.jpg';
             $path = $dir . '/' . $name;
             $encodedImage = \Intervention\Image\Laravel\Facades\Image::decode($file)->scaleDown(width: 800)->encodeUsingFileExtension('jpg', quality: 80);
-            \Illuminate\Support\Facades\Storage::disk('public')->put($path, (string) $encodedImage);
+            
+            $disk = config('filesystems.media_disk');
+            \Illuminate\Support\Facades\Storage::disk($disk)->put($path, (string) $encodedImage);
             
             $oldFile = $user->profile_picture;
             $user->profile_picture = $path;
             try {
-                Storage::disk('public')->delete('profile-pictures/' . basename($oldFile));
+                if ($oldFile) {
+                    \Illuminate\Support\Facades\Storage::disk($disk)->delete('profile-pictures/' . basename($oldFile));
+                }
             } catch (\Throwable $e) {}
             
             $user->save();
@@ -140,7 +144,7 @@ class UserSettingsController extends Controller
             $msg->save();
         }
 
-        return redirect()->route('user.settings.page')
+        return redirect()->route('user.settings.messages.page')
             ->with('success', 'Page settings saved and active messages updated.');
     }
 
@@ -157,7 +161,7 @@ class UserSettingsController extends Controller
         $settings->whatsapp_notifications = $request->boolean('whatsapp_notifications');
         $settings->save();
 
-        return redirect()->route('user.settings.page')
+        return redirect()->route('user.settings.messages.page')
             ->with('success', 'Notification preferences saved.');
     }
 
@@ -184,8 +188,6 @@ class UserSettingsController extends Controller
     {
         $request->validate([
             'privacy_blur_enabled' => 'nullable|in:on,yes,1,true,0,false,off',
-            'theme_preference'     => 'required|in:theme-default,theme-forest,theme-crimson',
-            'theme_bg_enabled'     => 'nullable|in:on,yes,1,true,0,false,off',
         ]);
 
         $settings = UserSettings::firstOrCreate(
@@ -194,8 +196,6 @@ class UserSettingsController extends Controller
         );
         
         $settings->privacy_blur_enabled = $request->boolean('privacy_blur_enabled');
-        $settings->theme_preference = $request->input('theme_preference');
-        $settings->theme_bg_enabled = $request->boolean('theme_bg_enabled');
         $settings->save();
 
         return back()

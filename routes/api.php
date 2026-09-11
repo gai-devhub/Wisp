@@ -18,6 +18,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/user/settings/password', [App\Http\Controllers\UserController::class, 'deletePassword']);
     Route::post('/user/profile-picture', [App\Http\Controllers\UserController::class, 'updateProfilePicture']);
     Route::delete('/user/profile-picture', [App\Http\Controllers\UserController::class, 'deleteProfilePicture']);
+    Route::delete('/user/account', [App\Http\Controllers\UserController::class, 'deleteAccountApi']);
     Route::put('/user/profile', [App\Http\Controllers\UserController::class, 'updateProfile']);
     Route::get('/user/messages', [App\Http\Controllers\UserController::class, 'listMessages']);
     Route::get('/user/messages/{id}', [App\Http\Controllers\UserController::class, 'showMessage']);

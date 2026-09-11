@@ -3,48 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
     <title>Welcome to WISP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #0f172a; background: #f8fafc; margin: 0; padding: 0; }
-        .container { max-width: 600px; margin: 24px auto; padding: 32px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; }
-        .header { text-align: center; margin-bottom: 32px; }
-        .header h1 { margin: 0; color: #6366f1; font-size: 28px; font-weight: 700; }
-        .body p { line-height: 1.6; margin: 16px 0; color: #334155; }
-        .btn-wrap { text-align: center; margin: 32px 0; }
-        .btn { background: linear-gradient(135deg, #6366f1, #a855f7); color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 8px; display: inline-block; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(99,102,241,0.2); }
-        .features { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 24px 0; }
-        .features ul { padding-left: 20px; margin: 0; color: #334155; }
-        .features li { margin-bottom: 10px; line-height: 1.5; }
-        .footer { margin-top: 32px; font-size: 0.85rem; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 16px; text-align: center; }
+        * { box-sizing: border-box; -webkit-text-size-adjust: 100%; }
+        body { margin: 0; padding: 0; width: 100% !important; background-color: #F8FAFC; font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #334155; }
+        table { border-collapse: collapse; }
+        .wrapper { width: 100%; background-color: #F8FAFC; padding: 24px 12px; }
+        .email-container { max-width: 580px; width: 100%; margin: 0 auto; background: #ffffff; border-radius: 16px; border: 1px solid #E2E8F0; overflow: hidden; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04); }
+        .content { padding: 32px 28px; }
+        .eyebrow { display: inline-block; background: #FFF3EB; color: #E8674A; font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; padding: 5px 12px; border-radius: 50px; margin-bottom: 16px; }
+        h1.title { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-size: 21px; font-weight: 800; color: #0F172A; margin: 0 0 14px; line-height: 1.3; }
+        p { font-size: 14px; line-height: 1.6; color: #475569; margin: 0 0 14px; }
+        ul.feature-list { padding-left: 18px; margin: 0 0 16px; }
+        ul.feature-list li { margin-bottom: 8px; font-size: 14px; color: #475569; line-height: 1.5; }
+        .btn-wrap { text-align: center; margin: 24px 0 16px; }
+        .btn { display: inline-block; width: 100%; max-width: 280px; background: #E8674A; color: #ffffff !important; text-decoration: none; font-weight: 700; font-size: 14px; padding: 13px 24px; border-radius: 10px; text-align: center; box-shadow: 0 4px 12px rgba(232,103,74,0.22); }
+        .footer { padding: 20px 24px 24px; text-align: center; font-size: 12px; color: #94A3B8; border-top: 1px solid #F1F5F9; background-color: #FAFAFA; }
+        .footer a { color: #E8674A; text-decoration: none; font-weight: 600; }
+        .footer p { font-size: 12px; color: #94A3B8; margin: 0 0 4px; }
+        
+        @media only screen and (max-width: 600px) {
+            .wrapper { padding: 8px 4px !important; }
+            .email-container { width: 100% !important; border-radius: 12px !important; }
+            .content { padding: 20px 16px !important; }
+            .footer { padding: 16px 16px 20px !important; }
+            h1.title { font-size: 19px !important; }
+            .btn { width: 100% !important; max-width: 100% !important; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Welcome to WISP!</h1>
-        </div>
-        <div class="body">
-            <p>Hi {{ explode(' ', $user->name ?? $user->username)[0] }},</p>
-            <p>We are thrilled to have you onboard. WISP is your central command center for managing, sharing, and organizing your secure messages and digital workspace.</p>
-            
-            <div class="features">
-                <strong>Here is what you can do next:</strong>
-                <ul style="margin-top: 12px;">
-                    <li>Set up your <strong>Control Center</strong> preferences.</li>
-                    <li>Secure your account with a custom <strong>2FA Passcode</strong>.</li>
-                    <li>Start drafting and sending encrypted messages.</li>
+    <div class="wrapper">
+        <div class="email-container">
+            <div class="content">
+                <span class="eyebrow">Welcome Aboard</span>
+                <h1 class="title">Welcome to WISP!</h1>
+                <p>Hi {{ explode(' ', $user->name ?? $user->username)[0] }},</p>
+                <p>We're thrilled to have you onboard. WISP is your central command center for creating, scheduling, and sharing secure, personalized messages.</p>
+
+                <p style="margin-bottom: 8px; font-weight: 700; color: #0F172A;">Here's what you can do next:</p>
+                <ul class="feature-list">
+                    <li>Set up your <strong>Control Center</strong> preferences</li>
+                    <li>Secure your account with a custom <strong>2FA Passcode</strong></li>
+                    <li>Start drafting and sending your first wish</li>
                 </ul>
-            </div>
 
-            <div class="btn-wrap">
-                <a href="{{ route('user.page') }}" class="btn" target="_blank" rel="noopener">Access Your Dashboard</a>
-            </div>
+                <div class="btn-wrap">
+                    <a href="{{ route('user.page') }}" class="btn" target="_blank" rel="noopener">Access Dashboard</a>
+                </div>
 
-            <p>If you have any questions or need assistance, feel free to reach out to our support team.</p>
-            <p>Welcome to the family,<br><strong>The WISP Team</strong></p>
-        </div>
-        <div class="footer">
-            <p>&copy; {{ date('Y') }} WISP. All rights reserved.</p>
+                <p style="margin-top: 20px; font-size: 13px; color: #64748B;">If you have any questions or need assistance, our support team is always here for you.<br><br>Welcome to the family,<br><strong style="color: #0F172A;">The WISP Team</strong></p>
+            </div>
+            <div class="footer">
+                <p>&copy; {{ date('Y') }} WISP. All rights reserved.</p>
+                <p>Need help? <a href="mailto:hello@wisp.app">Contact support</a></p>
+            </div>
         </div>
     </div>
 </body>

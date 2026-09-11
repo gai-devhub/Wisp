@@ -24,8 +24,8 @@
     }
 
     .hub-card { 
-        background: #ffffff; 
-        border: 1px solid rgba(0,0,0,0.04); 
+        background: var(--card-bg, #ffffff); 
+        border: 1px solid var(--border-color, rgba(0,0,0,0.04)); 
         border-radius: 20px; 
         padding: 28px; 
         box-shadow: 0 10px 30px rgba(0,0,0,0.03); 
@@ -216,8 +216,8 @@
 
                 <!-- Media Types Grid -->
                 <div class="storage-grid">
-                    <div style="background: white; border: 1px solid rgba(0,0,0,0.05); border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
-                        <div style="width: 48px; height: 48px; border-radius: 12px; background: #e0e7ff; color: #4f46e5; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                    <div style="background: var(--inner-card-bg, #ffffff); border: 1px solid var(--border-color, rgba(0,0,0,0.05)); border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(99, 102, 241, 0.15); color: #6366f1; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
                             <i class="fas fa-image"></i>
                         </div>
                         <div>
@@ -226,8 +226,8 @@
                         </div>
                     </div>
 
-                    <div style="background: white; border: 1px solid rgba(0,0,0,0.05); border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
-                        <div style="width: 48px; height: 48px; border-radius: 12px; background: #d1fae5; color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+                    <div style="background: var(--inner-card-bg, #ffffff); border: 1px solid var(--border-color, rgba(0,0,0,0.05)); border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(16, 185, 129, 0.15); color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
                             <i class="fas fa-music"></i>
                         </div>
                         <div>

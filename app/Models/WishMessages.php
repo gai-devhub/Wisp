@@ -192,4 +192,26 @@ class WishMessages extends Model
             return $value;
         }
     }
+    public function getTemplateNameAttribute()
+    {
+        return $this->template ? $this->template->template_name : null;
+    }
+
+    public function getMediaImageAttribute()
+    {
+        if (!$this->mediaFiles || !$this->mediaFiles->recipient_image) return null;
+        return s3_url($this->mediaFiles->recipient_image);
+    }
+
+    public function getMediaMusicAttribute()
+    {
+        if (!$this->mediaFiles || !$this->mediaFiles->background_music) return null;
+        return s3_url($this->mediaFiles->background_music);
+    }
+
+    public function getAppleMusicUrlAttribute()
+    {
+        return $this->mediaFiles ? $this->mediaFiles->apple_music_url : null;
+    }
+
 }

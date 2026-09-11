@@ -70,7 +70,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save icon-margin-right"></i> Update Account</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle icon-margin-right"></i> Update Account</button>
                     </form>
                 </div>
                 
@@ -107,7 +107,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-check icon-margin-right"></i> Save Preferences</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle icon-margin-right"></i> Save Preferences</button>
                     </form>
                 </div>
                 
@@ -169,42 +169,11 @@
                     
                     <form method="POST" action="{{ route('settings.hub.privacy_theme') ?? '#' }}">
                         @csrf
-                        <input type="hidden" name="theme_preference" value="{{ $userSettings->theme_preference ?? 'theme-default' }}">
                         <div class="form-check form-switch mt-2" style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
                             <input class="form-check-input" type="checkbox" name="privacy_blur_enabled" id="privacyBlur" {{ ($userSettings->privacy_blur_enabled ?? false) ? 'checked' : '' }} style="width: 2.5em; height: 1.3em; cursor: pointer; flex-shrink: 0;">
                             <label class="form-check-label" for="privacyBlur" style="font-size: 0.95rem; font-weight: 500; color: #334155; cursor: pointer; margin: 0;">Enable Blur UI</label>
                         </div>
-                        <button type="submit" class="btn btn-primary">Update Privacy</button>
-                    </form>
-                </div>
-
-                <!-- Appearance & Themes (moved from General Settings) -->
-                <div class="hub-card">
-                    <div class="hub-card-header">
-                        <div class="hub-card-icon icon-bg-pink">
-                            <i class="fas fa-palette"></i>
-                        </div>
-                        <div class="hub-card-header-text">
-                            <h4>Appearance &amp; Themes</h4>
-                            <p>Personalize your dashboard experience across 3 exclusive palettes.</p>
-                        </div>
-                    </div>
-                    <form method="POST" action="{{ route('settings.hub.privacy_theme') ?? '#' }}" id="user-settings-theme-form">
-                        @csrf
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <input type="hidden" name="privacy_blur_enabled" value="{{ ($userSettings->privacy_blur_enabled ?? false) ? '1' : '0' }}">
-                            <div class="form-check form-switch" style="display: flex; align-items: center; gap: 8px;">
-                                <input class="form-check-input" type="checkbox" name="theme_bg_enabled" id="themeBgEnabled" value="1" {{ ($userSettings->theme_bg_enabled ?? true) ? 'checked' : '' }} style="cursor: pointer; width: 2.2em; height: 1.1em; margin: 0;">
-                                <label class="form-check-label" for="themeBgEnabled" style="font-size: 0.85rem; color: var(--text-muted); cursor: pointer; margin: 0;">Apply to background</label>
-                            </div>
-                        </div>
-                        <input type="hidden" name="theme_preference" id="us_theme_preference_input" value="{{ $userSettings->theme_preference ?? 'theme-default' }}">
-                        <div class="theme-grid" style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0;">
-                            <div class="theme-preview {{ ($userSettings->theme_preference ?? 'theme-default') === 'theme-default' ? 'active' : '' }}" data-theme="theme-default">Indigo</div>
-                            <div class="theme-preview {{ ($userSettings->theme_preference ?? '') === 'theme-forest'  ? 'active' : '' }}" data-theme="theme-forest">Emerald</div>
-                            <div class="theme-preview {{ ($userSettings->theme_preference ?? '') === 'theme-crimson' ? 'active' : '' }}" data-theme="theme-crimson">Crimson</div>
-                        </div>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-paint-brush"></i> Apply Theme</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle icon-margin-right"></i> Update Privacy</button>
                     </form>
                 </div>
 
@@ -300,14 +269,9 @@
 
         <form action="{{ route('user.settings.delete-account') }}" method="POST">
             @csrf
-            <div class="form-group mb-4">
+            <div class="form-group mb-5">
                 <label  class="user-settings-inline-22">Confirm Username</label>
                 <input type="text" name="confirm_username" class="form-control" placeholder="{{ \Auth::user()->username }}" required class="user-setting-input">
-            </div>
-
-            <div class="form-group mb-5">
-                <label  class="user-settings-inline-23">Enter Passcode (2FA)</label>
-                <input type="password" name="confirm_passcode" class="form-control user-settings-inline-24" placeholder="••••••" required >
             </div>
 
             <div  class="user-settings-inline-25">

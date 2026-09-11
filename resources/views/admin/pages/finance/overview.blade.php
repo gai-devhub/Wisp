@@ -158,91 +158,94 @@
     {{-- Mid Charts Grid --}}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {{-- Monthly Cashflow --}}
-        <div class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm">
-            <div class="flex justify-between items-center mb-8">
-                <div class="text-lg text-slate-900 font-bold flex items-center gap-2">
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 md:p-7 shadow-sm">
+            <div class="flex justify-between items-center mb-6">
+                <div class="text-base md:text-lg text-slate-900 font-bold flex items-center gap-2">
                     Monthly Cashflow
-                    <i class="far fa-question-circle text-sm text-slate-400" title="Income vs Expenses for the current month"></i>
+                    <i class="far fa-question-circle text-xs text-slate-400" title="Income vs Expenses for the current month"></i>
                 </div>
-                <div class="border border-slate-200/80 bg-white/60 px-3 py-1.5 rounded-lg text-xs text-slate-600 font-semibold flex items-center gap-2 cursor-pointer hover:bg-white transition-colors">
+                <div class="border border-slate-200 bg-slate-100 dark:bg-slate-800 dark:border-slate-700 px-3 py-1.5 rounded-lg text-xs text-slate-700 dark:text-slate-300 font-semibold flex items-center gap-2 cursor-pointer hover:bg-slate-200 transition-colors">
                     This Month <i class="fas fa-chevron-down text-[10px] text-slate-400"></i>
                 </div>
             </div>
-            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-                <div class="flex flex-col">
-                    <div class="text-xs text-slate-500 mb-1 uppercase font-bold tracking-wider">Net Cashflow</div>
-                    <div class="text-3xl text-slate-900 font-extrabold mb-1">${{ number_format($netMonthly, 2) }}</div>
-                    <div class="text-sm text-slate-400 font-medium">Total</div>
-                </div>
-                
-                <div class="relative w-[152px] h-[152px] flex items-center justify-center flex-shrink-0" style="max-width: 152px; max-height: 152px;">
-                    <canvas id="cashflowChart"></canvas>
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 items-center">
+                <div class="flex items-center gap-4">
+                    <div class="relative w-[115px] h-[115px] flex items-center justify-center flex-shrink-0">
+                        <canvas id="cashflowChart"></canvas>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="text-[11px] text-slate-400 dark:text-slate-400 mb-0.5 uppercase font-bold tracking-wider">Net Cashflow</div>
+                        <div class="text-2xl font-extrabold text-slate-900 dark:text-slate-100">${{ number_format($netMonthly, 2) }}</div>
+                        <div class="text-xs text-slate-400 font-medium">Total</div>
+                    </div>
                 </div>
 
-                {{-- Legend Only --}}
-                <div class="flex flex-col gap-4 w-full md:w-auto">
-                    <div class="flex items-center justify-between gap-6">
-                        <div class="flex items-center gap-2.5 text-sm text-slate-700 font-semibold">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                {{-- Legend Box --}}
+                <div class="flex flex-col gap-3 w-full bg-slate-50 dark:bg-slate-900/60 p-3.5 rounded-xl border border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 font-semibold">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 flex-shrink-0"></span>
                             Total Deposits
                         </div>
-                        <div class="text-base text-slate-900 font-bold">${{ number_format($incomeMonthly, 2) }}</div>
+                        <div class="text-sm text-slate-900 dark:text-slate-100 font-bold">${{ number_format($incomeMonthly, 2) }}</div>
                     </div>
-                    <div class="flex items-center justify-between gap-6">
-                        <div class="flex items-center gap-2.5 text-sm text-slate-700 font-semibold">
-                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 font-semibold">
+                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 flex-shrink-0"></span>
                             Total Withdrawals
                         </div>
-                        <div class="text-base text-slate-900 font-bold">${{ number_format($expenseMonthly, 2) }}</div>
+                        <div class="text-sm text-slate-900 dark:text-slate-100 font-bold">${{ number_format($expenseMonthly, 2) }}</div>
                     </div>
                 </div>
             </div>
         </div>
 
         {{-- Profit Margin --}}
-        <div class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm">
-            <div class="flex justify-between items-center mb-8">
-                <div class="text-lg text-slate-900 font-bold flex items-center gap-2">
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 md:p-7 shadow-sm">
+            <div class="flex justify-between items-center mb-6">
+                <div class="text-base md:text-lg text-slate-900 font-bold flex items-center gap-2">
                     All-Time Profit Margin
-                    <i class="far fa-question-circle text-sm text-slate-400" title="Total revenue vs total costs"></i>
+                    <i class="far fa-question-circle text-xs text-slate-400" title="Total revenue vs total costs"></i>
                 </div>
-                <div class="border border-slate-200/80 bg-white/60 px-3 py-1.5 rounded-lg text-xs text-slate-600 font-semibold flex items-center gap-2 cursor-pointer hover:bg-white transition-colors">
+                <div class="border border-slate-200 bg-slate-100 dark:bg-slate-800 dark:border-slate-700 px-3 py-1.5 rounded-lg text-xs text-slate-700 dark:text-slate-300 font-semibold flex items-center gap-2 cursor-pointer hover:bg-slate-200 transition-colors">
                     All Time <i class="fas fa-chevron-down text-[10px] text-slate-400"></i>
                 </div>
             </div>
-            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-                <div class="flex flex-col">
-                    <div class="text-xs text-slate-500 mb-1 uppercase font-bold tracking-wider">Net Profit</div>
-                    <div class="text-3xl text-slate-900 font-extrabold">${{ number_format($netTotal, 2) }}</div>
-                </div>
-                
-                <div class="relative w-[152px] h-[152px] flex items-center justify-center flex-shrink-0" style="max-width: 152px; max-height: 152px;">
-                    <canvas id="profitMarginChart"></canvas>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center">
-                        <div class="text-2xl font-extrabold text-slate-900">
-                            @php
-                                $margin = $incomeTotal > 0 ? round(($netTotal / $incomeTotal) * 100) : 0;
-                            @endphp
-                            {{ $margin }}%
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 items-center">
+                <div class="flex items-center gap-4">
+                    <div class="relative w-[115px] h-[115px] flex items-center justify-center flex-shrink-0">
+                        <canvas id="profitMarginChart"></canvas>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                            <div class="text-lg font-extrabold text-slate-900 dark:text-slate-100 leading-none">
+                                @php
+                                    $margin = $incomeTotal > 0 ? round(($netTotal / $incomeTotal) * 100) : 0;
+                                @endphp
+                                {{ $margin }}%
+                            </div>
+                            <div class="text-[8px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Margin</div>
                         </div>
-                        <div class="text-xs text-slate-500 font-bold uppercase tracking-wider">Margin</div>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="text-[11px] text-slate-400 dark:text-slate-400 mb-0.5 uppercase font-bold tracking-wider">Net Profit</div>
+                        <div class="text-2xl font-extrabold text-slate-900 dark:text-slate-100">${{ number_format($netTotal, 2) }}</div>
                     </div>
                 </div>
 
-                <div class="flex flex-col gap-4 w-full md:w-auto">
-                    <div class="flex items-center justify-between gap-6">
-                        <div class="flex items-center gap-2.5 text-sm text-slate-700 font-semibold">
-                            <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+                {{-- Legend Box --}}
+                <div class="flex flex-col gap-3 w-full bg-slate-50 dark:bg-slate-900/60 p-3.5 rounded-xl border border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 font-semibold">
+                            <span class="w-2.5 h-2.5 rounded-full bg-indigo-600 flex-shrink-0"></span>
                             Gross Revenue
                         </div>
-                        <div class="text-base text-slate-900 font-bold">${{ number_format($incomeTotal, 2) }}</div>
+                        <div class="text-sm text-slate-900 dark:text-slate-100 font-bold">${{ number_format($incomeTotal, 2) }}</div>
                     </div>
-                    <div class="flex items-center justify-between gap-6">
-                        <div class="flex items-center gap-2.5 text-sm text-slate-700 font-semibold">
-                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 font-semibold">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500 flex-shrink-0"></span>
                             Total Cost
                         </div>
-                        <div class="text-base text-slate-900 font-bold">${{ number_format($expenseTotal, 2) }}</div>
+                        <div class="text-sm text-slate-900 dark:text-slate-100 font-bold">${{ number_format($expenseTotal, 2) }}</div>
                     </div>
                 </div>
             </div>

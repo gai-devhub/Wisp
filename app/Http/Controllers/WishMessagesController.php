@@ -78,21 +78,22 @@ class WishMessagesController extends Controller
     {
         $user = Auth::user();
 
-        // Free user message limit: max 5 messages
-        if (!$user->isPremium()) {
-            $messageCount = $user->freeMessageCount();
-            if ($messageCount >= 5) {
-                if ($request->wantsJson()) {
-                    return response()->json([
-                        'message' => "You've used all {$messageCount} of your free messages. Upgrade to Premium for unlimited messages!",
-                        'upgrade_required' => true
-                    ], 403);
-                }
-                return redirect()->route('user.billing.index')
-                    ->with('upgrade_prompt', true)
-                    ->with('upgrade_message', "You've used all {$messageCount} of your free messages. Upgrade to Premium for unlimited messages!");
-            }
-        }
+        // PREMIUM GATING DISABLED — free message limit removed.
+        // To re-enable, uncomment the block below.
+        // if (!$user->isPremium()) {
+        //     $messageCount = $user->freeMessageCount();
+        //     if ($messageCount >= 5) {
+        //         if ($request->wantsJson()) {
+        //             return response()->json([
+        //                 'message' => "You've used all {$messageCount} of your free messages. Upgrade to Premium for unlimited messages!",
+        //                 'upgrade_required' => true
+        //             ], 403);
+        //         }
+        //         return redirect()->route('user.billing.index')
+        //             ->with('upgrade_prompt', true)
+        //             ->with('upgrade_message', "You've used all {$messageCount} of your free messages. Upgrade to Premium for unlimited messages!");
+        //     }
+        // }
 
         if ($user->isStorageFull()) {
             if ($request->wantsJson()) {

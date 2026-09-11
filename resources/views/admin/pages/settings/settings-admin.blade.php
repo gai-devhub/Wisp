@@ -24,8 +24,8 @@
     }
 
     .hub-card { 
-        background: #ffffff; 
-        border: 1px solid rgba(0,0,0,0.04); 
+        background: var(--card-bg, #ffffff); 
+        border: 1px solid var(--border-color, rgba(0,0,0,0.04)); 
         border-radius: 20px; 
         padding: 28px; 
         box-shadow: 0 10px 30px rgba(0,0,0,0.03); 
@@ -304,8 +304,8 @@
                         </div>
                     </div>
                     
-                    <div style="background: var(--bg-subtle, #f8fafc); padding: 24px; border-radius: 16px; border: 1px dashed rgba(0,0,0,0.1); text-align: center; margin-bottom: 8px;">
-                        <div style="width: 64px; height: 64px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); color: {{ !empty($adminUser->settings->login_passcode) ? '#10b981' : '#cbd5e1' }}; font-size: 1.5rem;">
+                    <div style="background: var(--bg-subtle, #f8fafc); padding: 24px; border-radius: 16px; border: 1px dashed var(--border-color, rgba(0,0,0,0.1)); text-align: center; margin-bottom: 8px;">
+                        <div style="width: 64px; height: 64px; background: var(--inner-card-bg, #ffffff); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); color: {{ !empty($adminUser->settings->login_passcode) ? '#10b981' : '#cbd5e1' }}; font-size: 1.5rem;">
                             <i class="fas {{ !empty($adminUser->settings->login_passcode) ? 'fa-lock' : 'fa-lock-open' }}"></i>
                         </div>
                         <h5 style="font-weight: 700; margin-bottom: 8px; color: var(--text-dark);">{{ !empty($adminUser->settings->login_passcode) ? 'Dashboard is Protected' : 'Dashboard is Unlocked' }}</h5>

@@ -121,6 +121,15 @@
             sendMessage(text);
         });
 
+        input.addEventListener('keydown', function (e) {
+            if ((e.key === 'Enter' || e.keyCode === 13) && !e.shiftKey) {
+                e.preventDefault();
+                var text = (this.value || '').trim();
+                if (!text) return;
+                sendMessage(text);
+            }
+        });
+
         input.addEventListener('input', function () {
             this.style.height = 'auto';
             this.style.height = Math.min(this.scrollHeight, 140) + 'px';

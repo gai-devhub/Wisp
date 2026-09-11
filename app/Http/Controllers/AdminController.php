@@ -735,7 +735,6 @@ class AdminController extends Controller
     {
         $request->validate([
             'privacy_blur_enabled' => 'nullable|boolean',
-            'theme_preference'     => 'nullable|in:theme-default,theme-forest,theme-crimson',
         ]);
 
         $settings = \App\Models\UserSettings::firstOrCreate(
@@ -745,10 +744,6 @@ class AdminController extends Controller
         
         if ($request->has('privacy_form_submitted')) {
             $settings->privacy_blur_enabled = $request->boolean('privacy_blur_enabled');
-        }
-        
-        if ($request->has('theme_preference')) {
-            $settings->theme_preference = $request->input('theme_preference');
         }
         
         $settings->save();
@@ -1622,62 +1617,6 @@ class AdminController extends Controller
         return response()->json(['ok' => true]);
     }
 
-    public function adsPage()
-    {
-        $ads = \App\Models\Ad::latest()->paginate(5);
-        return view('admin.pages.management.ads', compact('ads'));
-    }
-
-    public function storeAd(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'nullable|image|max:2048',
-            'link_url' => 'nullable|url',
-            'display_location' => 'required|string',
-            'status' => 'required|in:active,inactive',
-        ]);
-
-        $data = $request->only(['title', 'link_url', 'display_location', 'content', 'details']);
-        $data['is_active'] = $request->input('status') === 'active';
-        if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('ads', config('filesystems.media_disk'));
-        }
-
-        \App\Models\Ad::create($data);
-        return redirect()->back()->with('success', 'Ad created successfully.');
-    }
-
-    public function updateAd(Request $request, $id)
-    {
-        $ad = \App\Models\Ad::findOrFail($id);
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'image' => 'nullable|image|max:2048',
-            'link_url' => 'nullable|url',
-            'display_location' => 'required|string',
-            'status' => 'required|in:active,inactive',
-        ]);
-
-        $data = $request->only(['title', 'link_url', 'display_location', 'content', 'details']);
-        $data['is_active'] = $request->input('status') === 'active';
-        if ($request->hasFile('image')) {
-            if ($ad->image_path) { try { \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->delete($ad->image_path); } catch (\Throwable $e) {} }
-            $data['image_path'] = $request->file('image')->store('ads', config('filesystems.media_disk'));
-        }
-
-        $ad->update($data);
-        return redirect()->back()->with('success', 'Ad updated successfully.');
-    }
-
-    public function deleteAd($id)
-    {
-        $ad = \App\Models\Ad::findOrFail($id);
-        if ($ad->image_path) { try { \Illuminate\Support\Facades\Storage::disk(config('filesystems.media_disk'))->delete($ad->image_path); } catch (\Throwable $e) {} }
-        $ad->delete();
-        return redirect()->back()->with('success', 'Ad deleted successfully.');
-    }
-
     public function saveSystemUpdates(Request $request)
     {
         ActivityLog::log($request->user()->id, 'System update check', 'Admin checked for system updates.');
@@ -1717,20 +1656,32 @@ class AdminController extends Controller
         $data = [];
         switch ($period) {
             case 'day':
-                for ($h = 23; $h >= 0; $h--) {
-                    $hour = \Carbon\Carbon::now()->subHours($h);
+                $startOfDay = \Carbon\Carbon::today();
+                for ($h = 0; $h <= 22; $h += 2) {
+                    $startHour = $startOfDay->copy()->addHours($h);
+                    $endHour = $startHour->copy()->addHours(1)->endOfHour();
                     $data[] = [
-                        'label' => $hour->format('H:i'),
-                        'count' => \App\Models\MessageViews::whereBetween('viewed_at', [$hour->copy()->startOfHour(), $hour->copy()->endOfHour()])->count(),
+                        'label' => $startHour->format('H:i'),
+                        'count' => \App\Models\MessageViews::whereBetween('viewed_at', [$startHour, $endHour])->count(),
                     ];
                 }
                 break;
             case 'month':
-                for ($d = 29; $d >= 0; $d--) {
-                    $date = \Carbon\Carbon::today()->subDays($d)->toDateString();
+                $startOfMonth = \Carbon\Carbon::now()->startOfMonth();
+                $endOfMonth = \Carbon\Carbon::now()->endOfMonth();
+                $daysInMonth = $endOfMonth->day;
+
+                for ($d = 1; $d <= $daysInMonth; $d += 2) {
+                    $startDate = $startOfMonth->copy()->addDays($d - 1);
+                    $endDate = $startDate->copy()->addDay()->endOfDay();
+                    
+                    if ($endDate->gt($endOfMonth)) {
+                        $endDate = $endOfMonth->copy();
+                    }
+
                     $data[] = [
-                        'label' => \Carbon\Carbon::parse($date)->format('j/n'),
-                        'count' => \App\Models\MessageViews::whereDate('viewed_at', $date)->count(),
+                        'label' => $startDate->format('j/n'),
+                        'count' => \App\Models\MessageViews::whereBetween('viewed_at', [$startDate->copy()->startOfDay(), $endDate])->count(),
                     ];
                 }
                 break;

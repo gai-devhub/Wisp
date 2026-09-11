@@ -66,9 +66,19 @@
                 <div class="detail-group">
                     <div class="preview-label">Template Applied</div>
                     <div class="preview-value">
-                        @if($message->template)
+                        @if($message->template && !empty($message->template->template_name))
+                            @php
+                                $tName = $message->template->template_name;
+                                if (preg_match('/^template\.([^.]+)\.template-(\d+)$/i', $tName, $matches)) {
+                                    $displayTemplate = ucfirst($matches[1]) . ' — Template ' . $matches[2];
+                                } elseif (preg_match('/^view-?(\d+)$/i', $tName, $matches)) {
+                                    $displayTemplate = 'Template View ' . $matches[1];
+                                } else {
+                                    $displayTemplate = ucwords(str_replace(['-', '_', '.'], [' ', ' ', ' '], $tName));
+                                }
+                            @endphp
                             <span class="template-badge-custom">
-                                <i class="fas fa-palette"></i> {{ $message->template->name }}
+                                <i class="fas fa-palette"></i> {{ $displayTemplate }}
                             </span>
                         @else
                             <span class="template-badge-default">
@@ -83,9 +93,7 @@
         <div style="margin-top: 24px;">
             <div class="detail-group">
                 <div class="preview-label" style="margin-bottom: 12px;">Message Content</div>
-                <div class="preview-content-box custom-scrollbar" style="max-height: 300px; overflow-y: auto; padding: 24px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; line-height: 1.7; color: #334155; white-space: pre-wrap;">
-                    {{ ($message->message) }}
-                </div>
+                <div class="preview-content-box custom-scrollbar" style="max-height: 300px; overflow-y: auto; padding: 24px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; line-height: 1.7; color: #334155; white-space: pre-wrap;">{{ trim($message->message ?? $message->wish_message ?? '') }}</div>
             </div>
         </div>
     </div>

@@ -23,13 +23,13 @@
         @if(!empty($matchedSystemPages))
             <div>
                 <h6 style="font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
-                    <i class="fas fa-directions" style="color: var(--primary, #6366f1);"></i> Quick Navigation
+                    <i class="fas fa-directions" style="color: var(--primary, #F28C76);"></i> Quick Navigation
                 </h6>
                 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px;">
                     @foreach($matchedSystemPages as $page)
                         <a href="{{ $page['url'] }}" style="text-decoration: none;">
                             <div class="search-result-item" style="display: flex; align-items: center; gap: 14px; padding: 14px; background: #f8fafc; border-radius: 12px; border: 1.5px solid #e2e8f0; transition: all 0.2s; cursor: pointer;">
-                                <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(99,102,241,0.08); color: var(--primary, #6366f1); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; flex-shrink: 0;">
+                                <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(242, 140, 118, 0.08); color: var(--primary, #F28C76); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; flex-shrink: 0;">
                                     <i class="{{ $page['icon'] }}"></i>
                                 </div>
                                 <div style="flex: 1; min-width: 0;">

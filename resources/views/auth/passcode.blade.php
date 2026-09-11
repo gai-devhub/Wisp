@@ -7,22 +7,22 @@
     <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --primary-light: rgba(99, 102, 241, 0.08);
-            --secondary: #a855f7;
-            --accent: #ec4899;
-            --text: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
+            --primary: #F28C76;
+            --primary-hover: #E8674A;
+            --primary-light: rgba(242, 140, 118, 0.08);
+            --secondary: #2B1F3D;
+            --accent: #4A3A63;
+            --text: #2B1F3D;
+            --text-muted: #6E6178;
+            --border: rgba(43, 31, 61, 0.10);
             --bg: #ffffff;
-            --bg-subtle: #f8fafc;
-            --success-bg: #f0fdf4;
-            --success-text: #166534;
+            --bg-subtle: #FDF6EC;
+            --success-bg: rgba(60, 122, 94, 0.10);
+            --success-text: #3C7A5E;
             --error-bg: #fef2f2;
             --error-text: #b91c1c;
             --radius: 12px;
@@ -35,12 +35,14 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: var(--bg);
             background-image:
-                radial-gradient(circle at 0% 30%, rgba(99,102,241,0.06) 0%, transparent 50%),
-                radial-gradient(circle at 100% 70%, rgba(236,72,153,0.06) 0%, transparent 50%),
-                radial-gradient(circle at 20% 90%, rgba(168,85,247,0.04) 0%, transparent 45%);
+                radial-gradient(circle at 5% 10%, rgba(242, 140, 118, 0.07) 0%, transparent 25%),
+                radial-gradient(circle at 95% 90%, rgba(43, 31, 61, 0.06) 0%, transparent 25%);
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
             color: var(--text);
             min-height: 100vh;
             display: flex; align-items: center; justify-content: center;
@@ -61,10 +63,11 @@
             display: inline-flex; align-items: center; gap: 10px;
             text-decoration: none; color: var(--text); font-weight: 700; font-size: 1.35rem;
             margin-bottom: 24px;
+            font-family: 'Fraunces', Georgia, serif;
         }
         .auth-header-logo img { width: 40px; height: 40px; object-fit: contain; }
 
-        h3 { font-size: 1.5rem; margin-bottom: 8px; color: var(--text); }
+        h3 { font-size: 1.5rem; margin-bottom: 8px; color: var(--text); font-family: 'Fraunces', Georgia, serif; }
         p.hint { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 30px; }
 
         .form-control {
@@ -78,7 +81,7 @@
         .btn {
             width: 100%; padding: 14px 20px; border: none; border-radius: var(--radius);
             font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s;
-            margin-top: 20px; background: linear-gradient(135deg, var(--primary), #7c3aed); color: #fff;
+            margin-top: 20px; background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: #fff;
         }
         .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
 
@@ -98,37 +101,40 @@
     </style>
 </head>
 <body>
-    <div class="ambient-grid"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
-    
-    <div class="auth-wrap">
-        <div class="auth-header-logo">
-            <img src="{{ asset('img/logo.png') }}" alt="WISP">
-            <span>WISP</span>
-        </div>
-        
-        <h3>Passcode Required</h3>
-        <p class="hint">Enter your security passcode to access your dashboard.</p>
+    <div style="position: relative; width: 100%; max-width: min(420px, 96vw);">
+        <!-- Backdrop decorative color dot at top right corner matching auth page -->
+        <div style="position: absolute; top: -60px; right: -40px; width: 190px; height: 190px; background: #F28C76; border-radius: 50%; filter: blur(65px); opacity: 0.15; z-index: -1;"></div>
 
-        @if($errors->any())
-            <div class="alert alert-danger">
-                @foreach($errors->all() as $error)
-                    {{ $error }}<br>
-                @endforeach
+        <div class="auth-wrap" style="position: relative; z-index: 1;">
+            <div class="auth-header-logo">
+                <img src="{{ asset('img/logo.png') }}" alt="WISP">
+                <span>WISP</span>
             </div>
-        @endif
+            
+            <h3>Passcode Required</h3>
+            <p class="hint">Enter your security passcode to access your dashboard.</p>
 
-        <form method="POST" action="{{ route('auth.passcode.verify.post') }}">
-            @csrf
-            <input type="password" name="passcode" class="form-control" placeholder="••••" required autofocus>
-            <button type="submit" class="btn">Unlock Dashboard <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></button>
-        </form>
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    @foreach($errors->all() as $error)
+                        {{ $error }}<br>
+                    @endforeach
+                </div>
+            @endif
 
-        <form method="POST" action="{{ route('auth.logout') }}" style="margin-top: 24px;">
-            @csrf
-            <button type="submit" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:0.9rem;">
-                <i class="fas fa-sign-out-alt"></i> Sign out
-            </button>
-        </form>
+            <form method="POST" action="{{ route('auth.passcode.verify.post') }}">
+                @csrf
+                <input type="password" name="passcode" class="form-control" placeholder="••••" required autofocus>
+                <button type="submit" class="btn">Unlock Dashboard <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></button>
+            </form>
+
+            <form method="POST" action="{{ route('auth.logout') }}" style="margin-top: 24px;">
+                @csrf
+                <button type="submit" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:0.9rem;">
+                    <i class="fas fa-sign-out-alt"></i> Sign out
+                </button>
+            </form>
+        </div>
     </div>
 </body>
 </html>

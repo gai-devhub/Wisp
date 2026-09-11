@@ -7,14 +7,14 @@
     <link rel="icon" href="{{ asset('img/logo-circle.png') }}" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --card-bg: rgba(255, 255, 255, 0.85);
-            --text: #0f172a;
-            --text-muted: #475569;
-            --accent: #6366f1;
-            --accent-hover: #4f46e5;
+            --text: #2B1F3D;
+            --text-muted: #6E6178;
+            --accent: #E8674A;
+            --accent-hover: #C7502F;
         }
 
         * {
@@ -30,10 +30,10 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            background-color: #f6f7ff;
-            background-image: radial-gradient(circle at 10% 15%, rgba(166, 223, 255, 0.9), transparent 28%), radial-gradient(circle at 80% 22%, rgba(255, 181, 213, 0.78), transparent 34%), radial-gradient(circle at 60% 76%, rgba(255, 202, 230, 0.62), transparent 24%), linear-gradient(120deg, #edf4ff 0%, #f9f4ff 48%, #ffe8f2 100%);
+            background-color: #FDF6EC;
+            background-image: radial-gradient(circle at 10% 15%, rgba(232, 103, 74, 0.12), transparent 28%), radial-gradient(circle at 80% 22%, rgba(43, 31, 61, 0.10), transparent 34%), radial-gradient(circle at 60% 76%, rgba(232, 103, 74, 0.08), transparent 24%), linear-gradient(120deg, #FDF6EC 0%, #F5EAD9 48%, #FDF6EC 100%);
             background-attachment: fixed;
-            font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             color: var(--text);
             padding: 20px;
             overflow: hidden; /* Prevent scroll from bouncing elements */
@@ -54,7 +54,7 @@
             height: 80px;
             opacity: 0;
             animation: floatAround infinite ease-in-out alternate;
-            filter: drop-shadow(0 10px 15px rgba(99, 102, 241, 0.2));
+            filter: drop-shadow(0 10px 15px rgba(232, 103, 74, 0.2));
         }
 
         .bouncing-logo:nth-child(1) { top: 10%; left: 15%; animation-duration: 12s; animation-delay: 0s; }
@@ -92,6 +92,7 @@
             font-weight: 700;
             color: var(--text);
             letter-spacing: -0.02em;
+            font-family: 'Fraunces', Georgia, serif;
         }
 
         p {

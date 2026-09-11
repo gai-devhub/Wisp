@@ -246,7 +246,7 @@
     <div class="folder-container">
         <div class="official-header">
             <div class="ref-no">VAL-REF: {{ $message->receiving_date ? \Carbon\Carbon::parse($message->receiving_date)->format('M Y') : '' }}</div>
-            <div class="ref-no">{{ $message->title ?? 'GAI CORP' }} // PERSONAL DEDICATION</div>
+            <div class="ref-no">{{ $message->title ?? 'WISP' }} // PERSONAL DEDICATION</div>
         </div>
 
         <div class="content-wrap">

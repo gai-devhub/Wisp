@@ -18,12 +18,10 @@
     <style>
         body { 
             font-family: 'Outfit', sans-serif; 
-            background-color: #f6f7ff !important;
+            background-color: #FDF6EC !important;
             background-image:
-                radial-gradient(circle at 10% 15%, rgba(166, 223, 255, 0.9), transparent 28%),
-                radial-gradient(circle at 80% 22%, rgba(255, 181, 213, 0.78), transparent 34%),
-                radial-gradient(circle at 60% 76%, rgba(255, 202, 230, 0.62), transparent 24%),
-                linear-gradient(120deg, #edf4ff 0%, #f9f4ff 48%, #ffe8f2 100%) !important;
+                radial-gradient(circle at 5% 10%, rgba(242, 140, 118, 0.07) 0%, transparent 25%),
+                radial-gradient(circle at 95% 90%, rgba(43, 31, 61, 0.06) 0%, transparent 25%) !important;
             background-attachment: fixed !important;
         }
         .nav-sub-menu { display: none; }
@@ -39,7 +37,7 @@
         .modal.active { display: flex; }
         .preview-popup { opacity: 0; visibility: hidden; transition: opacity 0.22s, visibility 0.22s; }
         .preview-popup.active { opacity: 1; visibility: visible; }
-        .admin-header-bg { background: linear-gradient(90deg, #edf4ff 0%, #ffe8f2 100%) !important; }
+        .admin-header-bg { background: #ffffff !important; }
         
         .notification-toast { 
             transform: translateX(420px); 
@@ -83,32 +81,85 @@
             }
         }
 
+        /* Theme CSS Variables */
+        :root {
+            --card-bg: #ffffff;
+            --bg-subtle: #f8fafc;
+            --bg-hover: #f1f5f9;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --text: #334155;
+            --border: #e2e8f0;
+            --border-color: rgba(0, 0, 0, 0.06);
+            --input-bg: #f8fafc;
+            --input-text: #0f172a;
+            --inner-card-bg: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --card-bg: #1e293b;
+            --bg-subtle: #0f172a;
+            --bg-hover: #334155;
+            --text-dark: #f8fafc;
+            --text-muted: #94a3b8;
+            --text: #cbd5e1;
+            --border: #334155;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --input-bg: #0f172a;
+            --input-text: #f8fafc;
+            --inner-card-bg: #0f172a;
+        }
+
         /* Dark mode support */
         [data-theme="dark"] body { background: #0f172a !important; background-image: none !important; color: #f1f5f9; }
         [data-theme="dark"] .admin-header-bg { background: #1e293b !important; }
         [data-theme="dark"] .bg-white { background: #1e293b !important; }
-        [data-theme="dark"] .bg-slate-50 { background: #1e293b !important; }
-        [data-theme="dark"] .border-slate-200 { border-color: #334155 !important; }
+        [data-theme="dark"] .bg-slate-50 { background: #0f172a !important; }
+        [data-theme="dark"] .bg-slate-50\/50 { background: #0f172a !important; }
+        [data-theme="dark"] .bg-slate-100 { background: #334155 !important; color: #f8fafc !important; }
+        [data-theme="dark"] .bg-slate-200 { background: #334155 !important; }
+        [data-theme="dark"] .bg-gray-50 { background: #0f172a !important; }
+        [data-theme="dark"] .bg-gray-100 { background: #334155 !important; }
+        [data-theme="dark"] .border-slate-200, [data-theme="dark"] .border-slate-100 { border-color: #334155 !important; }
         [data-theme="dark"] .text-slate-700, [data-theme="dark"] .text-slate-800, [data-theme="dark"] .text-slate-900 { color: #f1f5f9 !important; }
         [data-theme="dark"] .text-slate-500, [data-theme="dark"] .text-slate-600 { color: #94a3b8 !important; }
-        [data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] textarea { background: #0f172a; color: #f1f5f9; border-color: #334155; }
+        [data-theme="dark"] .text-slate-400, [data-theme="dark"] .text-gray-400 { color: #94a3b8 !important; }
+        [data-theme="dark"] .text-slate-300, [data-theme="dark"] .text-gray-300 { color: #cbd5e1 !important; }
+        [data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] textarea { background: #0f172a !important; color: #f1f5f9 !important; border-color: #334155 !important; }
         [data-theme="dark"] table thead { background: #334155 !important; }
         [data-theme="dark"] .notification-toast { background: #1e293b; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         [data-theme="dark"] .notification-toast-content h4 { color: #f1f5f9; }
         [data-theme="dark"] .notification-toast-content p { color: #cbd5e1; }
-        [data-theme="dark"] #globalSearchInput, [data-theme="dark"] #globalDateFilter { background: transparent !important; color: #334155 !important; }
+        [data-theme="dark"] #globalSearchInput, [data-theme="dark"] #globalDateFilter { background: transparent !important; color: #f8fafc !important; }
+        [data-theme="dark"] .hub-card, [data-theme="dark"] .db-card, [data-theme="dark"] .stat-card { background: #1e293b !important; border-color: #334155 !important; }
+        [data-theme="dark"] .btn-outline-danger { background: transparent !important; border-color: #ef4444 !important; color: #ef4444 !important; }
+        [data-theme="dark"] .modal > div { background: #1e293b !important; color: #f1f5f9 !important; border: 1px solid #334155; }
+        [data-theme="dark"] .modal h3 { color: #f1f5f9 !important; }
+        [data-theme="dark"] .modal label { color: #cbd5e1 !important; }
+    
+        /* Custom Admin Theme Colors */
+        .bg-theme-primary { background-color: #F28C76 !important; }
+        .text-theme-primary { color: #F28C76 !important; }
+        .bg-theme-50 { background-color: rgba(242, 140, 118, 0.1) !important; }
+        .hover\:bg-theme-50:hover { background-color: rgba(242, 140, 118, 0.1) !important; }
+        .hover\:text-theme-primary:hover { color: #F28C76 !important; }
+        .shadow-theme-200 { box-shadow: 0 4px 6px -1px rgba(242, 140, 118, 0.3) !important; }
+        .focus-within\:border-theme-400:focus-within { border-color: rgba(242, 140, 118, 0.6) !important; }
+        .focus-within\:ring-theme-100:focus-within { --tw-ring-color: rgba(242, 140, 118, 0.2) !important; }
+        .hover\:border-theme-300:hover { border-color: rgba(242, 140, 118, 0.4) !important; }
+        .text-theme-500 { color: #E8674A !important; }
     </style>
+
 </head>
 
 @php
     $adminSettings = auth()->check() ? (auth()->user()->settings ?? []) : [];
     $privacyEnabled = $adminSettings['privacy_blur_enabled'] ?? false;
-    $activeTheme = $adminSettings['theme_preference'] ?? 'theme-default';
 @endphp
 
 <body data-active-section="@yield('admin-section', 'dashboard')"
     data-activity-page="{{ $activityPage ?? $actPage ?? 1 }}"
-    class="{{ $activeTheme }} {{ $privacyEnabled ? 'privacy-blur-active' : '' }} min-h-screen">
+    class="{{ $privacyEnabled ? 'privacy-blur-active' : '' }} min-h-screen">
 
     {{-- ===== LAYOUT SHELL ===== --}}
     <div class="flex flex-col min-h-screen">
@@ -127,7 +178,7 @@
             {{-- Right --}}
             <div class="flex items-center gap-3">
                 {{-- Global Search --}}
-                <div class="flex items-center gap-2 h-10 px-3 rounded-full bg-slate-100 border border-slate-200 focus-within:border-indigo-400 focus-within:ring-2 focus-within:ring-indigo-100 transition-all">
+                <div class="flex items-center gap-2 h-10 px-3 rounded-full bg-slate-100 border border-slate-200 focus-within:border-theme-primary/60 focus-within:ring-2 focus-within:ring-theme-primary/20 transition-all">
                     <i class="fas fa-search text-slate-400 text-sm"></i>
                     <input type="text" id="globalSearchInput" placeholder="Search..." autocomplete="off"
                         class="border-0 bg-transparent outline-none text-sm text-slate-700 w-36 sm:w-48 placeholder-slate-400">
@@ -147,7 +198,7 @@
 
                 {{-- Theme toggle --}}
                 <button id="themeToggleBtn" title="Toggle Dark/Light Mode"
-                    class="w-10 h-10 flex items-center justify-center rounded-full border border-slate-200 bg-transparent text-slate-600 hover:bg-slate-100 hover:text-indigo-600 hover:border-indigo-300 cursor-pointer transition-all">
+                    class="w-10 h-10 flex items-center justify-center rounded-full border border-slate-200 bg-transparent text-slate-600 hover:bg-slate-100 hover:text-theme-primary hover:border-theme-primary/40 cursor-pointer transition-all">
                     <i class="fas fa-moon"></i>
                 </button>
 
@@ -190,7 +241,7 @@
                         <li>
                             <a href="{{ route('admin.page') }}"
                                 class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline
-                                    {{ request()->routeIs('admin.page') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200' : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                    {{ request()->routeIs('admin.page') ? 'bg-theme-primary text-white shadow-md shadow-theme-primary/30' : 'text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                 <i class="fas fa-tachometer-alt w-5 text-center"></i>
                                 <span>Dashboard</span>
                             </a>
@@ -198,7 +249,7 @@
                         @if(auth()->user()->role === 'admin')
                         <li>
                             <a href="{{ route('user.page') }}"
-                                class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-indigo-600 hover:bg-indigo-50">
+                                class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-theme-primary hover:bg-theme-primary/10">
                                 <i class="fas fa-exchange-alt w-5 text-center"></i>
                                 <span>Switch to User View</span>
                             </a>
@@ -206,7 +257,7 @@
                         @endif
 
                         <li class="nav-dropdown {{ request()->is('admin-page/users*', 'admin-page/subscribers*') ? 'open' : '' }}">
-                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer">
+                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary cursor-pointer">
                                 <i class="fas fa-users w-5 text-center"></i>
                                 <span>User Management</span>
                                 <i class="fas fa-chevron-right dropdown-arrow ml-auto text-xs"></i>
@@ -214,18 +265,18 @@
                             <ul class="nav-sub-menu list-none pl-4 pt-1 pb-1 space-y-0.5">
                                 <li><a href="{{ route('admin.users.page') }}"
                                     class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.users.page') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                        {{ request()->routeIs('admin.users.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                     <i class="fas fa-user w-4 text-center"></i> <span>Users</span></a></li>
                                 <li><a href="{{ route('admin.subscribers.page') }}"
                                     class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.subscribers.page') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                        {{ request()->routeIs('admin.subscribers.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                     <i class="fas fa-envelope-open-text w-4 text-center"></i> <span>Subscribers</span></a></li>
                             </ul>
                         </li>
 
                         {{-- Message dropdown --}}
                         <li class="nav-dropdown {{ request()->is('admin-page/messages*', 'admin-page/view-activity*') ? 'open' : '' }}">
-                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer">
+                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary cursor-pointer">
                                 <i class="fas fa-envelope w-5 text-center"></i>
                                 <span>Message Management</span>
                                 <i class="fas fa-chevron-right dropdown-arrow ml-auto text-xs"></i>
@@ -233,28 +284,19 @@
                             <ul class="nav-sub-menu list-none pl-4 pt-1 pb-1 space-y-0.5">
                                 <li><a href="{{ route('admin.messages.page') }}"
                                     class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.messages.page') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                        {{ request()->routeIs('admin.messages.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                     <i class="fas fa-envelope w-4 text-center"></i> <span>Messages</span></a></li>
                                 <li><a href="{{ route('admin.view-activity.page') }}"
                                     class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.view-activity.page') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                        {{ request()->routeIs('admin.view-activity.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                     <i class="fas fa-eye w-4 text-center"></i> <span>View Activity</span></a></li>
                             </ul>
                         </li>
 
                         <li>
-                            <a href="{{ route('admin.ads.page') }}"
-                                class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline
-                                    {{ request()->routeIs('admin.ads.page') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200' : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-600' }}">
-                                <i class="fas fa-bullhorn w-5 text-center"></i>
-                                <span>Advertisements</span>
-                            </a>
-                        </li>
-
-                        <li>
                             <a href="{{ route('admin.ai-usage.page') }}"
                                 class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline
-                                    {{ request()->routeIs('admin.ai-usage.page') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200' : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                    {{ request()->routeIs('admin.ai-usage.page') ? 'bg-theme-primary text-white shadow-md shadow-theme-primary/30' : 'text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                 <i class="fas fa-robot w-5 text-center"></i>
                                 <span>AI Usage</span>
                             </a>
@@ -263,7 +305,7 @@
                         <li>
                             <a href="{{ route('database.manager') }}"
                                 class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline
-                                    {{ request()->routeIs('database.manager') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200' : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                    {{ request()->routeIs('database.manager') ? 'bg-theme-primary text-white shadow-md shadow-theme-primary/30' : 'text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                 <i class="fas fa-database w-5 text-center"></i>
                                 <span>Database Manager</span>
                             </a>
@@ -272,7 +314,7 @@
                         <li>
                             <a href="{{ route('admin.notifications.page') }}"
                                 class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline
-                                    {{ request()->routeIs('admin.notifications.page') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200' : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                    {{ request()->routeIs('admin.notifications.page') ? 'bg-theme-primary text-white shadow-md shadow-theme-primary/30' : 'text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                 <i class="fas fa-bell w-5 text-center"></i>
                                 <span>Notifications</span>
                             </a>
@@ -280,7 +322,7 @@
 
                         {{-- Billing dropdown --}}
                         <li class="nav-dropdown {{ request()->is('admin-page/billing*') ? 'open' : '' }}">
-                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer">
+                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary cursor-pointer">
                                 <i class="fas fa-file-invoice-dollar w-5 text-center"></i>
                                 <span>Billing</span>
                                 <i class="fas fa-chevron-right dropdown-arrow ml-auto text-xs"></i>
@@ -288,18 +330,18 @@
                             <ul class="nav-sub-menu list-none pl-4 pt-1 pb-1 space-y-0.5">
                                 <li><a href="{{ route('admin.billing.users') }}"
                                     class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.billing.users') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                        {{ request()->routeIs('admin.billing.users') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                     <i class="fas fa-users w-4 text-center"></i> <span>Users</span></a></li>
                                 <li><a href="{{ route('admin.billing.index') }}"
                                     class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.billing.index') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                        {{ request()->routeIs('admin.billing.index') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                     <i class="fas fa-list w-4 text-center"></i> <span>Subscriptions</span></a></li>
                             </ul>
                         </li>
 
                          {{-- Finances dropdown --}}
                         <li class="nav-dropdown {{ request()->is('admin-page/finances*') ? 'open' : '' }}">
-                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer">
+                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary cursor-pointer">
                                 <i class="fas fa-university w-5 text-center"></i>
                                 <span>Finances</span>
                                 <i class="fas fa-chevron-right dropdown-arrow ml-auto text-xs"></i>
@@ -307,18 +349,18 @@
                             <ul class="nav-sub-menu list-none pl-4 pt-1 pb-1 space-y-0.5">
                                 <li><a href="{{ route('admin.finances.overview') }}"
                                     class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.finances.overview') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                        {{ request()->routeIs('admin.finances.overview') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                     <i class="fas fa-chart-line w-4 text-center"></i> <span>Overview</span></a></li>
                                 <li><a href="{{ route('admin.finances.transactions') }}"
                                     class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.finances.transactions') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                        {{ request()->routeIs('admin.finances.transactions') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                     <i class="fas fa-exchange-alt w-4 text-center"></i> <span>Transactions</span></a></li>
                             </ul>
                         </li>
 
                         {{-- Operations dropdown --}}
                         <li class="nav-dropdown {{ request()->is('admin-page/analytics*', 'admin-page/logs*', 'admin-page/system*', 'admin-page/maintenance*') ? 'open' : '' }}">
-                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer">
+                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary cursor-pointer">
                                 <i class="fas fa-tasks w-5 text-center"></i>
                                 <span>Operations</span>
                                 <i class="fas fa-chevron-right dropdown-arrow ml-auto text-xs"></i>
@@ -326,26 +368,26 @@
                             <ul class="nav-sub-menu list-none pl-4 pt-1 pb-1 space-y-0.5">
                                 <li><a href="{{ route('admin.analytics.page') }}"
                                     class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.analytics.page') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                        {{ request()->routeIs('admin.analytics.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                     <i class="fas fa-chart-bar w-4 text-center"></i> <span>Analytics</span></a></li>
                                 <li><a href="{{ route('admin.logs.page') }}"
                                     class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.logs.page') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                        {{ request()->routeIs('admin.logs.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                     <i class="fas fa-clipboard-list w-4 text-center"></i> <span>Activity Logs</span></a></li>
                                 <li><a href="{{ route('admin.system.page') }}"
                                     class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.system.page') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                        {{ request()->routeIs('admin.system.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                     <i class="fas fa-cogs w-4 text-center"></i> <span>System Controls</span></a></li>
                                 <li><a href="{{ route('admin.maintenance.page') }}"
                                     class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.maintenance.page') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                        {{ request()->routeIs('admin.maintenance.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                     <i class="fas fa-tools w-4 text-center"></i> <span>Maintenance</span></a></li>
                             </ul>
                         </li>
 
                         {{-- Settings dropdown --}}
                         <li class="nav-dropdown {{ request()->is('admin-page/settings*') ? 'open' : '' }}">
-                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer">
+                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary cursor-pointer">
                                 <i class="fas fa-cog w-5 text-center"></i>
                                 <span>Settings</span>
                                 <i class="fas fa-chevron-right dropdown-arrow ml-auto text-xs"></i>
@@ -353,15 +395,15 @@
                             <ul class="nav-sub-menu list-none pl-4 pt-1 pb-1 space-y-0.5">
                                 <li><a href="{{ route('admin.settings.message.page') }}"
                                     class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.settings.message.page') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                        {{ request()->routeIs('admin.settings.message.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                     <span>Message Settings</span></a></li>
                                 <li><a href="{{ route('admin.settings.page.page') }}"
                                     class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.settings.page.page') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                        {{ request()->routeIs('admin.settings.page.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                     <span>Page Settings</span></a></li>
                                 <li><a href="{{ route('admin.settings.user.page') }}"
                                     class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.settings.user.page') ? 'bg-indigo-50 text-indigo-600 font-semibold' : 'text-slate-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                        {{ request()->routeIs('admin.settings.user.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
                                     <span>Admin Settings</span></a></li>
                             </ul>
                         </li>
@@ -406,28 +448,28 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Username</label>
                     <input type="text" name="username" required minlength="3" pattern="[a-zA-Z0-9_.-]+"
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all">
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Email Address</label>
                     <input type="email" name="email" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all">
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
                     <input type="password" name="password" required minlength="8"
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all">
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Role</label>
                     <select name="role" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer">
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all cursor-pointer">
                         <option value="user">User</option>
                         <option value="admin">Administrator</option>
                     </select>
                 </div>
                 <button type="submit" id="createUserBtn"
-                    class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl cursor-pointer border-0 transition-colors">
+                    class="w-full py-2.5 bg-theme-primary hover:bg-indigo-700 text-white font-semibold rounded-xl cursor-pointer border-0 transition-colors">
                     Create User
                 </button>
             </form>
@@ -446,7 +488,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Type</label>
                     <select name="type" id="notificationType" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer">
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all cursor-pointer">
                         <option value="info">Information</option>
                         <option value="success">Success</option>
                         <option value="warning">Warning</option>
@@ -456,24 +498,24 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Title</label>
                     <input type="text" name="title" id="notificationTitle" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all">
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Message</label>
                     <textarea name="message" id="notificationMessage" rows="4" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all resize-y"></textarea>
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all resize-y"></textarea>
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Audience</label>
                     <select name="audience" id="notificationAudience" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer">
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all cursor-pointer">
                         <option value="all">All Users</option>
                         <option value="active">Active Users Only</option>
                         <option value="inactive">Inactive Users Only</option>
                     </select>
                 </div>
                 <button type="submit" id="sendNotificationActionBtn"
-                    class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl cursor-pointer border-0 transition-colors">
+                    class="w-full py-2.5 bg-theme-primary hover:bg-indigo-700 text-white font-semibold rounded-xl cursor-pointer border-0 transition-colors">
                     Send Notification
                 </button>
             </form>
@@ -488,13 +530,13 @@
                 <button class="modal-close border-0 bg-transparent text-2xl cursor-pointer text-slate-400 hover:text-red-500 leading-none" id="closeViewUserModal">&times;</button>
             </div>
             <div class="p-6 text-center">
-                <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl text-indigo-600">
+                <div class="w-16 h-16 bg-theme-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl text-theme-primary">
                     <i class="fas fa-user"></i>
                 </div>
                 <h4 id="viewUserName" class="text-xl font-bold text-slate-800 mb-1">User Name</h4>
                 <p id="viewUserDetails" class="text-sm text-slate-500 mb-5">User details</p>
                 <div class="flex gap-2 justify-center">
-                    <button id="editUserFromView" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl cursor-pointer border-0 transition-colors">Edit User</button>
+                    <button id="editUserFromView" class="px-4 py-2 bg-theme-primary hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl cursor-pointer border-0 transition-colors">Edit User</button>
                     <button id="closeViewModal" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-semibold rounded-xl cursor-pointer border-0 transition-colors">Close</button>
                 </div>
             </div>
@@ -513,17 +555,17 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Username</label>
                     <input type="text" id="editUserName" name="username" required pattern="[a-zA-Z0-9_.-]+"
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all">
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Email</label>
                     <input type="email" id="editUserEmail" name="email" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all">
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Status</label>
                     <select id="editUserStatus" name="status" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer">
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all cursor-pointer">
                         <option value="active">Active</option>
                         <option value="blocked">Blocked</option>
                         <option value="pending">Pending</option>
@@ -593,17 +635,17 @@
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Title</label>
                     <input type="text" id="editMessageTitle" name="title" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all">
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Content</label>
                     <textarea id="editMessageContent" name="message" rows="5" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all resize-y"></textarea>
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all resize-y"></textarea>
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Status</label>
                     <select id="editMessageStatus" name="is_published"
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer">
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all cursor-pointer">
                         <option value="0">Draft</option>
                         <option value="1">Published</option>
                     </select>

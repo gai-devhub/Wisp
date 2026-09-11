@@ -102,7 +102,7 @@
                                                     data-message-id="{{ $msg->id }}" data-template-index="{{ $msgTplIndex }}"
                                                     data-template-name="{{ $msgTplName }}" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                                                     <div style="display: flex; align-items: center; gap: 12px;">
-                                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: #f1f5f9; color: #4f46e5; display: flex; align-items: center; justify-content: center;"><i class="fas fa-eye"></i></div>
+                                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: #f8fafc; color: #E8674A; display: flex; align-items: center; justify-content: center;"><i class="fas fa-eye"></i></div>
                                                         <span style="font-weight: 500; color: #1e293b; font-size: 0.95rem;">Preview</span>
                                                     </div>
                                                     <i class="fas fa-chevron-right" style="color: #94a3b8; font-size: 0.8em;"></i>
@@ -111,7 +111,7 @@
                                                     class="nav-link message-action-item js-bypass" data-section="edit"
                                                     data-message-id="{{ $msg->id }}" style="display: flex; justify-content: space-between; align-items: center; width: 100%; text-decoration: none;">
                                                     <div style="display: flex; align-items: center; gap: 12px;">
-                                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: #ecfdf5; color: #10b981; display: flex; align-items: center; justify-content: center;"><i class="fas fa-pen"></i></div>
+                                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: #f8fafc; color: #E8674A; display: flex; align-items: center; justify-content: center;"><i class="fas fa-pen"></i></div>
                                                         <span style="font-weight: 500; color: #1e293b; font-size: 0.95rem;">Edit</span>
                                                     </div>
                                                     <i class="fas fa-chevron-right" style="color: #94a3b8; font-size: 0.8em;"></i>
@@ -119,7 +119,7 @@
                                                 <a href="{{ route('user.template.page') }}?message_id={{ $msg->id }}"
                                                     class="message-action-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%; text-decoration: none;">
                                                     <div style="display: flex; align-items: center; gap: 12px;">
-                                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: #ffe4e6; color: #e11d48; display: flex; align-items: center; justify-content: center;"><i class="fas fa-columns"></i></div>
+                                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: #f8fafc; color: #E8674A; display: flex; align-items: center; justify-content: center;"><i class="fas fa-columns"></i></div>
                                                         <span style="font-weight: 500; color: #1e293b; font-size: 0.95rem;">Template</span>
                                                     </div>
                                                     <i class="fas fa-chevron-right" style="color: #94a3b8; font-size: 0.8em;"></i>
@@ -127,23 +127,25 @@
                                                 <a href="{{ route('user.media.page') }}?message_id={{ $msg->id }}"
                                                     class="message-action-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%; text-decoration: none;">
                                                     <div style="display: flex; align-items: center; gap: 12px;">
-                                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: #f3e8ff; color: #9333ea; display: flex; align-items: center; justify-content: center;"><i class="fas fa-image"></i></div>
+                                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: #f8fafc; color: #E8674A; display: flex; align-items: center; justify-content: center;"><i class="fas fa-image"></i></div>
                                                         <span style="font-weight: 500; color: #1e293b; font-size: 0.95rem;">Add Media</span>
                                                     </div>
                                                     <i class="fas fa-chevron-right" style="color: #94a3b8; font-size: 0.8em;"></i>
                                                 </a>
                                                 @php
-                                                    $hasActiveLink = isset($msg->generatedLinks) 
-                                                        ? $msg->generatedLinks->where('is_active', true)->isNotEmpty() 
-                                                        : $msg->generatedLinks()->where('is_active', true)->exists();
+                                                    $hasGeneratedLink = !empty($msg->generated_link) || (
+                                                        isset($msg->generatedLinks) 
+                                                            ? $msg->generatedLinks->isNotEmpty() 
+                                                            : $msg->generatedLinks()->exists()
+                                                    );
                                                 @endphp
-                                                @if(!$hasActiveLink)
+                                                @if(!$hasGeneratedLink)
                                                 <form method="POST" action="{{ route('links.generate') }}" class="m-0" style="width: 100%;">
                                                     @csrf
                                                     <input type="hidden" name="wish_message_id" value="{{ $msg->id }}">
                                                     <button type="submit" class="message-action-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%; border: none; background: transparent; text-align: left;">
                                                         <div style="display: flex; align-items: center; gap: 12px;">
-                                                            <div style="width: 32px; height: 32px; border-radius: 8px; background: #ffedd5; color: #ea580c; display: flex; align-items: center; justify-content: center;"><i class="fas fa-link"></i></div>
+                                                            <div style="width: 32px; height: 32px; border-radius: 8px; background: #f8fafc; color: #E8674A; display: flex; align-items: center; justify-content: center;"><i class="fas fa-link"></i></div>
                                                             <span style="font-weight: 500; color: #1e293b; font-size: 0.95rem;">Generate Link</span>
                                                         </div>
                                                         <i class="fas fa-chevron-right" style="color: #94a3b8; font-size: 0.8em;"></i>
@@ -156,7 +158,7 @@
                                                     data-phone="{{ $msg->recipient_phone }}" data-link="{{ $msg->generated_link }}"
                                                     style="display: flex; justify-content: space-between; align-items: center; width: 100%; text-decoration: none;">
                                                     <div style="display: flex; align-items: center; gap: 12px;">
-                                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center;"><i class="fas fa-paper-plane"></i></div>
+                                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: #f8fafc; color: #E8674A; display: flex; align-items: center; justify-content: center;"><i class="fas fa-paper-plane"></i></div>
                                                         <span style="font-weight: 500; color: #1e293b; font-size: 0.95rem;">Share Message</span>
                                                     </div>
                                                     <i class="fas fa-chevron-right" style="color: #94a3b8; font-size: 0.8em;"></i>
@@ -167,7 +169,7 @@
                                                     @csrf
                                                     <button type="submit" class="message-action-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                                                         <div style="display: flex; align-items: center; gap: 12px;">
-                                                            <div style="width: 32px; height: 32px; border-radius: 8px; background: #fef3c7; color: #f59e0b; display: flex; align-items: center; justify-content: center;"><i class="fas fa-lock"></i></div>
+                                                            <div style="width: 32px; height: 32px; border-radius: 8px; background: #f8fafc; color: #E8674A; display: flex; align-items: center; justify-content: center;"><i class="fas fa-lock"></i></div>
                                                             <span style="font-weight: 500; color: #1e293b; font-size: 0.95rem;">{{ $msg->is_vaulted ? 'Unvault' : 'Vault' }}</span>
                                                         </div>
                                                         <i class="fas fa-chevron-right" style="color: #94a3b8; font-size: 0.8em;"></i>

@@ -28,8 +28,8 @@
     }
 
     .hub-card { 
-        background: #ffffff; 
-        border: 1px solid rgba(0,0,0,0.04); 
+        background: var(--card-bg, #ffffff); 
+        border: 1px solid var(--border-color, rgba(0,0,0,0.04)); 
         border-radius: 20px; 
         padding: 28px; 
         box-shadow: 0 10px 30px rgba(0,0,0,0.03); 
@@ -290,37 +290,6 @@
             <!-- Right Column -->
             <div style="display: flex; flex-direction: column; gap: 24px;">
 
-                {{-- Admin Dashboard Themes --}}
-                <div class="hub-card">
-                    <div class="hub-card-header">
-                        <div class="hub-card-icon" style="background: linear-gradient(135deg, #fce7f3, #fbcfe8); color: #db2777;">
-                            <i class="fas fa-palette"></i>
-                        </div>
-                        <div class="hub-card-header-text">
-                            <h4>Appearance & Themes</h4>
-                            <p>Personalize your dashboard experience across 3 exclusive palettes.</p>
-                        </div>
-                    </div>
-                    
-                    <form method="POST" action="{{ route('admin.privacy_theme') }}" id="theme-form">
-                        @csrf
-                        <input type="hidden" name="theme_preference" id="themeInput" value="{{ $adminSettings['theme_preference'] ?? 'theme-default' }}">
-                        <div class="theme-grid" style="margin-bottom: 24px;">
-                            @php $currentTheme = $adminSettings['theme_preference'] ?? 'theme-default'; @endphp
-                            <div class="theme-preview {{ $currentTheme === 'theme-default' ? 'active' : '' }}" data-theme="theme-default" style="background: linear-gradient(135deg, #6366f1, #3b82f6);">
-                                Indigo
-                            </div>
-                            <div class="theme-preview {{ $currentTheme === 'theme-forest' ? 'active' : '' }}" data-theme="theme-forest" style="background: linear-gradient(135deg, #10b981, #059669);">
-                                Emerald
-                            </div>
-                            <div class="theme-preview {{ $currentTheme === 'theme-crimson' ? 'active' : '' }}" data-theme="theme-crimson" style="background: linear-gradient(135deg, #f43f5e, #e11d48);">
-                                Crimson
-                            </div>
-                        </div>
-                        <button type="submit" class="btn-primary" style="width: 100%; background: linear-gradient(135deg, #ec4899, #db2777); border-color: transparent;"><i class="fas fa-paint-brush" style="margin-right: 8px;"></i> Apply Theme</button>
-                    </form>
-                </div>
-
                 {{-- Privacy Mode --}}
                 <div class="hub-card">
                     <div class="hub-card-header">
@@ -356,8 +325,8 @@
                         </div>
                     </div>
                     
-                    <div style="background: var(--bg-subtle, #f8fafc); padding: 24px; border-radius: 16px; border: 1px dashed rgba(0,0,0,0.1); text-align: center;">
-                        <div style="width: 64px; height: 64px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); color: #10b981; font-size: 1.5rem;">
+                    <div style="background: var(--bg-subtle, #f8fafc); padding: 24px; border-radius: 16px; border: 1px dashed var(--border-color, rgba(0,0,0,0.1)); text-align: center;">
+                        <div style="width: 64px; height: 64px; background: var(--inner-card-bg, #ffffff); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); color: #10b981; font-size: 1.5rem;">
                             <i class="fas fa-shield-alt"></i>
                         </div>
                         <h5 style="font-weight: 700; margin-bottom: 8px; color: var(--text-dark);">Fully Encrypted</h5>

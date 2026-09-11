@@ -19,7 +19,7 @@ class MediaFilesController extends Controller
     {
         $request->validate(['message_id' => 'required|integer']);
         $messageId = (int) $request->input('message_id');
-        WishMessages::where('user_id', Auth::id())->findOrFail($messageId);
+        $message = WishMessages::where('user_id', Auth::id())->findOrFail($messageId);
 
         $media = MediaFiles::where('user_id', Auth::id())
             ->where('wish_message_id', $messageId)
@@ -30,19 +30,44 @@ class MediaFilesController extends Controller
         $recipientImageName = null;
         $backgroundMusicName = null;
         $appleMusicUrl = null;
+        $recipientImageSize = null;
+        $backgroundMusicSize = null;
 
         if ($media) {
             if ($media->recipient_image) {
                 $recipientImageUrl = s3_url($media->recipient_image);
                 $recipientImageName = basename($media->recipient_image);
+                try {
+                    $disk = config('filesystems.media_disk');
+                    if (Storage::disk($disk)->exists($media->recipient_image)) {
+                        $bytes = Storage::disk($disk)->size($media->recipient_image);
+                        if ($bytes > 0) {
+                            $units = ['B', 'KB', 'MB', 'GB'];
+                            $i = (int) floor(log($bytes, 1024));
+                            $recipientImageSize = round($bytes / pow(1024, $i), 2) . ' ' . $units[$i];
+                        }
+                    }
+                } catch (\Throwable $e) {}
             }
             if ($media->background_music) {
                 if (str_starts_with($media->background_music, 'http')) {
                     $backgroundMusicUrl = $media->background_music;
                     $backgroundMusicName = 'Spotify Track';
+                    $backgroundMusicSize = 'Spotify Link';
                 } else {
                     $backgroundMusicUrl = s3_url($media->background_music);
                     $backgroundMusicName = basename($media->background_music);
+                    try {
+                        $disk = config('filesystems.media_disk');
+                        if (Storage::disk($disk)->exists($media->background_music)) {
+                            $bytes = Storage::disk($disk)->size($media->background_music);
+                            if ($bytes > 0) {
+                                $units = ['B', 'KB', 'MB', 'GB'];
+                                $i = (int) floor(log($bytes, 1024));
+                                $backgroundMusicSize = round($bytes / pow(1024, $i), 2) . ' ' . $units[$i];
+                            }
+                        }
+                    } catch (\Throwable $e) {}
                 }
             }
             if ($media->apple_music_url) {
@@ -53,9 +78,13 @@ class MediaFilesController extends Controller
         return response()->json([
             'recipient_image_url' => $recipientImageUrl,
             'recipient_image_name' => $recipientImageName,
+            'recipient_image_size' => $recipientImageSize,
             'background_music_url' => $backgroundMusicUrl,
             'background_music_name' => $backgroundMusicName,
+            'background_music_size' => $backgroundMusicSize,
             'apple_music_url' => $appleMusicUrl,
+            'message_title' => $message->title,
+            'receiving_date' => $message->receiving_date ? \Carbon\Carbon::parse($message->receiving_date)->format('F j, Y') : ($message->created_at ? $message->created_at->format('F j, Y') : null),
         ]);
     }
 
