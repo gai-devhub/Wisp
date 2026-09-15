@@ -4,86 +4,88 @@
 
 @section('content')
 <div class="content-section active" id="maintenance">
-    <div class="flex items-center gap-4 mb-6">
-        <h2 class="flex items-center gap-3 text-2xl font-bold text-slate-800 m-0">
-            <span class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center shadow-sm">
-                <i class="fas fa-tools opacity-90"></i>
+    {{-- Page Header --}}
+    <div class="admin-card-header-bar margin-bottom-8">
+        <h2 class="admin-page-title">
+            <span class="admin-title-icon-box">
+                <i class="fas fa-tools"></i>
             </span>
-            Maintenance & Cleanup
+            Maintenance &amp; Cleanup
         </h2>
     </div>
-
-    <p class="text-sm font-medium text-slate-500 mb-8">Manage system storage, clear caches, and clean up expired data.</p>
+    <p class="admin-card-text margin-bottom-24">
+        Manage system storage, clear caches, and clean up expired data.
+    </p>
 
     {{-- ROW 1: 2 CARDS (Database Stats & Storage Usage) --}}
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <div class="admin-system-grid-2">
         
         {{-- Database Stats --}}
-        <div class="db-card overflow-hidden flex flex-col shadow-sm border border-slate-200 bg-white" style="border-radius: 16px;">
-            <div class="px-6 py-5 border-b border-slate-200 bg-slate-50/50 flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
-                    <i class="fas fa-database text-sm"></i>
+        <div class="db-card admin-system-card">
+            <div class="admin-card-header">
+                <div class="admin-card-header-left">
+                    <i class="fas fa-database admin-card-header-icon"></i>
+                    <h3 class="admin-card-header-title">Database Stats</h3>
                 </div>
-                <h3 class="text-lg font-bold text-slate-800 m-0">Database Stats</h3>
             </div>
-            <div class="p-0 flex-1 bg-white">
-                <div class="px-6 py-4 flex justify-between items-center text-sm border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
-                    <span class="font-medium text-slate-500">Users</span>
-                    <strong class="font-bold text-slate-800">{{ number_format($stats['total_users'] ?? 0) }}</strong>
+            <div class="p-0 flex-1 flex-col">
+                <div class="storage-stat-row">
+                    <span class="text-muted font-500">Users</span>
+                    <strong class="text-dark font-700">{{ number_format($stats['total_users'] ?? 0) }}</strong>
                 </div>
-                <div class="px-6 py-4 flex justify-between items-center text-sm border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
-                    <span class="font-medium text-slate-500">Messages</span>
-                    <strong class="font-bold text-slate-800">{{ number_format($stats['total_messages'] ?? 0) }}</strong>
+                <div class="storage-stat-row">
+                    <span class="text-muted font-500">Messages</span>
+                    <strong class="text-dark font-700">{{ number_format($stats['total_messages'] ?? 0) }}</strong>
                 </div>
-                <div class="px-6 py-4 flex justify-between items-center text-sm border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
-                    <span class="font-medium text-slate-500">Message Views</span>
-                    <strong class="font-bold text-slate-800">{{ number_format($stats['total_views'] ?? 0) }}</strong>
+                <div class="storage-stat-row">
+                    <span class="text-muted font-500">Message Views</span>
+                    <strong class="text-dark font-700">{{ number_format($stats['total_views'] ?? 0) }}</strong>
                 </div>
-                <div class="px-6 py-4 flex justify-between items-center text-sm border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
-                    <span class="font-medium text-slate-500">Published</span>
-                    <strong class="font-bold text-slate-800">{{ number_format($stats['published_messages'] ?? 0) }}</strong>
+                <div class="storage-stat-row">
+                    <span class="text-muted font-500">Published</span>
+                    <strong class="text-dark font-700">{{ number_format($stats['published_messages'] ?? 0) }}</strong>
                 </div>
-                <div class="px-6 py-4 flex justify-between items-center text-sm border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
-                    <span class="font-medium text-slate-500">Expired Messages</span>
-                    <strong class="font-bold text-slate-800">{{ number_format($stats['expired_messages'] ?? 0) }}</strong>
+                <div class="storage-stat-row">
+                    <span class="text-muted font-500">Expired Messages</span>
+                    <strong class="text-dark font-700">{{ number_format($stats['expired_messages'] ?? 0) }}</strong>
                 </div>
-                <div class="px-6 py-4 flex justify-between items-center text-sm border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
-                    <span class="font-medium text-slate-500">Draft Messages</span>
-                    <strong class="font-bold text-slate-800">{{ number_format($stats['draft_messages'] ?? 0) }}</strong>
+                <div class="storage-stat-row border-none">
+                    <span class="text-muted font-500">Draft Messages</span>
+                    <strong class="text-dark font-700">{{ number_format($stats['draft_messages'] ?? 0) }}</strong>
                 </div>
             </div>
         </div>
 
         {{-- Storage Usage --}}
-        <div class="db-card overflow-hidden flex flex-col shadow-sm border border-slate-200 bg-white" style="border-radius: 16px;">
-            <div class="px-6 py-5 border-b border-slate-200 bg-slate-50/50 flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">
-                    <i class="fas fa-hdd text-sm"></i>
+        <div class="db-card admin-system-card">
+            <div class="admin-card-header">
+                <div class="admin-card-header-left">
+                    <i class="fas fa-hdd admin-card-header-icon"></i>
+                    <h3 class="admin-card-header-title">Storage Usage</h3>
                 </div>
-                <h3 class="text-lg font-bold text-slate-800 m-0">Storage Usage</h3>
             </div>
-            <div class="p-0 flex-1 bg-white flex flex-col">
-                <div class="px-6 py-4 flex justify-between items-center text-sm border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                    <span class="font-medium text-slate-500">Uploads</span>
-                    <strong class="font-semibold text-slate-700 font-mono text-[13px] bg-slate-100 border border-slate-200/60 px-2.5 py-1 rounded-md">{{ $storageStats['uploads_size'] ?? 'N/A' }}</strong>
+            <div class="p-0 flex-1 flex-col">
+                <div class="storage-stat-row">
+                    <span class="text-muted font-500">Uploads</span>
+                    <strong class="storage-code-badge">{{ $storageStats['uploads_size'] ?? 'N/A' }}</strong>
                 </div>
-                <div class="px-6 py-4 flex justify-between items-center text-sm border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                    <span class="font-medium text-slate-500">Backups</span>
-                    <strong class="font-semibold text-slate-700 font-mono text-[13px] bg-slate-100 border border-slate-200/60 px-2.5 py-1 rounded-md">{{ $storageStats['backups_size'] ?? 'N/A' }}</strong>
+                <div class="storage-stat-row">
+                    <span class="text-muted font-500">Backups</span>
+                    <strong class="storage-code-badge">{{ $storageStats['backups_size'] ?? 'N/A' }}</strong>
                 </div>
-                <div class="px-6 py-4 flex justify-between items-center text-sm border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                    <span class="font-medium text-slate-500">Logs</span>
-                    <strong class="font-semibold text-slate-700 font-mono text-[13px] bg-slate-100 border border-slate-200/60 px-2.5 py-1 rounded-md">{{ $storageStats['logs_size'] ?? 'N/A' }}</strong>
+                <div class="storage-stat-row">
+                    <span class="text-muted font-500">Logs</span>
+                    <strong class="storage-code-badge">{{ $storageStats['logs_size'] ?? 'N/A' }}</strong>
                 </div>
-                <div class="px-6 py-4 flex justify-between items-center text-sm border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                    <span class="font-medium text-slate-500">System Files</span>
-                    <strong class="font-semibold text-slate-700 font-mono text-[13px] bg-slate-100 border border-slate-200/60 px-2.5 py-1 rounded-md">{{ $storageStats['system_size'] ?? 'N/A' }}</strong>
+                <div class="storage-stat-row">
+                    <span class="text-muted font-500">System Files</span>
+                    <strong class="storage-code-badge">{{ $storageStats['system_size'] ?? 'N/A' }}</strong>
                 </div>
-                <div class="px-6 py-4 flex justify-between items-center text-sm bg-indigo-50/40 mt-auto border-t-2 border-indigo-100">
-                    <span class="font-bold text-indigo-900">Total Storage</span>
-                    <strong class="font-bold text-indigo-700 font-mono text-[14px] bg-indigo-100/60 px-2.5 py-1 rounded-md">{{ $storageStats['total_size'] ?? 'N/A' }}</strong>
+                <div class="storage-total-row">
+                    <span class="font-700 text-dark">Total Storage</span>
+                    <strong class="admin-github-badge">{{ $storageStats['total_size'] ?? 'N/A' }}</strong>
                 </div>
-                <div class="px-6 pb-5 pt-2 bg-indigo-50/40 flex flex-col gap-2 border-t border-indigo-50">
+                <div class="storage-bar-wrapper">
                     @php
                         $uploadsBytes = $storageStats['uploads_bytes'] ?? 0;
                         $backupsBytes = $storageStats['backups_bytes'] ?? 0;
@@ -100,54 +102,42 @@
                         $isAlmostFull = $overallPct >= 90;
                     @endphp
                     <!-- Segmented Storage Bar -->
-                    <div class="w-full bg-slate-200 rounded-full overflow-hidden flex" style="height: 14px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);">
+                    <div class="storage-segmented-bar">
                         @if($uploadsBytes > 0)
-                            <div class="h-full transition-all duration-500 hover:opacity-80 cursor-help" 
-                                 style="width: {{ max(1, $uploadsPct) }}%; background-color: #3b82f6;"
-                                 title="Uploads: {{ $storageStats['uploads_size'] }} ({{ round($uploadsPct, 1) }}% of used)">
-                            </div>
+                            <div class="bg-primary h-full" style="width: {{ max(1, $uploadsPct) }}%;" title="Uploads: {{ $storageStats['uploads_size'] }}"></div>
                         @endif
                         @if($backupsBytes > 0)
-                            <div class="h-full transition-all duration-500 hover:opacity-80 cursor-help" 
-                                 style="width: {{ max(1, $backupsPct) }}%; background-color: #10b981;"
-                                 title="Backups: {{ $storageStats['backups_size'] }} ({{ round($backupsPct, 1) }}% of used)">
-                            </div>
+                            <div class="bg-success h-full" style="width: {{ max(1, $backupsPct) }}%;" title="Backups: {{ $storageStats['backups_size'] }}"></div>
                         @endif
                         @if($logsBytes > 0)
-                            <div class="h-full transition-all duration-500 hover:opacity-80 cursor-help" 
-                                 style="width: {{ max(1, $logsPct) }}%; background-color: #f97316;"
-                                 title="Logs: {{ $storageStats['logs_size'] }} ({{ round($logsPct, 1) }}% of used)">
-                            </div>
+                            <div class="bg-warning h-full" style="width: {{ max(1, $logsPct) }}%;" title="Logs: {{ $storageStats['logs_size'] }}"></div>
                         @endif
                         @if($systemBytes > 0)
-                            <div class="h-full transition-all duration-500 hover:opacity-80 cursor-help" 
-                                 style="width: {{ max(1, $systemPct) }}%; background-color: #8b5cf6;"
-                                 title="System Files: {{ $storageStats['system_size'] }} ({{ round($systemPct, 1) }}% of used)">
-                            </div>
+                            <div class="bg-purple h-full" style="width: {{ max(1, $systemPct) }}%;" title="System Files: {{ $storageStats['system_size'] }}"></div>
                         @endif
                     </div>
                     
                     <!-- Segmented Legend -->
-                    <div class="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-[11px] font-semibold text-slate-500 justify-center">
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-2.5 h-2.5 rounded-full" style="background-color: #3b82f6;"></span>
+                    <div class="storage-legend-container">
+                        <div class="storage-legend-item">
+                            <span class="storage-legend-dot bg-primary"></span>
                             <span>Uploads</span>
                         </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-2.5 h-2.5 rounded-full" style="background-color: #10b981;"></span>
+                        <div class="storage-legend-item">
+                            <span class="storage-legend-dot bg-success"></span>
                             <span>Backups</span>
                         </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-2.5 h-2.5 rounded-full" style="background-color: #f97316;"></span>
+                        <div class="storage-legend-item">
+                            <span class="storage-legend-dot bg-warning"></span>
                             <span>Logs</span>
                         </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-2.5 h-2.5 rounded-full" style="background-color: #8b5cf6;"></span>
+                        <div class="storage-legend-item">
+                            <span class="storage-legend-dot bg-purple"></span>
                             <span>System</span>
                         </div>
                     </div>
 
-                    <div class="flex justify-between items-center text-xs font-semibold mt-2" style="color: {{ $isAlmostFull ? '#ef4444' : 'var(--text-muted, #64748b)' }};">
+                    <div class="storage-usage-footer {{ $isAlmostFull ? 'almost-full' : '' }}">
                         <span>{{ number_format($overallPct, 4) }}% Used</span>
                         <span>2.0 TB Limit</span>
                     </div>
@@ -157,101 +147,101 @@
     </div>
 
     {{-- ROW 2: 4 CARDS (Cleanup Tools Grid: 4 cards on 1 row) --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <div class="cleanup-grid">
         
         {{-- Tool 1: Clean Expired Messages --}}
-        <div class="db-card overflow-hidden flex flex-col p-6 bg-white shadow-sm border border-slate-200 justify-between" style="border-radius: 16px;">
+        <div class="db-card cleanup-card">
             <div>
-                <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-4">
-                    <i class="fas fa-broom text-sm"></i>
+                <div class="cleanup-icon-box">
+                    <i class="fas fa-broom"></i>
                 </div>
-                <strong class="block text-base font-bold text-slate-800 mb-1.5">Clean Expired Messages</strong>
-                <p class="text-xs font-medium text-slate-500 m-0 leading-relaxed mb-6">Mark expired messages and clean up their associated data.</p>
+                <strong class="cleanup-card-title">Clean Expired Messages</strong>
+                <p class="cleanup-card-desc">Mark expired messages and clean up their associated data.</p>
             </div>
-            <form method="POST" action="{{ route('admin.maintenance.cleanExpired') }}" onsubmit="event.preventDefault(); showAdminConfirm('Clean all expired messages? This cannot be undone.', () => this.submit());" class="m-0">
+            <form method="POST" action="{{ route('admin.maintenance.cleanExpired') }}" onsubmit="event.preventDefault(); showAdminConfirm('Clean all expired messages? This cannot be undone.', () => this.submit());">
                 @csrf
-                <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 hover:bg-amber-100 font-bold text-xs transition-all shadow-sm cursor-pointer">Clean Now</button>
+                <button type="submit" class="admin-btn-action-primary">Clean Now</button>
             </form>
         </div>
 
         {{-- Tool 2: Clear Application Cache --}}
-        <div class="db-card overflow-hidden flex flex-col p-6 bg-white shadow-sm border border-slate-200 justify-between" style="border-radius: 16px;">
+        <div class="db-card cleanup-card">
             <div>
-                <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-4">
-                    <i class="fas fa-bolt text-sm"></i>
+                <div class="cleanup-icon-box">
+                    <i class="fas fa-bolt"></i>
                 </div>
-                <strong class="block text-base font-bold text-slate-800 mb-1.5">Clear Application Cache</strong>
-                <p class="text-xs font-medium text-slate-500 m-0 leading-relaxed mb-6">Clear config, route, view, and application cache.</p>
+                <strong class="cleanup-card-title">Clear Application Cache</strong>
+                <p class="cleanup-card-desc">Clear config, route, view, and application cache.</p>
             </div>
-            <form method="POST" action="{{ route('admin.maintenance.clearCache') }}" class="m-0">
+            <form method="POST" action="{{ route('admin.maintenance.clearCache') }}">
                 @csrf
-                <button type="submit" class="w-full py-2.5 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700 hover:bg-indigo-100 font-bold text-xs transition-all shadow-sm cursor-pointer">Clear Cache</button>
+                <button type="submit" class="admin-btn-action-primary">Clear Cache</button>
             </form>
         </div>
 
         {{-- Tool 3: Clear Old Activity Logs --}}
-        <div class="db-card overflow-hidden flex flex-col p-6 bg-white shadow-sm border border-slate-200 justify-between" style="border-radius: 16px;">
+        <div class="db-card cleanup-card">
             <div>
-                <div class="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center mb-4">
-                    <i class="fas fa-trash-alt text-sm"></i>
+                <div class="cleanup-icon-box">
+                    <i class="fas fa-trash-alt"></i>
                 </div>
-                <strong class="block text-base font-bold text-slate-800 mb-1.5">Clear Old Activity Logs</strong>
-                <p class="text-xs font-medium text-slate-500 m-0 leading-relaxed mb-6">Remove activity logs older than 90 days.</p>
+                <strong class="cleanup-card-title">Clear Old Activity Logs</strong>
+                <p class="cleanup-card-desc">Remove activity logs older than 90 days.</p>
             </div>
-            <form method="POST" action="{{ route('admin.maintenance.cleanLogs') }}" onsubmit="event.preventDefault(); showAdminConfirm('Delete activity logs older than 90 days?', () => this.submit());" class="m-0">
+            <form method="POST" action="{{ route('admin.maintenance.cleanLogs') }}" onsubmit="event.preventDefault(); showAdminConfirm('Delete activity logs older than 90 days?', () => this.submit());">
                 @csrf
-                <button type="submit" class="w-full py-2.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 hover:bg-rose-100 font-bold text-xs transition-all shadow-sm cursor-pointer">Clean Logs</button>
+                <button type="submit" class="admin-btn-action-primary">Clean Logs</button>
             </form>
         </div>
 
         {{-- Tool 4: Optimize Application --}}
-        <div class="db-card overflow-hidden flex flex-col p-6 bg-white shadow-sm border border-slate-200 justify-between" style="border-radius: 16px;">
+        <div class="db-card cleanup-card">
             <div>
-                <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4">
-                    <i class="fas fa-rocket text-sm"></i>
+                <div class="cleanup-icon-box">
+                    <i class="fas fa-rocket"></i>
                 </div>
-                <strong class="block text-base font-bold text-slate-800 mb-1.5">Optimize Application</strong>
-                <p class="text-xs font-medium text-slate-500 m-0 leading-relaxed mb-6">Cache application bootstrap configuration, routes, and views.</p>
+                <strong class="cleanup-card-title">Optimize Application</strong>
+                <p class="cleanup-card-desc">Cache application bootstrap configuration, routes, and views.</p>
             </div>
-            <form method="POST" action="{{ route('admin.maintenance.optimize') }}" class="m-0">
+            <form method="POST" action="{{ route('admin.maintenance.optimize') }}">
                 @csrf
-                <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100 font-bold text-xs transition-all shadow-sm cursor-pointer">Optimize</button>
+                <button type="submit" class="admin-btn-action-primary">Optimize</button>
             </form>
         </div>
     </div>
 
     {{-- ROW 3: System Info --}}
-    <div class="db-card overflow-hidden flex flex-col shadow-sm border border-slate-200 bg-white mb-6" style="border-radius: 16px;">
-        <div class="px-6 py-5 border-b border-slate-200 bg-slate-50/50 flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center">
-                <i class="fas fa-info-circle text-sm"></i>
+    <div class="db-card margin-bottom-24">
+        <div class="admin-card-header">
+            <div class="admin-card-header-left">
+                <i class="fas fa-info-circle admin-card-header-icon"></i>
+                <h3 class="admin-card-header-title">System Info</h3>
             </div>
-            <h3 class="text-lg font-bold text-slate-800 m-0">System Info</h3>
         </div>
-        <div class="p-0 flex-1 bg-white grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-0 gap-x-6">
-            <div class="px-6 py-4 flex justify-between items-center text-sm border-b border-slate-100 transition-colors">
-                <span class="font-medium text-slate-500">PHP Version</span>
-                <strong class="font-semibold text-slate-700 font-mono bg-slate-100 border border-slate-200/60 px-2.5 py-1 rounded-md text-[12px]">{{ $systemInfo['php_version'] ?? phpversion() }}</strong>
+        <div class="system-info-grid">
+            <div class="system-info-item">
+                <span class="text-muted font-500">PHP Version</span>
+                <strong class="storage-code-badge">{{ $systemInfo['php_version'] ?? phpversion() }}</strong>
             </div>
-            <div class="px-6 py-4 flex justify-between items-center text-sm border-b border-slate-100 transition-colors">
-                <span class="font-medium text-slate-500">Laravel Version</span>
-                <strong class="font-semibold text-slate-700 font-mono bg-slate-100 border border-slate-200/60 px-2.5 py-1 rounded-md text-[12px]">{{ $systemInfo['laravel_version'] ?? app()->version() }}</strong>
+            <div class="system-info-item">
+                <span class="text-muted font-500">Laravel Version</span>
+                <strong class="storage-code-badge">{{ $systemInfo['laravel_version'] ?? app()->version() }}</strong>
             </div>
-            <div class="px-6 py-4 flex justify-between items-center text-sm border-b border-slate-100 transition-colors">
-                <span class="font-medium text-slate-500">Database</span>
-                <strong class="font-semibold text-slate-700 bg-slate-100 border border-slate-200/60 px-2.5 py-1 rounded-md text-[12px] uppercase tracking-wider">{{ $systemInfo['db_driver'] ?? 'N/A' }}</strong>
+            <div class="system-info-item">
+                <span class="text-muted font-500">Database</span>
+                <strong class="storage-code-badge uppercase">{{ $systemInfo['db_driver'] ?? 'N/A' }}</strong>
             </div>
-            <div class="px-6 py-4 flex justify-between items-center text-sm border-b border-slate-100 transition-colors">
-                <span class="font-medium text-slate-500">Server Software</span>
-                <strong class="font-semibold text-slate-700 text-[12px] font-mono bg-slate-100 border border-slate-200/60 px-2.5 py-1 rounded-md truncate max-w-[180px]" title="{{ $systemInfo['server_software'] ?? 'N/A' }}">{{ $systemInfo['server_software'] ?? 'N/A' }}</strong>
+            <div class="system-info-item">
+                <span class="text-muted font-500">Server Software</span>
+                <strong class="storage-code-badge text-ellipsis" title="{{ $systemInfo['server_software'] ?? 'N/A' }}">{{ $systemInfo['server_software'] ?? 'N/A' }}</strong>
             </div>
-            <div class="px-6 py-4 flex justify-between items-center text-sm border-b border-slate-100 transition-colors">
-                <span class="font-medium text-slate-500">Timezone</span>
-                <strong class="font-bold text-slate-800">{{ $systemSettings['timezone'] ?? 'UTC' }}</strong>
+            <div class="system-info-item">
+                <span class="text-muted font-500">Timezone</span>
+                <strong class="text-dark font-700">{{ $systemSettings['timezone'] ?? 'UTC' }}</strong>
             </div>
-            <div class="px-6 py-4 flex justify-between items-center text-sm border-b border-slate-100 transition-colors">
-                <span class="font-medium text-slate-500">Last Backup</span>
-                <strong class="font-bold text-slate-800">{{ $systemSettings['last_backup_at'] ? \Carbon\Carbon::parse($systemSettings['last_backup_at'])->diffForHumans() : 'Never' }}</strong>
+            <div class="system-info-item border-none">
+                <span class="text-muted font-500">Last Backup</span>
+                <strong class="text-dark font-700">{{ $systemSettings['last_backup_at'] ? \Carbon\Carbon::parse($systemSettings['last_backup_at'])->diffForHumans() : 'Never' }}</strong>
             </div>
         </div>
     </div>

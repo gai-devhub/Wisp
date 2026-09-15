@@ -155,7 +155,7 @@ class WishMessages extends Model
 
     public function getViewCountAttribute()
     {
-        return $this->views()->count();
+        return $this->views()->select('ip_address')->groupBy('ip_address')->get()->count();
     }
 
     public function getStatusAttribute()

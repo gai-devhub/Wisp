@@ -64,33 +64,33 @@
                                             <i class="fas fa-chevron-down d-none d-md-inline"></i>
                                             <i class="fas fa-ellipsis-v d-md-none"></i>
                                         </button>
-                                        <div class="message-actions-menu trash-actions-menu" style="display:none;">
+                                        <div class="message-actions-menu">
 
                                             {{-- Restore --}}
-                                            <form action="{{ route('user.lifecycle.restore', $msg->id) }}" method="POST" class="trash-action-form">
+                                            <form action="{{ route('user.lifecycle.restore', $msg->id) }}" method="POST" class="m-0">
                                                 @csrf
-                                                <button type="submit" class="trash-menu-item trash-menu-restore">
-                                                    <span class="trash-menu-icon" style="background: rgba(16,185,129,0.12); color: #10b981;">
-                                                        <i class="fas fa-undo"></i>
-                                                    </span>
-                                                    <span class="trash-menu-label">Restore</span>
-                                                    <i class="fas fa-chevron-right trash-menu-arrow"></i>
+                                                <button type="submit" class="message-action-item" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: #f8fafc; color: #E8674A; display: flex; align-items: center; justify-content: center;"><i class="fas fa-undo"></i></div>
+                                                        <span style="font-weight: 500; color: #1e293b; font-size: 0.95rem;">Restore</span>
+                                                    </div>
+                                                    <i class="fas fa-chevron-right" style="color: #94a3b8; font-size: 0.8em;"></i>
                                                 </button>
                                             </form>
 
-                                            <div class="trash-menu-divider"></div>
+                                            <div style="height: 1px; background: #f1f5f9; margin: 4px 0;"></div>
 
                                             {{-- Delete Permanently --}}
-                                            <form action="{{ route('user.lifecycle.force_delete', $msg->id) }}" method="POST" class="trash-action-form"
+                                            <form action="{{ route('user.lifecycle.force_delete', $msg->id) }}" method="POST" class="m-0"
                                                   onsubmit="return confirmFormSubmit(event, this, 'WARNING: This will permanently delete this message and cannot be undone!', 'confirm');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="trash-menu-item trash-menu-delete">
-                                                    <span class="trash-menu-icon" style="background: rgba(239,68,68,0.12); color: #ef4444;">
-                                                        <i class="fas fa-trash"></i>
-                                                    </span>
-                                                    <span class="trash-menu-label">Delete Permanently</span>
-                                                    <i class="fas fa-chevron-right trash-menu-arrow"></i>
+                                                <button type="submit" class="message-action-item message-action-delete" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                                        <div style="width: 32px; height: 32px; border-radius: 8px; background: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center;"><i class="fas fa-trash"></i></div>
+                                                        <span style="font-weight: 500; color: #ef4444; font-size: 0.95rem;">Delete Permanently</span>
+                                                    </div>
+                                                    <i class="fas fa-chevron-right" style="color: #fca5a5; font-size: 0.8em;"></i>
                                                 </button>
                                             </form>
 
@@ -107,88 +107,18 @@
     </div>
 </div>
 
-<style>
-.trash-card {
-    border: none;
-    border-radius: 16px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    overflow: visible;
-}
 
-/* Neat table headers without wrapping */
-.messages-table th {
-    white-space: nowrap !important;
-    word-break: keep-all !important;
-}
 
-/* Dropdown menu overrides for trash */
-.trash-actions-menu {
-    min-width: 220px;
-    padding: 8px;
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.13), 0 2px 8px rgba(0,0,0,0.07);
-    border: 1px solid #f1f5f9;
-}
-
-.trash-action-form {
-    display: block;
-    margin: 0;
-    padding: 0;
-}
-
-.trash-menu-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 10px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    text-align: left;
-    transition: background 0.15s;
-    font-size: 0.92rem;
-    font-weight: 500;
-    color: #1e293b;
-}
-.trash-menu-item:hover { background: #f8fafc; }
-.trash-menu-delete { color: #ef4444; }
-.trash-menu-delete:hover { background: rgba(239,68,68,0.06); }
-
-.trash-menu-icon {
-    width: 32px; height: 32px;
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.85rem;
-    flex-shrink: 0;
-}
-
-.trash-menu-label { flex: 1; }
-
-.trash-menu-arrow {
-    font-size: 0.7rem;
-    color: #94a3b8;
-}
-.trash-menu-delete .trash-menu-arrow { color: #ef4444; }
-
-.trash-menu-divider {
-    height: 1px;
-    background: #f1f5f9;
-    margin: 4px 0;
-}
-</style>
 
 <script>
-// Trash dropdown — reuse the same open/close pattern as my-messages
 function closeTrashDropdowns(exceptDropdown) {
-    document.querySelectorAll('.message-actions-dropdown.is-open').forEach(function(openDropdown) {
+    document.querySelectorAll('#trash .message-actions-dropdown.is-open').forEach(function(openDropdown) {
         if (exceptDropdown && openDropdown === exceptDropdown) return;
         openDropdown.classList.remove('is-open');
-        var trigger = openDropdown.querySelector('.message-actions-trigger');
-        if (trigger) trigger.setAttribute('aria-expanded', 'false');
-        var menu = openDropdown.querySelector('.message-actions-menu');
-        if (menu) menu.style.display = 'none';
+        var openTrigger = openDropdown.querySelector('.message-actions-trigger');
+        if (openTrigger) openTrigger.setAttribute('aria-expanded', 'false');
+        var openMenu = openDropdown.querySelector('.message-actions-menu');
+        if (openMenu) openMenu.style.display = 'none';
     });
 }
 
@@ -208,12 +138,11 @@ document.querySelectorAll('#trash .message-actions-trigger').forEach(function(tr
             if (!isOpen) {
                 var rect = trigger.getBoundingClientRect();
                 menu.style.position = 'fixed';
-                menu.style.top = (rect.bottom + 6) + 'px';
-                var menuWidth = 220;
-                var left = rect.right - menuWidth;
-                if (left < 8) left = 8;
-                menu.style.left = left + 'px';
-                menu.style.zIndex = 9999;
+                menu.style.top = (rect.bottom + 8) + 'px';
+                menu.style.left = 'auto';
+                menu.style.right = (window.innerWidth - rect.right) + 'px';
+                menu.style.zIndex = '9999';
+                menu.style.margin = '0';
             }
         }
     });

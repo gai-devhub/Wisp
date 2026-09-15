@@ -107,7 +107,7 @@
                                          </div>
                                          <div>
                                              <h3 class="accordion-title">Create Message</h3>
-                                             <p class="accordion-subtitle" id="messageBasicsSubtitle">The core details of your magical message.</p>
+                                             <p class="accordion-subtitle" id="messageBasicsSubtitle">The core details of your wish.</p>
                                          </div>
                                      </div>
                                      <div class="flex items-center gap-4">
@@ -189,7 +189,7 @@
                                          </div>
                                          <div>
                                              <h3 class="accordion-title">Add Media Files</h3>
-                                             <p class="accordion-subtitle" id="mediaSubtitle">Personalize how your message looks.</p>
+                                             <p class="accordion-subtitle" id="mediaSubtitle">Add images & audio to your wish.</p>
                                          </div>
                                      </div>
                                      <div class="flex items-center gap-4">
@@ -258,7 +258,7 @@
                                         </div>
                                         <div>
                                              <h3 class="accordion-title">Template & Appearance</h3>
-                                             <p class="accordion-subtitle" id="templateSubtitle">Select an option</p>
+                                             <p class="accordion-subtitle" id="templateSubtitle">Personalize your Wisp's appearance.</p>
                                         </div>
                                     </div>
                                     <div class="flex items-center gap-2">

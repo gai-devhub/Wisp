@@ -282,12 +282,19 @@ class UserController extends Controller
             ->get()
             ->keyBy('wish_message_id');
         $generatedLinks = GeneratedLinks::whereIn('wish_message_id', $messageIds)
+            ->with(['wishMessage' => function ($q) {
+                $q->withCount('views');
+            }])
             ->orderBy('updated_at', 'desc')
             ->paginate(20, ['*'], 'links_page', $linksPage);
 
         $dashboardStats = [
             'generated_links' => GeneratedLinks::whereIn('wish_message_id', $messageIds)->count(),
-            'total_views' => MessageViews::where('user_id', $userId)->count(),
+            'total_views' => MessageViews::where('user_id', $userId)
+                ->select('ip_address', 'wish_message_id')
+                ->groupBy('ip_address', 'wish_message_id')
+                ->get()
+                ->count(),
             'active_messages' => WishMessages::where('user_id', $userId)
                 ->where(function ($q) {
                     $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
@@ -540,7 +547,6 @@ class UserController extends Controller
             
             'control-center-security' => 'security.control-center-security',
             'vault' => 'security.vault',
-            'vault-auth' => 'security.vault-auth',
             
             'message-settings' => 'settings.message-settings',
             'user-settings' => 'settings.user-settings',
@@ -758,7 +764,11 @@ class UserController extends Controller
         
         $messageIds = $messages->pluck('id');
         $linksGenerated = \App\Models\GeneratedLinks::whereIn('wish_message_id', $messageIds)->count();
-        $totalViews = \App\Models\MessageViews::whereIn('wish_message_id', $messageIds)->count();
+        $totalViews = \App\Models\MessageViews::whereIn('wish_message_id', $messageIds)
+            ->select('ip_address', 'wish_message_id')
+            ->groupBy('ip_address', 'wish_message_id')
+            ->get()
+            ->count();
 
         return response()->json([
             'success' => true,

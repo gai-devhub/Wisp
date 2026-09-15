@@ -5,9 +5,11 @@
 @section('content')
 <div class="content-section active" id="dashboard">
     <!-- Header Section -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
-        <h2 style="font-weight: 700; color: var(--text); font-size: 1.6rem; margin: 0; display: flex; align-items: center; gap: 12px;">
-            <i class="fas fa-tachometer-alt text-primary" style="opacity: 0.9;"></i>
+<div class="content-section active" id="dashboard">
+    <!-- Header Section -->
+    <div class="admin-card-header-bar">
+        <h2 class="admin-page-title">
+            <i class="fas fa-tachometer-alt text-primary"></i>
             Dashboard Overview
         </h2>
     </div>
@@ -16,76 +18,66 @@
     <div class="stats-container">
         {{-- Stat Card 1 --}}
         <div class="stat-card">
-            <div class="stat-icon" style="background: rgba(232, 103, 74, 0.05); color: var(--primary);">
+            <div class="stat-icon bg-primary-soft text-primary">
                 <i class="fas fa-users text-xl"></i>
             </div>
             <div class="stat-info">
-                <h4 style="font-size:1.5rem; margin:0; line-height:1;">{{ number_format($stats['total_users'] ?? 0) }}</h4>
-                <p style="font-size:0.75rem; text-transform:uppercase; font-weight:700; margin-top:4px;">Total Users</p>
+                <h4>{{ number_format($stats['total_users'] ?? 0) }}</h4>
+                <p>Total Users</p>
             </div>
         </div>
         {{-- Stat Card 2 --}}
         <div class="stat-card">
-            <div class="stat-icon" style="background: rgba(232, 103, 74, 0.10); color: var(--primary);">
+            <div class="stat-icon bg-primary-soft text-primary">
                 <i class="fas fa-envelope text-xl"></i>
             </div>
             <div class="stat-info">
-                <h4 style="font-size:1.5rem; margin:0; line-height:1;">{{ number_format($stats['total_messages'] ?? 0) }}</h4>
-                <p style="font-size:0.75rem; text-transform:uppercase; font-weight:700; margin-top:4px;">Messages Created</p>
+                <h4>{{ number_format($stats['total_messages'] ?? 0) }}</h4>
+                <p>Messages Created</p>
             </div>
         </div>
         {{-- Stat Card 3 --}}
         <div class="stat-card">
-            <div class="stat-icon" style="background: rgba(232, 103, 74, 0.15); color: var(--primary);">
+            <div class="stat-icon bg-primary-soft text-primary">
                 <i class="fas fa-eye text-xl"></i>
             </div>
             <div class="stat-info">
-                <h4 style="font-size:1.5rem; margin:0; line-height:1;">{{ number_format($stats['total_views'] ?? 0) }}</h4>
-                <p style="font-size:0.75rem; text-transform:uppercase; font-weight:700; margin-top:4px;">Total Views</p>
+                <h4>{{ number_format($stats['total_views'] ?? 0) }}</h4>
+                <p>Total Views</p>
             </div>
         </div>
         {{-- Stat Card 4 --}}
         <div class="stat-card">
-            <div class="stat-icon" style="background: rgba(232, 103, 74, 0.20); color: var(--primary);">
+            <div class="stat-icon bg-primary-soft text-primary">
                 <i class="fas fa-exclamation-triangle text-xl"></i>
             </div>
             <div class="stat-info">
-                <h4 style="font-size:1.5rem; margin:0; line-height:1;">{{ number_format($stats['system_issues'] ?? 0) }}</h4>
-                <p style="font-size:0.75rem; text-transform:uppercase; font-weight:700; margin-top:4px;">System Issues</p>
-            </div>
-        </div>
-        {{-- Stat Card 5 --}}
-        <div class="stat-card">
-            <div class="stat-icon" style="background: rgba(232, 103, 74, 0.25); color: var(--primary);">
-                <i class="fas fa-coins text-xl"></i>
-            </div>
-            <div class="stat-info">
-                <h4 style="font-size:1.5rem; margin:0; line-height:1;">${{ number_format($stats['total_income'] ?? 0, 2) }}</h4>
-                <p style="font-size:0.75rem; text-transform:uppercase; font-weight:700; margin-top:4px;">All Income</p>
+                <h4>{{ number_format($stats['system_issues'] ?? 0) }}</h4>
+                <p>System Issues</p>
             </div>
         </div>
     </div>
 
     {{-- Main Grid --}}
-    <div class="db-main-grid" style="grid-template-columns: 1fr 380px;">
+    <div class="db-main-grid">
         {{-- Left Col --}}
         <div class="db-col-left">
             {{-- Views Chart --}}
             <div class="db-card">
                 <div class="db-card-header">
                     <h3 class="db-card-title">Views Activity</h3>
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <div class="db-chart-filters" style="display:flex; gap:4px; background:#f1f5f9; border:1px solid #e2e8f0; border-radius:10px; padding:3px;">
-                            <button class="db-filter-btn" data-period="day" style="background:none; border:none; font-size:0.75rem; font-weight:600; color:#94a3b8; padding:4px 12px; border-radius:7px; cursor:pointer;">Day</button>
-                            <button class="db-filter-btn active" data-period="week" style="background:#ffffff; border:none; font-size:0.75rem; font-weight:600; color:#1e293b; padding:4px 12px; border-radius:7px; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.08);">Week</button>
-                            <button class="db-filter-btn" data-period="month" style="background:none; border:none; font-size:0.75rem; font-weight:600; color:#94a3b8; padding:4px 12px; border-radius:7px; cursor:pointer;">Month</button>
+                    <div class="db-card-header-actions">
+                        <div class="db-chart-filters">
+                            <button class="db-filter-btn" data-period="day">Day</button>
+                            <button class="db-filter-btn active" data-period="week">Week</button>
+                            <button class="db-filter-btn" data-period="month">Month</button>
                         </div>
-                        <a href="{{ route('admin.page') }}" id="adminDashboardRefresh" style="color:var(--primary); transition:0.2s;" title="Refresh data">
+                        <a href="{{ route('admin.page') }}" id="adminDashboardRefresh" class="text-primary transition-200" title="Refresh data">
                             <i class="fas fa-sync-alt"></i>
                         </a>
                     </div>
                 </div>
-                <div class="db-chart-area" style="height: 300px; padding: 20px;">
+                <div class="db-chart-area">
                     <canvas id="dashboardViewsChart"></canvas>
                 </div>
             </div>
@@ -108,21 +100,21 @@
                         <div class="db-donut-legend">
                             <div class="db-legend-item">
                                 <div class="db-legend-label-row">
-                                    <span class="db-legend-dot" style="background:rgba(232, 103, 74, 1.0);"></span>
+                                    <span class="db-legend-dot bg-primary"></span>
                                     <span class="db-legend-name">Published</span>
                                 </div>
                                 <div class="db-legend-val">{{ number_format($stats['published_messages'] ?? 0) }}</div>
                             </div>
                             <div class="db-legend-item">
                                 <div class="db-legend-label-row">
-                                    <span class="db-legend-dot" style="background:rgba(232, 103, 74, 0.4);"></span>
+                                    <span class="db-legend-dot bg-primary-soft"></span>
                                     <span class="db-legend-name">Draft</span>
                                 </div>
                                 <div class="db-legend-val">{{ number_format($stats['draft_messages'] ?? 0) }}</div>
                             </div>
                             <div class="db-legend-item">
                                 <div class="db-legend-label-row">
-                                    <span class="db-legend-dot" style="background:rgba(232, 103, 74, 0.7);"></span>
+                                    <span class="db-legend-dot bg-warning"></span>
                                     <span class="db-legend-name">Expired</span>
                                 </div>
                                 <div class="db-legend-val">{{ number_format($stats['expired_messages'] ?? 0) }}</div>
@@ -147,14 +139,14 @@
                         <div class="db-donut-legend">
                             <div class="db-legend-item">
                                 <div class="db-legend-label-row">
-                                    <span class="db-legend-dot" style="background:rgba(232, 103, 74, 0.8);"></span>
+                                    <span class="db-legend-dot bg-primary"></span>
                                     <span class="db-legend-name">Media Files</span>
                                 </div>
                                 <div class="db-legend-val">{{ number_format($stats['total_media'] ?? 0) }}</div>
                             </div>
                             <div class="db-legend-item">
                                 <div class="db-legend-label-row">
-                                    <span class="db-legend-dot" style="background:rgba(232, 103, 74, 0.4);"></span>
+                                    <span class="db-legend-dot bg-primary-soft"></span>
                                     <span class="db-legend-name">AI Chats</span>
                                 </div>
                                 <div class="db-legend-val">{{ number_format($stats['total_ai'] ?? 0) }}</div>
@@ -168,33 +160,33 @@
         {{-- Right Col --}}
         <div class="db-col-right">
             {{-- Calendar --}}
-            <div class="db-card" style="padding: 24px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
-                    <button id="cal-prev" style="width:32px; height:32px; border-radius:8px; border:1px solid var(--border); background:var(--bg); cursor:pointer;"><i class="fas fa-chevron-left text-xs"></i></button>
-                    <span id="cal-month" style="font-weight:700; font-size:1rem; color:var(--text);">{{ date('F Y') }}</span>
-                    <button id="cal-next" style="width:32px; height:32px; border-radius:8px; border:1px solid var(--border); background:var(--bg); cursor:pointer;"><i class="fas fa-chevron-right text-xs"></i></button>
+            <div class="db-card calendar-card">
+                <div class="calendar-header-bar">
+                    <button id="cal-prev" class="cal-nav-btn" type="button"><i class="fas fa-chevron-left"></i></button>
+                    <span id="cal-month" class="cal-month-title">{{ date('F Y') }}</span>
+                    <button id="cal-next" class="cal-nav-btn" type="button"><i class="fas fa-chevron-right"></i></button>
                 </div>
                 
-                <div style="display:grid; grid-template-columns:repeat(7,1fr); text-align:center; margin-bottom:8px;">
-                    <div style="font-size:0.68rem; font-weight:700; text-transform:uppercase; color:var(--text-muted); padding:4px 0;">Mo</div>
-                    <div style="font-size:0.68rem; font-weight:700; text-transform:uppercase; color:var(--text-muted); padding:4px 0;">Tu</div>
-                    <div style="font-size:0.68rem; font-weight:700; text-transform:uppercase; color:var(--text-muted); padding:4px 0;">We</div>
-                    <div style="font-size:0.68rem; font-weight:700; text-transform:uppercase; color:var(--text-muted); padding:4px 0;">Th</div>
-                    <div style="font-size:0.68rem; font-weight:700; text-transform:uppercase; color:var(--text-muted); padding:4px 0;">Fr</div>
-                    <div style="font-size:0.68rem; font-weight:700; text-transform:uppercase; color:var(--text-muted); padding:4px 0;">Sa</div>
-                    <div style="font-size:0.68rem; font-weight:700; text-transform:uppercase; color:var(--text-muted); padding:4px 0;">Su</div>
+                <div class="calendar-week-header">
+                    <div class="calendar-week-day">MO</div>
+                    <div class="calendar-week-day">TU</div>
+                    <div class="calendar-week-day">WE</div>
+                    <div class="calendar-week-day">TH</div>
+                    <div class="calendar-week-day">FR</div>
+                    <div class="calendar-week-day">SA</div>
+                    <div class="calendar-week-day">SU</div>
                 </div>
 
-                <div id="calendar-days" style="display:grid; grid-template-columns:repeat(7,1fr); gap:4px;"></div>
+                <div id="calendar-days" class="calendar-days-container"></div>
 
                 {{-- Messages Popup Modal --}}
-                <div id="messagesModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
-                    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 overflow-hidden transform scale-95 transition-transform duration-300 relative">
-                        <div class="flex items-center justify-between p-5 border-b border-slate-100">
-                            <h3 id="messagesModalTitle" class="text-lg font-bold text-slate-800 m-0">Messages for Date</h3>
-                            <button type="button" class="border-0 bg-transparent text-xl cursor-pointer text-slate-400 hover:text-red-500 leading-none" onclick="closeMessagesModal()">&times;</button>
+                <div id="messagesModal" class="admin-modal transition-all">
+                    <div class="admin-modal-content max-w-lg transition-all">
+                        <div class="admin-modal-header">
+                            <h3 id="messagesModalTitle" class="admin-modal-title">Messages for Date</h3>
+                            <button type="button" class="admin-modal-close" onclick="closeMessagesModal()">&times;</button>
                         </div>
-                        <div id="messagesModalContent" class="p-5 max-h-[60vh] overflow-y-auto bg-slate-50">
+                        <div id="messagesModalContent" class="admin-modal-body bg-subtle">
                             <!-- Messages will be injected here -->
                         </div>
                     </div>
@@ -202,98 +194,37 @@
             </div>
 
             {{-- Recent Activity --}}
-            <div class="db-card">
-                <div class="db-card-header" style="border-bottom:1px solid var(--border); padding-bottom:16px;">
+            <div class="db-card recent-activity-card">
+                <div class="db-card-header">
                     <h3 class="db-card-title">Recent Activity</h3>
                 </div>
-                <div style="padding: 0;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <div class="recent-activity-body">
+                    <table class="recent-activity-table">
                         <tbody>
                             @forelse(array_slice($recentActivity ?? [], 0, 5) as $a)
-                                <tr style="border-bottom: 1px solid var(--border);">
-                                    <td style="padding: 12px 20px;">
-                                        <div style="font-weight: 600; font-size: 0.85rem; color: var(--text);">{{ $a['user'] ?? '-' }}</div>
-                                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">{{ $a['activity'] ?? '-' }}</div>
+                                <tr>
+                                    <td>
+                                        <div class="ra-user-name">{{ $a['user'] ?? '-' }}</div>
+                                        <div class="ra-activity-desc">{{ strtoupper($a['activity'] ?? '-') }}</div>
                                     </td>
-                                    <td style="padding: 12px 20px; text-align: right; font-size: 0.75rem; color: var(--text-muted); white-space: nowrap;">
+                                    <td class="ra-time-col">
                                         {{ $a['time'] ?? '-' }}
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="2" style="padding: 24px; text-align: center; color: var(--text-muted); font-size: 0.85rem;">No activity yet.</td>
+                                    <td colspan="2" class="admin-table-empty">No activity yet.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
-                <div style="padding: 16px; border-top: 1px solid var(--border); text-align: center;">
-                    <a href="{{ route('admin.logs.page') }}" style="display:block; padding:8px 0; background:rgba(99,102,241,0.1); color:var(--primary); font-weight:600; font-size:0.85rem; border-radius:8px; text-decoration:none; transition:0.2s;">View All Logs</a>
+                <div class="recent-activity-footer">
+                    <a href="{{ route('admin.logs.page') }}" class="ra-view-btn">View All Logs</a>
                 </div>
             </div>
         </div>
     </div>
-
-    <style>
-        /* Calendar Days custom classes */
-        .cal-day {
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.15s;
-            border: 1px solid transparent;
-        }
-        .cal-day:hover {
-            background-color: var(--bg-subtle, #f1f5f9);
-            border-color: var(--border);
-        }
-        .cal-day.today {
-            background-color: var(--primary, #F28C76);
-            color: #ffffff;
-            font-weight: 700;
-            box-shadow: 0 2px 6px rgba(232, 103, 74, 0.4);
-        }
-        .cal-day.selected {
-            background-color: var(--primary, #F28C76);
-            color: #ffffff;
-            box-shadow: 0 2px 6px rgba(232, 103, 74, 0.4);
-        }
-        .db-event-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border);
-        }
-        .db-event-item:last-child {
-            border-bottom: none;
-        }
-        .db-event-dot {
-            width: 3px;
-            background-color: var(--text);
-            border-radius: 2px;
-            flex-shrink: 0;
-            align-self: stretch;
-            min-height: 16px;
-        }
-        .db-event-name {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text);
-            line-height: 1.3;
-        }
-        .db-event-time {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-    </style>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -340,48 +271,64 @@
             });
         }
 
-        // Render Views Chart
+        // Render Views Chart (matching user dashboard style)
+        var BAR_COLORS = [
+            '#F8D2C8', '#F4B9A9', '#F0A08B', '#EC876D', 
+            '#F28C76', '#D15D43', '#BA523B', '#A24834'
+        ];
+
+        function buildBarColors(count) {
+            var colors = [];
+            for (var i = 0; i < count; i++) {
+                colors.push(BAR_COLORS[i % BAR_COLORS.length]);
+            }
+            return colors;
+        }
+
         var viewsChartInstance = null;
         function renderViewsChart(data) {
+            if (data && data.data) { data = data.data; }
             var chartEl = document.getElementById('dashboardViewsChart');
-            if (!chartEl) return;
+            if (!chartEl || typeof Chart === 'undefined') return;
+
             if (viewsChartInstance) {
                 viewsChartInstance.destroy();
+                viewsChartInstance = null;
             }
-            var labels = data.map(d => d.label);
-            var counts = data.map(d => d.count);
-            
-            var ctx = chartEl.getContext('2d');
-            var gradient = ctx.createLinearGradient(0, 0, 0, 300);
-            gradient.addColorStop(0, 'rgba(232, 103, 74, 0.25)');
-            gradient.addColorStop(1, 'rgba(232, 103, 74, 0.0)');
+
+            var labels = data.map(function(d) { return d.label; });
+            var counts = data.map(function(d) { return d.count; });
+            var colors = buildBarColors(counts.length);
+            var maxVal = Math.max.apply(null, counts) || 1;
+
+            var bgColors = counts.map(function(c, i) {
+                return c >= maxVal ? colors[i] : colors[i] + 'bb';
+            });
 
             viewsChartInstance = new Chart(chartEl, {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Views',
                         data: counts,
-                        borderColor: '#F28C76',
-                        backgroundColor: gradient,
-                        pointBackgroundColor: '#ffffff',
-                        pointBorderColor: '#F28C76',
-                        pointBorderWidth: 2,
-                        pointRadius: 4,
-                        tension: 0.35,
-                        fill: true
+                        backgroundColor: bgColors,
+                        borderRadius: { topLeft: 6, topRight: 6 },
+                        borderSkipped: false,
+                        minBarLength: 6,
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.75
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     animation: { duration: 400 },
-                    layout: { padding: { top: 12, bottom: 4, left: 6, right: 6 } },
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: 'rgba(15,23,42,0.9)',
+                            backgroundColor: '#1e293b',
+                            titleColor: '#94a3b8',
+                            bodyColor: '#ffffff',
                             padding: 10,
                             cornerRadius: 8,
                             callbacks: {
@@ -395,8 +342,8 @@
                         y: {
                             beginAtZero: true,
                             grace: '10%',
-                            ticks: { color: '#94a3b8' },
-                            grid: { color: 'rgba(148,163,184,0.18)' },
+                            ticks: { display: false },
+                            grid: { display: false },
                             border: { display: false }
                         },
                         x: {
@@ -485,6 +432,7 @@
 
         // Calendar Logic
         let currentDate = new Date();
+        let selectedDayNum = null;
         const calMonth = document.getElementById('cal-month');
         const calDays = document.getElementById('calendar-days');
         const prevBtn = document.getElementById('cal-prev');
@@ -505,46 +453,71 @@
 
                 const today = new Date();
 
-                for (let i = 0; i < startOffset; i++) {
-                    const emptyDiv = document.createElement('div');
-                    calDays.appendChild(emptyDiv);
-                }
+                fetch('{{ route("admin.api.month_message_dates") }}?year=' + year + '&month=' + (month + 1))
+                    .then(res => res.json())
+                    .then(activeDays => {
+                        buildDaysGrid(activeDays || []);
+                    })
+                    .catch(() => {
+                        buildDaysGrid([]);
+                    });
 
-                for (let i = 1; i <= daysInMonth; i++) {
-                    const dayDiv = document.createElement('div');
-                    dayDiv.innerText = i;
-                    dayDiv.classList.add('cal-day');
+                function buildDaysGrid(activeDays) {
+                    calDays.innerHTML = '';
 
-                    const isToday = (i === today.getDate() && month === today.getMonth() && year === today.getFullYear());
-                    if (isToday) {
-                        dayDiv.classList.add('today');
+                    for (let i = 0; i < startOffset; i++) {
+                        const emptyDiv = document.createElement('div');
+                        emptyDiv.classList.add('cal-day-empty');
+                        calDays.appendChild(emptyDiv);
                     }
 
-                    dayDiv.onclick = () => {
-                        // Remove selected from all days, restore today highlight
-                        document.querySelectorAll('#calendar-days .cal-day').forEach(d => {
-                            d.classList.remove('selected');
-                            const dayNum = parseInt(d.innerText);
-                            if (year === today.getFullYear() && month === today.getMonth() && dayNum === today.getDate()) {
-                                d.classList.add('today');
-                            } else {
-                                d.classList.remove('today');
-                            }
-                        });
-                        // Mark this day as selected (today stays highlighted too)
-                        dayDiv.classList.add('selected');
-                        fetchMessagesForDate(year, month, i);
-                    };
+                    for (let i = 1; i <= daysInMonth; i++) {
+                        const dayDiv = document.createElement('div');
+                        dayDiv.classList.add('cal-day');
 
-                    calDays.appendChild(dayDiv);
+                        const isToday = (i === today.getDate() && month === today.getMonth() && year === today.getFullYear());
+                        const isSelected = (selectedDayNum !== null && i === selectedDayNum && month === currentDate.getMonth() && year === currentDate.getFullYear());
+                        const hasMessage = Array.isArray(activeDays) && activeDays.includes(i);
+
+                        if (isToday) {
+                            dayDiv.classList.add('today');
+                        }
+
+                        if (isSelected && !isToday) {
+                            dayDiv.classList.add('selected');
+                        }
+
+                        const numSpan = document.createElement('span');
+                        numSpan.innerText = i;
+                        dayDiv.appendChild(numSpan);
+
+                        if (hasMessage) {
+                            const dotSpan = document.createElement('span');
+                            dotSpan.classList.add('cal-day-dot');
+                            dayDiv.appendChild(dotSpan);
+                        }
+
+                        dayDiv.onclick = () => {
+                            selectedDayNum = i;
+                            document.querySelectorAll('#calendar-days .cal-day').forEach(d => {
+                                d.classList.remove('selected');
+                            });
+                            if (!dayDiv.classList.contains('today')) {
+                                dayDiv.classList.add('selected');
+                            }
+                            fetchMessagesForDate(year, month, i);
+                        };
+
+                        calDays.appendChild(dayDiv);
+                    }
                 }
             }
 
             window.closeMessagesModal = function() {
                 const modal = document.getElementById('messagesModal');
-                modal.classList.add('opacity-0');
-                modal.children[0].classList.add('scale-95');
-                setTimeout(() => modal.classList.add('hidden'), 300);
+                modal.style.opacity = '0';
+                modal.children[0].style.transform = 'scale(0.95)';
+                setTimeout(() => modal.classList.remove('active'), 300);
             };
 
             function fetchMessagesForDate(year, month, day) {
@@ -555,12 +528,13 @@
                 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
                 title.innerText = 'Messages on ' + monthNames[month] + ' ' + day + ', ' + year;
                 
-                content.innerHTML = '<div class="text-center text-slate-500 py-8"><i class="fas fa-spinner fa-spin text-2xl mb-3"></i><p>Loading messages...</p></div>';
+                content.innerHTML = '<div class="modal-loading-box"><i class="fas fa-spinner fa-spin modal-loading-spinner"></i><p style="margin:0;">Loading messages...</p></div>';
                 
-                modal.classList.remove('hidden');
+                modal.classList.add('active');
+                modal.style.opacity = '0';
                 setTimeout(() => {
-                    modal.classList.remove('opacity-0');
-                    modal.children[0].classList.remove('scale-95');
+                    modal.style.opacity = '1';
+                    modal.children[0].style.transform = 'scale(1)';
                 }, 10);
                 
                 const dateStr = year + '-' + (month+1).toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
@@ -568,33 +542,33 @@
                     .then(res => res.json())
                     .then(data => {
                         if (!data || data.length === 0) {
-                            content.innerHTML = '<div class="text-center text-slate-500 py-8"><div class="text-4xl mb-3 opacity-50">📭</div><p>No messages created on this day.</p></div>';
+                            content.innerHTML = '<div class="modal-empty-box"><div class="modal-empty-icon">📭</div><p style="margin:0;">No messages created on this day.</p></div>';
                             return;
                         }
 
                         let html = '<div>';
                         data.forEach(msg => {
-                            let statusColor = msg.status === 'active' || msg.status === 'published' ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 
-                                              (msg.status === 'draft' ? 'bg-amber-50 text-amber-600 border border-amber-200' : 'bg-slate-50 text-slate-600 border border-slate-200');
+                            let statusClass = msg.status === 'active' || msg.status === 'published' ? 'modal-status-published' : 
+                                              (msg.status === 'draft' ? 'modal-status-draft' : 'modal-status-default');
                                               
                             html += `
-                                <div class="bg-white border border-slate-100 p-4 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 group relative mb-3 last:mb-0">
-                                    <div class="flex justify-between items-start mb-3">
-                                        <div class="flex-1 min-w-0 pr-4">
-                                            <h4 class="font-bold text-slate-800 m-0 truncate text-base group-hover:text-primary transition-colors">${msg.title || 'Untitled'}</h4>
+                                <div class="modal-msg-item">
+                                    <div class="modal-msg-header">
+                                        <div style="flex:1; min-width:0; padding-right:16px;">
+                                            <h4 class="modal-msg-title">${msg.title || 'Untitled'}</h4>
                                         </div>
-                                        <span class="text-[0.65rem] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider flex-shrink-0 ${statusColor}">${msg.status}</span>
+                                        <span class="modal-msg-badge ${statusClass}">${msg.status}</span>
                                     </div>
-                                    <div class="flex items-center justify-between border-t border-slate-50 pt-3 mt-1">
-                                        <div class="flex items-center gap-3">
-                                            <div class="flex items-center gap-1.5 text-xs font-medium text-slate-500 bg-slate-50 px-2 py-1 rounded-md">
-                                                <i class="fas fa-user text-slate-400"></i> <span class="truncate max-w-[100px]">${msg.user}</span>
+                                    <div class="modal-msg-footer">
+                                        <div style="display:flex; align-items:center; gap:12px;">
+                                            <div class="modal-msg-meta">
+                                                <i class="fas fa-user text-muted"></i> <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100px;">${msg.user}</span>
                                             </div>
-                                            <div class="flex items-center gap-1.5 text-xs font-medium text-slate-500 bg-slate-50 px-2 py-1 rounded-md">
-                                                <i class="fas fa-clock text-slate-400"></i> ${msg.time}
+                                            <div class="modal-msg-meta">
+                                                <i class="fas fa-clock text-muted"></i> ${msg.time}
                                             </div>
                                         </div>
-                                        <a href="${msg.url}" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 hover:text-indigo-700 px-3 py-1.5 rounded-lg transition-colors" style="text-decoration:none;">
+                                        <a href="${msg.url}" target="_blank" class="modal-msg-link">
                                             <i class="fas fa-external-link-alt"></i> View Message
                                         </a>
                                     </div>
@@ -605,7 +579,7 @@
                         content.innerHTML = html;
                     })
                     .catch(err => {
-                        content.innerHTML = '<div class="text-center text-red-500 py-8"><i class="fas fa-exclamation-triangle text-2xl mb-3"></i><p>Error loading messages.</p></div>';
+                        content.innerHTML = '<div class="modal-loading-box text-danger"><i class="fas fa-exclamation-triangle modal-loading-spinner"></i><p style="margin:0;">Error loading messages.</p></div>';
                     });
             }
 

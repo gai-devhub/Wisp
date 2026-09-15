@@ -18,7 +18,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
             'systemOnline' => \App\Http\Middleware\SystemOnline::class,
             'require.passcode' => \App\Http\Middleware\RequirePasscode::class,
-            'billing' => \App\Http\Middleware\EnsureSubscriptionIsActive::class,
         ]);
         
         $middleware->trustProxies(at: '*');

@@ -77,7 +77,7 @@
                 <!-- Notification Preferences -->
                 <div class="hub-card">
                     <div class="hub-card-header">
-                        <div class="hub-card-icon icon-bg-emerald">
+                        <div class="hub-card-icon icon-bg-indigo">
                             <i class="fas fa-bell"></i>
                         </div>
                         <div class="hub-card-header-text">
@@ -119,7 +119,7 @@
                 <!-- Security / 2FA -->
                 <div class="hub-card">
                     <div class="hub-card-header">
-                        <div class="hub-card-icon icon-bg-amber">
+                        <div class="hub-card-icon icon-bg-indigo">
                             <i class="fas fa-shield-alt"></i>
                         </div>
                         <div class="hub-card-header-text">
@@ -181,7 +181,7 @@
 
                 <div class="hub-card">
                     <div class="hub-card-header">
-                        <div class="hub-card-icon icon-bg-pink">
+                        <div class="hub-card-icon icon-bg-indigo">
                             <i class="fas fa-database"></i>
                         </div>
                         <div class="hub-card-header-text">
@@ -222,7 +222,7 @@
                 @if($enableUpdates)
                 <div class="hub-card" id="system-update-card">
                     <div class="hub-card-header">
-                        <div class="hub-card-icon icon-bg-blue">
+                        <div class="hub-card-icon icon-bg-indigo">
                             <i class="fas fa-sync-alt"></i>
                         </div>
                         <div class="hub-card-header-text">

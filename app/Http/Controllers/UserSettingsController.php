@@ -293,6 +293,48 @@ class UserSettingsController extends Controller
         ]);
     }
 
+    public function vaultPinDisplay(Request $request)
+    {
+        $settings = UserSettings::where('user_id', $request->user()->id)->first();
+
+        return response()->json([
+            'success' => true,
+            'maskedVaultPin' => $settings?->masked_vault_pin ?? '',
+        ]);
+    }
+
+    /**
+     * Verify a user's Vault PIN without exposing the stored value to the client.
+     */
+    public function verifyVaultPin(Request $request)
+    {
+        $request->validate(['pin' => 'required|string|min:4|max:6']);
+
+        $settings = UserSettings::where('user_id', $request->user()->id)->first();
+        if (!$settings || !$settings->vault_pin) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Vault PIN is not configured.',
+            ], 422);
+        }
+
+        try {
+            $storedPin = \Illuminate\Support\Facades\Crypt::decryptString($settings->vault_pin);
+            $isCorrect = hash_equals($storedPin, $request->input('pin'));
+        } catch (\Exception $e) {
+            $isCorrect = Hash::check($request->input('pin'), $settings->vault_pin);
+        }
+
+        if (!$isCorrect) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Incorrect Vault PIN.',
+            ], 422);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
     /**
      * API endpoint to update user settings.
      */
@@ -314,13 +356,21 @@ class UserSettingsController extends Controller
             $settings->login_passcode = \Illuminate\Support\Facades\Hash::make($request->input('appLockPasscode'));
         }
 
+        $vaultPin = $request->input('vault_pin', $request->input('globalVaultPin'));
+        if ($vaultPin !== null && $vaultPin !== '') {
+            $request->validate([
+                'vault_pin' => 'nullable|string|min:4|max:6',
+                'globalVaultPin' => 'nullable|string|min:4|max:6',
+            ]);
+            $settings->vault_pin = \Illuminate\Support\Facades\Crypt::encryptString($vaultPin);
+        }
+
         // Fill any standard settings if they exist in the request
         $settings->fill($request->only([
             'page_expiry',
             'page_view_alerts',
             'whatsapp_notifications',
             'auto_delete_expired',
-            'vault_pin',
             'auto_archive_days',
             'privacy_blur_enabled',
             'theme_preference',
@@ -332,5 +382,66 @@ class UserSettingsController extends Controller
             'success' => true,
             'settings' => $settings
         ]);
+    }
+
+    /**
+     * Update all message settings and lifecycle rules at once.
+     */
+    public function updateAllMessageSettings(Request $request)
+    {
+        $vaultPinInput = $request->input('vault_pin');
+        $hasStars = $vaultPinInput && str_contains($vaultPinInput, '*');
+
+        $rules = [
+            'page_expiry'       => 'required|integer|min:1|max:8760',
+            'auto_delete'       => 'required|in:immediately,1_hour,1_day,1_week,1_month,2_months,6_months,never',
+            'auto_archive_days' => 'nullable|integer|min:1',
+        ];
+
+        if ($request->filled('vault_pin') && !$hasStars) {
+            $rules['vault_pin'] = 'required|string|min:4|max:6';
+        }
+
+        $request->validate($rules);
+
+        $settings = UserSettings::firstOrCreate(['user_id' => Auth::id()]);
+
+        // Notifications
+        $settings->page_view_alerts = $request->boolean('page_view_alerts');
+        $settings->whatsapp_notifications = $request->boolean('whatsapp_notifications');
+
+        // Page Configuration
+        $settings->page_expiry = (int) $request->input('page_expiry');
+        $settings->auto_delete_expired = $request->input('auto_delete');
+
+        // Vault PIN
+        if ($request->filled('vault_pin') && !$hasStars) {
+            $settings->vault_pin = \Illuminate\Support\Facades\Crypt::encryptString($request->input('vault_pin'));
+        }
+
+        // Auto Archive Days
+        $settings->auto_archive_days = $request->input('auto_archive_days');
+
+        $settings->save();
+
+        // Update message expiry for user's wish messages based on new page_expiry
+        $messages = \App\Models\WishMessages::where('user_id', Auth::id())
+            ->whereNotNull('receiving_date')
+            ->where('is_published', false)
+            ->get();
+
+        foreach ($messages as $msg) {
+            $msg->expiry_hours = $settings->page_expiry;
+            $rd = $msg->receiving_date;
+            if ($rd) {
+                $msg->expires_at = \Carbon\Carbon::parse($rd instanceof \DateTimeInterface ? $rd : (string) $rd)->setTime(now()->hour, now()->minute, now()->second)->addHours((int) $msg->expiry_hours);
+            } else {
+                $msg->expires_at = now()->addHours((int) $msg->expiry_hours);
+            }
+            $msg->save();
+        }
+
+        return redirect()->route('user.settings.messages.page')
+            ->with('success', 'All message settings updated successfully.');
     }
 }

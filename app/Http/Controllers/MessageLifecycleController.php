@@ -92,7 +92,7 @@ class MessageLifecycleController extends Controller
         $data = $this->getLayoutData($user);
 
         if (!session('vault_unlocked')) {
-            return view('user.pages.security.vault-auth', $data);
+            return redirect()->route('user.settings.messages.page')->with('error', 'Please enter your Vault PIN to access the Vault.');
         }
 
         $data['messages'] = WishMessages::forUser()->where('is_vaulted', true)->orderBy('created_at', 'desc')->get();

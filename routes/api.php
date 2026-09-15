@@ -13,7 +13,9 @@ Route::post('/password/reset/update', [App\Http\Controllers\AuthController::clas
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [App\Http\Controllers\UserController::class, 'showCurrentUser']);
     Route::get('/user/settings', [App\Http\Controllers\UserSettingsController::class, 'showSettings']);
+    Route::get('/user/settings/vault-pin-display', [App\Http\Controllers\UserSettingsController::class, 'vaultPinDisplay']);
     Route::put('/user/settings', [App\Http\Controllers\UserSettingsController::class, 'updateSettings']);
+    Route::post('/user/settings/verify-vault-pin', [App\Http\Controllers\UserSettingsController::class, 'verifyVaultPin']);
     Route::post('/user/settings/password', [App\Http\Controllers\UserController::class, 'updatePassword']);
     Route::delete('/user/settings/password', [App\Http\Controllers\UserController::class, 'deletePassword']);
     Route::post('/user/profile-picture', [App\Http\Controllers\UserController::class, 'updateProfilePicture']);
@@ -30,8 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/user/notifications/{id}', [App\Http\Controllers\UserController::class, 'deleteNotification']);
     Route::get('/user/ai-credits', [App\Http\Controllers\UserController::class, 'aiCredits']);
     Route::post('/user/ai-credits/redeem-monthly', [App\Http\Controllers\UserController::class, 'redeemMonthlyCredits']);
-    Route::get('/user/subscriptions', [App\Http\Controllers\UserController::class, 'listSubscriptions']);
-    Route::get('/user/subscriptions/{id}', [App\Http\Controllers\UserController::class, 'showSubscription']);
+
     Route::get('/user/links', [App\Http\Controllers\UserController::class, 'listLinks']);
 });
 
@@ -91,10 +92,3 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/templates/select', [App\Http\Controllers\TemplateController::class, 'select']);
 });
 
-// ===================== BILLING API =====================
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/billing/info', [\App\Http\Controllers\Api\BillingController::class, 'info']);
-    Route::post('/billing/verify', [\App\Http\Controllers\Api\BillingController::class, 'verify']);
-    Route::post('/billing/charge', [\App\Http\Controllers\Api\BillingController::class, 'charge']);
-    Route::post('/billing/otp', [\App\Http\Controllers\Api\BillingController::class, 'submitOtp']);
-});

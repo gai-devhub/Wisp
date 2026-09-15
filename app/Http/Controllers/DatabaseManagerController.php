@@ -10,7 +10,7 @@ class DatabaseManagerController extends Controller
 {
     public function databaseManagerPage(): View
     {
-        return view('database-manager.index');
+        return view('admin.pages.general.database-manager');
     }
 
     public function getTablesData()

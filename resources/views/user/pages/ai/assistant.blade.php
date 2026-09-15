@@ -14,7 +14,15 @@
             justify-content: stretch;
             background: transparent !important;
         }
-        
+
+        .ai-float {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            -webkit-mask: url("{{ asset('img/gil.png') }}") center / contain no-repeat;
+            mask: url("{{ asset('img/gil.png') }}") center / contain no-repeat;
+        }
+    
         .ai-shell {
             width: 100%;
             height: 100%;
@@ -46,7 +54,7 @@
         <section class="ai-shell">
             <header class="ai-header">
                 <div class="ai-brand">
-                    <img src="{{ asset('img/logo.png') }}" alt="WISP logo">
+                    <div class="ai-float" aria-label="WISP logo"></div>
                     <div>
                         <h1 style="color: var(--text)">WISP AI</h1>
                         <p style="color: var(--text-muted)">Write faster with clean suggestions</p>

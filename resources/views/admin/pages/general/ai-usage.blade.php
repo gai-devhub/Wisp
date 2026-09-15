@@ -4,22 +4,24 @@
 
 @section('content')
 <div class="content-section active" id="ai-usage">
-    <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
-        <h2 class="flex items-center gap-3 text-2xl font-bold text-slate-800 m-0">
-            <span class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center">
-                <i class="fas fa-robot text-primary"></i>
+    {{-- Page Header --}}
+    <div class="admin-page-header">
+        <h2 class="ai-page-title">
+            <span class="ai-title-icon-box">
+                <i class="fas fa-robot"></i>
             </span>
             AI Usage Logs
         </h2>
     </div>
 
-    <div class="db-card overflow-hidden">
+    {{-- Card --}}
+    <div class="db-card">
         <div class="table-responsive">
-            <table class="data-table">
+            <table class="data-table" id="aiUsageTable">
                 <thead>
                     <tr>
                         <th>User</th>
-                        <th>Context/Prompt</th>
+                        <th>Context / Prompt</th>
                         <th>Response</th>
                         <th>Tokens</th>
                         <th>Date</th>
@@ -29,8 +31,8 @@
                     @forelse($aiUsage as $log)
                         <tr>
                             <td>
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #e0e7ff; color: #4f46e5; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
+                                <div class="ai-user-wrap">
+                                    <div class="ai-user-avatar">
                                         @if($log->user)
                                             {{ strtoupper(substr($log->user->username ?? $log->user->name, 0, 1)) }}
                                         @else
@@ -38,43 +40,52 @@
                                         @endif
                                     </div>
                                     <div>
-                                        <span style="font-weight: 600;">{{ $log->user->username ?? $log->user->name ?? 'Unauthenticated Guest' }}</span>
+                                        <div class="ai-user-name">
+                                            {{ $log->user->username ?? $log->user->name ?? 'Unauthenticated Guest' }}
+                                        </div>
                                         @if($log->user)
-                                            <div style="font-size: 0.8rem; color: #64748b;">{{ $log->user->email }}</div>
+                                            <div class="ai-user-email">{{ $log->user->email }}</div>
                                         @endif
                                     </div>
                                 </div>
                             </td>
-                            <td style="max-width: 250px;">
-                                <div style="font-size: 0.9rem; color: var(--text); overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-lg text-xs font-bold bg-indigo-100 text-indigo-700 mb-1">{{ $log->message_type ?? 'conversational' }}</span><br>
-                                    {{ Str::limit(is_array(json_decode($log->prompt, true)) ? 'JSON History' : $log->prompt, 100) }}
+                            <td class="ai-cell-prompt">
+                                <div class="ai-prompt-box">
+                                    <span class="admin-badge ai-badge-prompt">
+                                        {{ $log->message_type ?? 'conversational' }}
+                                    </span>
+                                    <div class="ai-prompt-text">
+                                        {{ Str::limit(is_array(json_decode($log->prompt, true)) ? 'JSON History' : $log->prompt, 100) }}
+                                    </div>
                                 </div>
                             </td>
-                            <td style="max-width: 300px;">
-                                <div style="font-size: 0.9rem; color: #64748b; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
+                            <td class="ai-cell-response">
+                                <div class="ai-response-text">
                                     {{ Str::limit($log->response, 150) }}
                                 </div>
                             </td>
                             <td>
                                 @if($log->tokens_used)
-                                    <span style="font-family: monospace; background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem;">{{ $log->tokens_used }}</span>
+                                    <span class="ai-model-tag">
+                                        {{ number_format($log->tokens_used) }}
+                                    </span>
                                 @else
-                                    <span style="color: #94a3b8;">—</span>
+                                    <span class="text-muted">—</span>
                                 @endif
                             </td>
                             <td>
-                                <div style="font-size: 0.8rem; color: #64748b;">
-                                    <div style="font-weight: 500; color: #334155;">{{ $log->created_at->format('Y-m-d') }}</div>
-                                    <div>{{ $log->created_at->format('H:i:s') }}</div>
+                                <div class="ai-timestamp-box">
+                                    <div class="ai-user-name">{{ $log->created_at ? $log->created_at->format('Y-m-d') : '-' }}</div>
+                                    <div class="ai-user-email">{{ $log->created_at ? $log->created_at->format('H:i:s') : '' }}</div>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-4 py-12 text-center text-slate-400">
-                                <i class="fas fa-robot text-4xl mb-3 block opacity-30"></i>
-                                No AI usage logs found.
+                            <td colspan="5" class="ai-empty-cell">
+                                <i class="fas fa-robot ai-empty-icon"></i>
+                                <div class="ai-user-name">No AI usage logs found</div>
+                                <div class="ai-user-email">No AI requests have been recorded yet.</div>
                             </td>
                         </tr>
                     @endforelse

@@ -45,24 +45,24 @@
 @endphp
 
 <div class="content-section active" id="analytics">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
-        <h2 style="font-weight: 700; color: var(--text); font-size: 1.6rem; margin: 0; display: flex; align-items: center; gap: 12px;">
-            <i class="fas fa-chart-bar text-primary" style="opacity: 0.9;"></i>
+    <div class="analytics-header-bar">
+        <h2 class="analytics-title">
+            <i class="fas fa-chart-bar text-primary analytics-title-icon"></i>
             System Analytics
-            <span style="display: inline-flex; items-center; gap: 6px; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; background-color: rgba(244, 63, 94, 0.1); color: #f43f5e; margin-left: 8px;">
-                <span style="width: 8px; height: 8px; border-radius: 50%; background-color: #f43f5e; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;"></span> Live
+            <span class="analytics-live-pill">
+                <span class="analytics-live-dot"></span> Live
             </span>
         </h2>
     </div>
 
     <!-- 2 Bar Charts At Top -->
-    <div class="db-main-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 24px; gap: 24px;">
+    <div class="analytics-chart-grid">
         <!-- Bar Chart 1 -->
         <div class="db-card">
             <div class="db-card-header">
                 <h3 class="db-card-title">Daily Activity</h3>
             </div>
-            <div class="db-chart-area" style="height: 250px; padding: 20px;">
+            <div class="db-chart-area-md">
                 <canvas id="adminBarChart1"></canvas>
             </div>
         </div>
@@ -72,42 +72,42 @@
             <div class="db-card-header">
                 <h3 class="db-card-title">Engagement Metrics</h3>
             </div>
-            <div class="db-chart-area" style="height: 250px; padding: 20px;">
+            <div class="db-chart-area-md">
                 <canvas id="adminBarChart2"></canvas>
             </div>
         </div>
     </div>
 
     <!-- 4 Pie Charts Underneath -->
-    <div class="db-main-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-bottom: 40px; gap: 24px;">
+    <div class="analytics-pie-grid">
         
         <!-- Pie Chart 1: Usage Statistics -->
         <div class="db-card">
             <div class="db-card-header">
                 <h3 class="db-card-title">Usage Statistics</h3>
             </div>
-            <div class="db-donut-body" style="flex-direction: column; padding-bottom: 24px;">
-                <div class="db-donut-canvas-wrap" style="width: 150px; height: 150px; margin-bottom: 16px;">
+            <div class="db-donut-body db-donut-body-col">
+                <div class="db-donut-canvas-wrap db-donut-canvas-wrap-sm">
                     <canvas id="adminPieUsage"></canvas>
                     <div class="db-donut-center">
-                        <span class="db-donut-num" style="font-size: 1.1rem;">{{ number_format($kpis['page_views'] ?? 0) }}</span>
+                        <span class="db-donut-num db-donut-num-lg">{{ number_format($kpis['page_views'] ?? 0) }}</span>
                         <span class="db-donut-label">Views</span>
                     </div>
                 </div>
-                <div class="db-donut-legend" style="width: 100%; align-items: flex-start; text-align: left; gap: 8px;">
-                    <div class="db-legend-item" style="align-items: center; flex-direction: row; justify-content: space-between; width: 100%;">
+                <div class="db-donut-legend db-donut-legend-full">
+                    <div class="db-legend-item db-legend-item-row">
                         <div class="db-legend-label-row">
-                            <span class="db-legend-dot" style="background:#f43f5e;"></span>
+                            <span class="db-legend-dot legend-dot-primary"></span>
                             <span class="db-legend-name">Unique Visitors</span>
                         </div>
-                        <div class="db-legend-val" style="font-size: 1.1rem;">{{ number_format($uv) }}</div>
+                        <div class="db-legend-val db-donut-num-lg">{{ number_format($uv) }}</div>
                     </div>
-                    <div class="db-legend-item" style="align-items: center; flex-direction: row; justify-content: space-between; width: 100%;">
+                    <div class="db-legend-item db-legend-item-row">
                         <div class="db-legend-label-row">
-                            <span class="db-legend-dot" style="background:#10b981;"></span>
+                            <span class="db-legend-dot legend-dot-secondary"></span>
                             <span class="db-legend-name">Repeat Views</span>
                         </div>
-                        <div class="db-legend-val" style="font-size: 1.1rem;">{{ number_format($repeat) }}</div>
+                        <div class="db-legend-val db-donut-num-lg">{{ number_format($repeat) }}</div>
                     </div>
                 </div>
             </div>
@@ -118,35 +118,35 @@
             <div class="db-card-header">
                 <h3 class="db-card-title">User Growth</h3>
             </div>
-            <div class="db-donut-body" style="flex-direction: column; padding-bottom: 24px;">
-                <div class="db-donut-canvas-wrap" style="width: 150px; height: 150px; margin-bottom: 16px;">
+            <div class="db-donut-body db-donut-body-col">
+                <div class="db-donut-canvas-wrap db-donut-canvas-wrap-sm">
                     <canvas id="adminPieUsers"></canvas>
                     <div class="db-donut-center">
-                        <span class="db-donut-num" style="font-size: 1.1rem;">{{ number_format($kpis['total_users'] ?? 0) }}</span>
+                        <span class="db-donut-num db-donut-num-lg">{{ number_format($kpis['total_users'] ?? 0) }}</span>
                         <span class="db-donut-label">Users</span>
                     </div>
                 </div>
-                <div class="db-donut-legend" style="width: 100%; align-items: flex-start; text-align: left; gap: 8px;">
-                    <div class="db-legend-item" style="align-items: center; flex-direction: row; justify-content: space-between; width: 100%;">
+                <div class="db-donut-legend db-donut-legend-full">
+                    <div class="db-legend-item db-legend-item-row">
                         <div class="db-legend-label-row">
-                            <span class="db-legend-dot" style="background:#10b981;"></span>
+                            <span class="db-legend-dot legend-dot-primary"></span>
                             <span class="db-legend-name">New (30d)</span>
                         </div>
-                        <div class="db-legend-val" style="font-size: 1.1rem;">{{ number_format($newU) }}</div>
+                        <div class="db-legend-val db-donut-num-lg">{{ number_format($newU) }}</div>
                     </div>
-                    <div class="db-legend-item" style="align-items: center; flex-direction: row; justify-content: space-between; width: 100%;">
+                    <div class="db-legend-item db-legend-item-row">
                         <div class="db-legend-label-row">
-                            <span class="db-legend-dot" style="background:#f43f5e;"></span>
+                            <span class="db-legend-dot legend-dot-secondary"></span>
                             <span class="db-legend-name">Active (7d)</span>
                         </div>
-                        <div class="db-legend-val" style="font-size: 1.1rem;">{{ number_format($actU) }}</div>
+                        <div class="db-legend-val db-donut-num-lg">{{ number_format($actU) }}</div>
                     </div>
-                    <div class="db-legend-item" style="align-items: center; flex-direction: row; justify-content: space-between; width: 100%;">
+                    <div class="db-legend-item db-legend-item-row">
                         <div class="db-legend-label-row">
-                            <span class="db-legend-dot" style="background:#64748b;"></span>
+                            <span class="db-legend-dot legend-dot-muted"></span>
                             <span class="db-legend-name">Inactive</span>
                         </div>
-                        <div class="db-legend-val" style="font-size: 1.1rem;">{{ number_format($inactU) }}</div>
+                        <div class="db-legend-val db-donut-num-lg">{{ number_format($inactU) }}</div>
                     </div>
                 </div>
             </div>
@@ -157,35 +157,35 @@
             <div class="db-card-header">
                 <h3 class="db-card-title">Message Stats</h3>
             </div>
-            <div class="db-donut-body" style="flex-direction: column; padding-bottom: 24px;">
-                <div class="db-donut-canvas-wrap" style="width: 150px; height: 150px; margin-bottom: 16px;">
+            <div class="db-donut-body db-donut-body-col">
+                <div class="db-donut-canvas-wrap db-donut-canvas-wrap-sm">
                     <canvas id="adminPieMessages"></canvas>
                     <div class="db-donut-center">
-                        <span class="db-donut-num" style="font-size: 1.1rem;">{{ number_format($totM_actual) }}</span>
+                        <span class="db-donut-num db-donut-num-lg">{{ number_format($totM_actual) }}</span>
                         <span class="db-donut-label">Msgs</span>
                     </div>
                 </div>
-                <div class="db-donut-legend" style="width: 100%; align-items: flex-start; text-align: left; gap: 8px;">
-                    <div class="db-legend-item" style="align-items: center; flex-direction: row; justify-content: space-between; width: 100%;">
+                <div class="db-donut-legend db-donut-legend-full">
+                    <div class="db-legend-item db-legend-item-row">
                         <div class="db-legend-label-row">
-                            <span class="db-legend-dot" style="background:#10b981;"></span>
+                            <span class="db-legend-dot legend-dot-primary"></span>
                             <span class="db-legend-name">Published</span>
                         </div>
-                        <div class="db-legend-val" style="font-size: 1.1rem;">{{ number_format($pubM) }}</div>
+                        <div class="db-legend-val db-donut-num-lg">{{ number_format($pubM) }}</div>
                     </div>
-                    <div class="db-legend-item" style="align-items: center; flex-direction: row; justify-content: space-between; width: 100%;">
+                    <div class="db-legend-item db-legend-item-row">
                         <div class="db-legend-label-row">
-                            <span class="db-legend-dot" style="background:#f43f5e;"></span>
+                            <span class="db-legend-dot legend-dot-secondary"></span>
                             <span class="db-legend-name">Expired</span>
                         </div>
-                        <div class="db-legend-val" style="font-size: 1.1rem;">{{ number_format($expM) }}</div>
+                        <div class="db-legend-val db-donut-num-lg">{{ number_format($expM) }}</div>
                     </div>
-                    <div class="db-legend-item" style="align-items: center; flex-direction: row; justify-content: space-between; width: 100%;">
+                    <div class="db-legend-item db-legend-item-row">
                         <div class="db-legend-label-row">
-                            <span class="db-legend-dot" style="background:#94a3b8;"></span>
+                            <span class="db-legend-dot legend-dot-muted"></span>
                             <span class="db-legend-name">Drafts</span>
                         </div>
-                        <div class="db-legend-val" style="font-size: 1.1rem;">{{ number_format($draftM) }}</div>
+                        <div class="db-legend-val db-donut-num-lg">{{ number_format($draftM) }}</div>
                     </div>
                 </div>
             </div>
@@ -196,28 +196,28 @@
             <div class="db-card-header">
                 <h3 class="db-card-title">Message Views</h3>
             </div>
-            <div class="db-donut-body" style="flex-direction: column; padding-bottom: 24px;">
-                <div class="db-donut-canvas-wrap" style="width: 150px; height: 150px; margin-bottom: 16px;">
+            <div class="db-donut-body db-donut-body-col">
+                <div class="db-donut-canvas-wrap db-donut-canvas-wrap-sm">
                     <canvas id="adminPieViews"></canvas>
                     <div class="db-donut-center">
-                        <span class="db-donut-num" style="font-size: 1.1rem;">{{ number_format($totV_actual) }}</span>
+                        <span class="db-donut-num db-donut-num-lg">{{ number_format($totV_actual) }}</span>
                         <span class="db-donut-label">Total</span>
                     </div>
                 </div>
-                <div class="db-donut-legend" style="width: 100%; align-items: flex-start; text-align: left; gap: 8px;">
-                    <div class="db-legend-item" style="align-items: center; flex-direction: row; justify-content: space-between; width: 100%;">
+                <div class="db-donut-legend db-donut-legend-full">
+                    <div class="db-legend-item db-legend-item-row">
                         <div class="db-legend-label-row">
-                            <span class="db-legend-dot" style="background:#3b82f6;"></span>
+                            <span class="db-legend-dot legend-dot-primary"></span>
                             <span class="db-legend-name">Today</span>
                         </div>
-                        <div class="db-legend-val" style="font-size: 1.1rem;">{{ number_format($tdyV) }}</div>
+                        <div class="db-legend-val db-donut-num-lg">{{ number_format($tdyV) }}</div>
                     </div>
-                    <div class="db-legend-item" style="align-items: center; flex-direction: row; justify-content: space-between; width: 100%;">
+                    <div class="db-legend-item db-legend-item-row">
                         <div class="db-legend-label-row">
-                            <span class="db-legend-dot" style="background:#94a3b8;"></span>
+                            <span class="db-legend-dot legend-dot-secondary"></span>
                             <span class="db-legend-name">Past</span>
                         </div>
-                        <div class="db-legend-val" style="font-size: 1.1rem;">{{ number_format($pstV) }}</div>
+                        <div class="db-legend-val db-donut-num-lg">{{ number_format($pstV) }}</div>
                     </div>
                 </div>
             </div>
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 datasets: [{
                     label: 'Activity',
                     data: bars1,
-                    backgroundColor: '#6366f1',
+                    backgroundColor: '#E8674A',
                     borderRadius: 4
                 }]
             },
@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 datasets: [{
                     label: 'Engagement',
                     data: bars2,
-                    backgroundColor: '#4cc9f0',
+                    backgroundColor: '#F28C76',
                     borderRadius: 4
                 }]
             },
@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 labels: isEmpty ? ['No Data'] : ['Unique', 'Repeat'],
                 datasets: [{
                     data: isEmpty ? [1] : [uvVal, repeatVal],
-                    backgroundColor: isEmpty ? [getEmptyColor()] : ['#f43f5e', '#10b981'],
+                    backgroundColor: isEmpty ? [getEmptyColor()] : ['#E8674A', '#F28C76'],
                     borderWidth: 6,
                     borderColor: getBorderColor(),
                     borderRadius: isEmpty ? 0 : 20,
@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 labels: isEmpty ? ['No Data'] : ['New', 'Active', 'Inactive'],
                 datasets: [{
                     data: isEmpty ? [1] : [newUVal, actUVal, inactUVal],
-                    backgroundColor: isEmpty ? [getEmptyColor()] : ['#10b981', '#f43f5e', '#64748b'],
+                    backgroundColor: isEmpty ? [getEmptyColor()] : ['#E8674A', '#F28C76', '#cbd5e1'],
                     borderWidth: 6,
                     borderColor: getBorderColor(),
                     borderRadius: isEmpty ? 0 : 20,
@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 labels: isEmpty ? ['No Data'] : ['Published', 'Expired', 'Drafts'],
                 datasets: [{
                     data: isEmpty ? [1] : [pubMVal, expMVal, draftMVal],
-                    backgroundColor: isEmpty ? [getEmptyColor()] : ['#10b981', '#f43f5e', '#94a3b8'],
+                    backgroundColor: isEmpty ? [getEmptyColor()] : ['#E8674A', '#F28C76', '#cbd5e1'],
                     borderWidth: 6,
                     borderColor: getBorderColor(),
                     borderRadius: isEmpty ? 0 : 20,
@@ -387,7 +387,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 labels: isEmpty ? ['No Data'] : ['Today', 'Past'],
                 datasets: [{
                     data: isEmpty ? [1] : [tdyVVal, pstVVal],
-                    backgroundColor: isEmpty ? [getEmptyColor()] : ['#3b82f6', '#94a3b8'],
+                    backgroundColor: isEmpty ? [getEmptyColor()] : ['#E8674A', '#F28C76'],
                     borderWidth: 6,
                     borderColor: getBorderColor(),
                     borderRadius: isEmpty ? 0 : 20,

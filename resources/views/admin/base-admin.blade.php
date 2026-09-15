@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#6366f1">
+    <meta name="theme-color" content="#E8674A">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Wisp Admin</title>
     <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/png">
@@ -13,143 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('css/admin-page.css') }}?v={{ filemtime(public_path('css/admin-page.css')) }}">
-    <style>
-        body { 
-            font-family: 'Outfit', sans-serif; 
-            background-color: #FDF6EC !important;
-            background-image:
-                radial-gradient(circle at 5% 10%, rgba(242, 140, 118, 0.07) 0%, transparent 25%),
-                radial-gradient(circle at 95% 90%, rgba(43, 31, 61, 0.06) 0%, transparent 25%) !important;
-            background-attachment: fixed !important;
-        }
-        .nav-sub-menu { display: none; }
-        .nav-dropdown.open .nav-sub-menu { display: block; }
-        .nav-dropdown.open .dropdown-arrow { transform: rotate(90deg); }
-        .dropdown-arrow { transition: transform 0.25s ease; }
-        .sidebar-link:hover { transform: translateX(3px); }
-        .sidebar-link { transition: all 0.18s ease; }
-        .content-section { display: none; animation: fadeInUp 0.3s ease; }
-        .content-section.active { display: block; }
-        @keyframes fadeInUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-        .modal { display: none; }
-        .modal.active { display: flex; }
-        .preview-popup { opacity: 0; visibility: hidden; transition: opacity 0.22s, visibility 0.22s; }
-        .preview-popup.active { opacity: 1; visibility: visible; }
-        .admin-header-bg { background: #ffffff !important; }
-        
-        .notification-toast { 
-            transform: translateX(420px); 
-            transition: transform 0.32s cubic-bezier(0.4,0,0.2,1); 
-            background: #ffffff;
-            border-left: 4px solid #6366f1;
-            padding: 12px 16px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            position: relative;
-        }
-        .notification-toast.show { transform: translateX(0); }
-        .notification-toast.success { border-left-color: #10b981; }
-        .notification-toast.error { border-left-color: #ef4444; }
-        .notification-toast.warning { border-left-color: #f59e0b; }
-        .notification-toast.info { border-left-color: #3b82f6; }
-        .notification-toast-icon { font-size: 1.25rem; }
-        .notification-toast.success .notification-toast-icon { color: #10b981; }
-        .notification-toast.error .notification-toast-icon { color: #ef4444; }
-        .notification-toast.warning .notification-toast-icon { color: #f59e0b; }
-        .notification-toast.info .notification-toast-icon { color: #3b82f6; }
-        .notification-toast-content { flex: 1; }
-        .notification-toast-content h4 { margin: 0 0 4px 0; font-size: 0.9rem; font-weight: 600; color: #1e293b; }
-        .notification-toast-content p { margin: 0; font-size: 0.8rem; color: #64748b; line-height: 1.4; }
-        .notification-toast-close { background: none; border: none; font-size: 1rem; color: #94a3b8; cursor: pointer; padding: 4px; }
-        .notification-toast-close:hover { color: #ef4444; }
-
-        /* Constrain modals to main content area to prevent blurring header/sidebar */
-        .modal, .preview-popup, #messagesModal, #adModal, #addMethodModal {
-            top: 70px !important;
-            bottom: 0 !important;
-            right: 0 !important;
-            left: 0 !important;
-        }
-        @media (min-width: 1024px) {
-            .modal, .preview-popup, #messagesModal, #adModal, #addMethodModal {
-                left: 280px !important;
-            }
-        }
-
-        /* Theme CSS Variables */
-        :root {
-            --card-bg: #ffffff;
-            --bg-subtle: #f8fafc;
-            --bg-hover: #f1f5f9;
-            --text-dark: #0f172a;
-            --text-muted: #64748b;
-            --text: #334155;
-            --border: #e2e8f0;
-            --border-color: rgba(0, 0, 0, 0.06);
-            --input-bg: #f8fafc;
-            --input-text: #0f172a;
-            --inner-card-bg: #ffffff;
-        }
-
-        [data-theme="dark"] {
-            --card-bg: #1e293b;
-            --bg-subtle: #0f172a;
-            --bg-hover: #334155;
-            --text-dark: #f8fafc;
-            --text-muted: #94a3b8;
-            --text: #cbd5e1;
-            --border: #334155;
-            --border-color: rgba(255, 255, 255, 0.08);
-            --input-bg: #0f172a;
-            --input-text: #f8fafc;
-            --inner-card-bg: #0f172a;
-        }
-
-        /* Dark mode support */
-        [data-theme="dark"] body { background: #0f172a !important; background-image: none !important; color: #f1f5f9; }
-        [data-theme="dark"] .admin-header-bg { background: #1e293b !important; }
-        [data-theme="dark"] .bg-white { background: #1e293b !important; }
-        [data-theme="dark"] .bg-slate-50 { background: #0f172a !important; }
-        [data-theme="dark"] .bg-slate-50\/50 { background: #0f172a !important; }
-        [data-theme="dark"] .bg-slate-100 { background: #334155 !important; color: #f8fafc !important; }
-        [data-theme="dark"] .bg-slate-200 { background: #334155 !important; }
-        [data-theme="dark"] .bg-gray-50 { background: #0f172a !important; }
-        [data-theme="dark"] .bg-gray-100 { background: #334155 !important; }
-        [data-theme="dark"] .border-slate-200, [data-theme="dark"] .border-slate-100 { border-color: #334155 !important; }
-        [data-theme="dark"] .text-slate-700, [data-theme="dark"] .text-slate-800, [data-theme="dark"] .text-slate-900 { color: #f1f5f9 !important; }
-        [data-theme="dark"] .text-slate-500, [data-theme="dark"] .text-slate-600 { color: #94a3b8 !important; }
-        [data-theme="dark"] .text-slate-400, [data-theme="dark"] .text-gray-400 { color: #94a3b8 !important; }
-        [data-theme="dark"] .text-slate-300, [data-theme="dark"] .text-gray-300 { color: #cbd5e1 !important; }
-        [data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] textarea { background: #0f172a !important; color: #f1f5f9 !important; border-color: #334155 !important; }
-        [data-theme="dark"] table thead { background: #334155 !important; }
-        [data-theme="dark"] .notification-toast { background: #1e293b; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-        [data-theme="dark"] .notification-toast-content h4 { color: #f1f5f9; }
-        [data-theme="dark"] .notification-toast-content p { color: #cbd5e1; }
-        [data-theme="dark"] #globalSearchInput, [data-theme="dark"] #globalDateFilter { background: transparent !important; color: #f8fafc !important; }
-        [data-theme="dark"] .hub-card, [data-theme="dark"] .db-card, [data-theme="dark"] .stat-card { background: #1e293b !important; border-color: #334155 !important; }
-        [data-theme="dark"] .btn-outline-danger { background: transparent !important; border-color: #ef4444 !important; color: #ef4444 !important; }
-        [data-theme="dark"] .modal > div { background: #1e293b !important; color: #f1f5f9 !important; border: 1px solid #334155; }
-        [data-theme="dark"] .modal h3 { color: #f1f5f9 !important; }
-        [data-theme="dark"] .modal label { color: #cbd5e1 !important; }
-    
-        /* Custom Admin Theme Colors */
-        .bg-theme-primary { background-color: #F28C76 !important; }
-        .text-theme-primary { color: #F28C76 !important; }
-        .bg-theme-50 { background-color: rgba(242, 140, 118, 0.1) !important; }
-        .hover\:bg-theme-50:hover { background-color: rgba(242, 140, 118, 0.1) !important; }
-        .hover\:text-theme-primary:hover { color: #F28C76 !important; }
-        .shadow-theme-200 { box-shadow: 0 4px 6px -1px rgba(242, 140, 118, 0.3) !important; }
-        .focus-within\:border-theme-400:focus-within { border-color: rgba(242, 140, 118, 0.6) !important; }
-        .focus-within\:ring-theme-100:focus-within { --tw-ring-color: rgba(242, 140, 118, 0.2) !important; }
-        .hover\:border-theme-300:hover { border-color: rgba(242, 140, 118, 0.4) !important; }
-        .text-theme-500 { color: #E8674A !important; }
-    </style>
-
 </head>
 
 @php
@@ -162,59 +26,61 @@
     class="{{ $privacyEnabled ? 'privacy-blur-active' : '' }} min-h-screen">
 
     {{-- ===== LAYOUT SHELL ===== --}}
-    <div class="flex flex-col min-h-screen">
+    <div class="admin-shell">
 
         {{-- ===== HEADER ===== --}}
-        <header class="sticky top-0 z-50 flex items-center justify-between px-4 lg:px-6 h-[70px] border-b border-slate-200 shadow-sm admin-header-bg">
+        <header class="admin-header">
             {{-- Left --}}
-            <div class="flex items-center gap-3">
-                <button id="menuToggle" class="lg:hidden flex items-center justify-center w-10 h-10 rounded-xl hover:bg-slate-100 text-slate-600 border-0 bg-transparent cursor-pointer">
-                    <i class="fas fa-bars text-lg"></i>
+            <div class="admin-header-left">
+                <button type="button" id="menuToggle" class="admin-menu-toggle">
+                    <i class="fas fa-bars"></i>
                 </button>
-                <img src="{{ asset('img/logo.png') }}" alt="" class="w-9 h-9 object-contain">
-                <h1 class="hidden sm:block text-lg font-bold text-slate-800 m-0">WISP Creator</h1>
+                <a href="{{ route('admin.page') }}" style="display: flex; align-items: center; gap: 0; text-decoration: none;">
+                    <img src="{{ asset('img/logo.png') }}" alt="WISP" class="admin-logo">
+                    <h2 style="color: var(--primary, #E8674A); margin: 0 0 0 4px; font-size: 1.3rem; font-weight: 700;">WISP</h2>
+                </a>
             </div>
 
             {{-- Right --}}
-            <div class="flex items-center gap-3">
+            <div class="admin-header-right">
                 {{-- Global Search --}}
-                <div class="flex items-center gap-2 h-10 px-3 rounded-full bg-slate-100 border border-slate-200 focus-within:border-theme-primary/60 focus-within:ring-2 focus-within:ring-theme-primary/20 transition-all">
-                    <i class="fas fa-search text-slate-400 text-sm"></i>
-                    <input type="text" id="globalSearchInput" placeholder="Search..." autocomplete="off"
-                        class="border-0 bg-transparent outline-none text-sm text-slate-700 w-36 sm:w-48 placeholder-slate-400">
-                    <div class="hidden sm:block w-px h-4 bg-slate-300"></div>
-                    <input type="date" id="globalDateFilter"
-                        class="hidden sm:block border-0 bg-transparent outline-none text-xs text-slate-400 cursor-pointer">
-                </div>
+                <form method="GET" action="{{ route('admin.search.page') }}" class="header-search-form" id="globalSearchForm">
+                    <div class="header-search-wrap">
+                        <i class="fas fa-search header-search-icon-inner"></i>
+                        <input type="text" name="q" id="globalSearchInput" placeholder="Search messages and pages..." autocomplete="off" class="header-search-input" value="{{ request('q') ?? '' }}">
+                        <input type="date" id="globalDateFilter" style="display: none;">
+                    </div>
+                </form>
 
-                {{-- System status --}}
-                @php $appLocked = $systemSettings['app_locked'] ?? false; @endphp
-                <div id="systemStatus"
-                    class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer
-                        {{ $appLocked ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600' }}">
-                    <i class="fas fa-circle text-[8px]"></i>
-                    {{ $appLocked ? 'Offline' : 'Online' }}
-                </div>
+                {{-- Notification Bell --}}
+                @php
+                    $adminUnreadCount = \App\Models\UserNotification::where('user_id', auth()->id())
+                        ->whereNull('read_at')
+                        ->where('deleted_by_user', false)
+                        ->count();
+                @endphp
+                <a href="{{ route('admin.notifications.page') }}" class="notification-bell" title="Notifications">
+                    <i class="fas fa-bell"></i>
+                    @if($adminUnreadCount > 0)
+                        <div class="notification-dot active"></div>
+                    @endif
+                </a>
 
-                {{-- Theme toggle --}}
-                <button id="themeToggleBtn" title="Toggle Dark/Light Mode"
-                    class="w-10 h-10 flex items-center justify-center rounded-full border border-slate-200 bg-transparent text-slate-600 hover:bg-slate-100 hover:text-theme-primary hover:border-theme-primary/40 cursor-pointer transition-all">
-                    <i class="fas fa-moon"></i>
-                </button>
+                {{-- Hidden elements for JS compatibility --}}
+                <button id="themeToggleBtn" style="display: none;"></button>
+                <div id="systemStatus" style="display: none;"></div>
 
                 {{-- Admin profile --}}
                 @php $admin = auth()->user(); @endphp
-                <div class="flex items-center gap-2">
-                    <img src="{{ route('profile.picture') }}" alt="Admin"
-                        class="w-9 h-9 rounded-full object-cover border-2 border-slate-200"
-                        onerror="this.src='{{ asset('img/logo.png') }}'">
-                    <span class="hidden sm:block text-sm font-semibold text-slate-700">{{ $admin->username ?? 'Administrator' }}</span>
-                </div>
+                <a href="{{ route('admin.settings.user.page') }}" class="user-profile" style="text-decoration: none; color: inherit;">
+                    <img src="{{ route('profile.picture') }}" alt="Admin" data-fallback-src="https://ui-avatars.com/api/?name={{ urlencode($admin->username ?? $admin->name ?? 'Admin') }}&color=E8674A&background=FDF6F0" onerror="if(this.dataset.fallbackSrc) this.src=this.dataset.fallbackSrc">
+                    <span><b>{{ $admin->username ?? 'Administrator' }}</b></span>
+                </a>
             </div>
         </header>
 
         {{-- ===== TOAST CONTAINER ===== --}}
-        <div id="notificationContainer" class="fixed top-20 right-5 z-[1100] flex flex-col gap-2 w-80"></div>
+        <div id="notificationContainer" class="notification-container"></div>
 
         @if(session('success') || session('error'))
             <div id="adminFlash" data-type="{{ session('success') ? 'success' : 'error' }}"
@@ -222,188 +88,129 @@
         @endif
 
         {{-- ===== BODY WRAPPER ===== --}}
-        <div class="flex flex-1">
+        <div class="admin-body-wrapper">
 
             {{-- Sidebar overlay (mobile) --}}
-            <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+            <div id="sidebarOverlay" class="admin-sidebar-overlay"></div>
 
             {{-- ===== SIDEBAR ===== --}}
-            <aside id="sidebar"
-                class="fixed lg:sticky top-0 lg:top-[70px] left-[-280px] lg:left-0 z-50 lg:z-auto
-                       w-[280px] h-screen lg:h-[calc(100vh-70px)]
-                       bg-white border-r border-slate-200 flex flex-col overflow-y-auto
-                       transition-[left] duration-300 ease-in-out shadow-xl lg:shadow-none">
+            <aside id="sidebar" class="admin-sidebar">
 
                 {{-- Nav --}}
-                <nav class="flex-1 py-4 px-2">
-                    <ul class="list-none space-y-0.5">
+                <nav class="admin-nav">
+                    <ul class="admin-nav-list">
 
                         <li>
                             <a href="{{ route('admin.page') }}"
-                                class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline
-                                    {{ request()->routeIs('admin.page') ? 'bg-theme-primary text-white shadow-md shadow-theme-primary/30' : 'text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                <i class="fas fa-tachometer-alt w-5 text-center"></i>
+                                class="admin-nav-link {{ request()->routeIs('admin.page') || request()->is('admin.page') ? 'active' : '' }}">
+                                <i class="fas fa-tachometer-alt admin-nav-icon"></i>
                                 <span>Dashboard</span>
                             </a>
                         </li>
                         @if(auth()->user()->role === 'admin')
                         <li>
                             <a href="{{ route('user.page') }}"
-                                class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-theme-primary hover:bg-theme-primary/10">
-                                <i class="fas fa-exchange-alt w-5 text-center"></i>
+                                class="admin-nav-link">
+                                <i class="fas fa-exchange-alt admin-nav-icon"></i>
                                 <span>Switch to User View</span>
                             </a>
                         </li>
                         @endif
 
-                        <li class="nav-dropdown {{ request()->is('admin-page/users*', 'admin-page/subscribers*') ? 'open' : '' }}">
-                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary cursor-pointer">
-                                <i class="fas fa-users w-5 text-center"></i>
+                        <li class="admin-nav-item {{ request()->is('admin-page/users*', 'admin-page/subscribers*') ? 'open' : '' }}">
+                            <a href="javascript:void(0)" class="admin-nav-link admin-nav-dropdown-toggle">
+                                <i class="fas fa-users admin-nav-icon"></i>
                                 <span>User Management</span>
                                 <i class="fas fa-chevron-right dropdown-arrow ml-auto text-xs"></i>
                             </a>
-                            <ul class="nav-sub-menu list-none pl-4 pt-1 pb-1 space-y-0.5">
+                            <ul class="admin-nav-submenu">
                                 <li><a href="{{ route('admin.users.page') }}"
-                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.users.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                    <i class="fas fa-user w-4 text-center"></i> <span>Users</span></a></li>
+                                    class="admin-nav-sublink {{ request()->routeIs('admin.users.page') || request()->is('admin.users.page') ? 'active' : '' }}">
+                                    <i class="fas fa-user admin-nav-subicon"></i> <span>Users</span></a></li>
                                 <li><a href="{{ route('admin.subscribers.page') }}"
-                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.subscribers.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                    <i class="fas fa-envelope-open-text w-4 text-center"></i> <span>Subscribers</span></a></li>
+                                    class="admin-nav-sublink {{ request()->routeIs('admin.subscribers.page') || request()->is('admin.subscribers.page') ? 'active' : '' }}">
+                                    <i class="fas fa-envelope-open-text admin-nav-subicon"></i> <span>Subscribers</span></a></li>
                             </ul>
                         </li>
 
                         {{-- Message dropdown --}}
-                        <li class="nav-dropdown {{ request()->is('admin-page/messages*', 'admin-page/view-activity*') ? 'open' : '' }}">
-                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary cursor-pointer">
-                                <i class="fas fa-envelope w-5 text-center"></i>
+                        <li class="admin-nav-item {{ request()->is('admin-page/messages*', 'admin-page/view-activity*') ? 'open' : '' }}">
+                            <a href="javascript:void(0)" class="admin-nav-link admin-nav-dropdown-toggle">
+                                <i class="fas fa-envelope admin-nav-icon"></i>
                                 <span>Message Management</span>
                                 <i class="fas fa-chevron-right dropdown-arrow ml-auto text-xs"></i>
                             </a>
-                            <ul class="nav-sub-menu list-none pl-4 pt-1 pb-1 space-y-0.5">
+                            <ul class="admin-nav-submenu">
                                 <li><a href="{{ route('admin.messages.page') }}"
-                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.messages.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                    <i class="fas fa-envelope w-4 text-center"></i> <span>Messages</span></a></li>
+                                    class="admin-nav-sublink {{ request()->routeIs('admin.messages.page') || request()->is('admin.messages.page') ? 'active' : '' }}">
+                                    <i class="fas fa-envelope admin-nav-subicon"></i> <span>Messages</span></a></li>
                                 <li><a href="{{ route('admin.view-activity.page') }}"
-                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.view-activity.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                    <i class="fas fa-eye w-4 text-center"></i> <span>View Activity</span></a></li>
+                                    class="admin-nav-sublink {{ request()->routeIs('admin.view-activity.page') || request()->is('admin.view-activity.page') ? 'active' : '' }}">
+                                    <i class="fas fa-eye admin-nav-subicon"></i> <span>View Activity</span></a></li>
                             </ul>
                         </li>
 
                         <li>
                             <a href="{{ route('admin.ai-usage.page') }}"
-                                class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline
-                                    {{ request()->routeIs('admin.ai-usage.page') ? 'bg-theme-primary text-white shadow-md shadow-theme-primary/30' : 'text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                <i class="fas fa-robot w-5 text-center"></i>
+                                class="admin-nav-link {{ request()->routeIs('admin.ai-usage.page') || request()->is('admin.ai-usage.page') ? 'active' : '' }}">
+                                <i class="fas fa-robot admin-nav-icon"></i>
                                 <span>AI Usage</span>
                             </a>
                         </li>
 
                         <li>
                             <a href="{{ route('database.manager') }}"
-                                class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline
-                                    {{ request()->routeIs('database.manager') ? 'bg-theme-primary text-white shadow-md shadow-theme-primary/30' : 'text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                <i class="fas fa-database w-5 text-center"></i>
+                                class="admin-nav-link {{ request()->routeIs('database.manager') || request()->routeIs('admin.database-manager.page') || request()->is('database-manager') || request()->is('admin-page/database-manager') ? 'active' : '' }}">
+                                <i class="fas fa-database admin-nav-icon"></i>
                                 <span>Database Manager</span>
                             </a>
                         </li>
 
                         <li>
                             <a href="{{ route('admin.notifications.page') }}"
-                                class="sidebar-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline
-                                    {{ request()->routeIs('admin.notifications.page') ? 'bg-theme-primary text-white shadow-md shadow-theme-primary/30' : 'text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                <i class="fas fa-bell w-5 text-center"></i>
+                                class="admin-nav-link {{ request()->routeIs('admin.notifications.page') || request()->is('admin.notifications.page') ? 'active' : '' }}">
+                                <i class="fas fa-bell admin-nav-icon"></i>
                                 <span>Notifications</span>
                             </a>
                         </li>
 
-                        {{-- Billing dropdown --}}
-                        <li class="nav-dropdown {{ request()->is('admin-page/billing*') ? 'open' : '' }}">
-                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary cursor-pointer">
-                                <i class="fas fa-file-invoice-dollar w-5 text-center"></i>
-                                <span>Billing</span>
-                                <i class="fas fa-chevron-right dropdown-arrow ml-auto text-xs"></i>
-                            </a>
-                            <ul class="nav-sub-menu list-none pl-4 pt-1 pb-1 space-y-0.5">
-                                <li><a href="{{ route('admin.billing.users') }}"
-                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.billing.users') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                    <i class="fas fa-users w-4 text-center"></i> <span>Users</span></a></li>
-                                <li><a href="{{ route('admin.billing.index') }}"
-                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.billing.index') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                    <i class="fas fa-list w-4 text-center"></i> <span>Subscriptions</span></a></li>
-                            </ul>
-                        </li>
-
-                         {{-- Finances dropdown --}}
-                        <li class="nav-dropdown {{ request()->is('admin-page/finances*') ? 'open' : '' }}">
-                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary cursor-pointer">
-                                <i class="fas fa-university w-5 text-center"></i>
-                                <span>Finances</span>
-                                <i class="fas fa-chevron-right dropdown-arrow ml-auto text-xs"></i>
-                            </a>
-                            <ul class="nav-sub-menu list-none pl-4 pt-1 pb-1 space-y-0.5">
-                                <li><a href="{{ route('admin.finances.overview') }}"
-                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.finances.overview') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                    <i class="fas fa-chart-line w-4 text-center"></i> <span>Overview</span></a></li>
-                                <li><a href="{{ route('admin.finances.transactions') }}"
-                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.finances.transactions') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                    <i class="fas fa-exchange-alt w-4 text-center"></i> <span>Transactions</span></a></li>
-                            </ul>
-                        </li>
 
                         {{-- Operations dropdown --}}
-                        <li class="nav-dropdown {{ request()->is('admin-page/analytics*', 'admin-page/logs*', 'admin-page/system*', 'admin-page/maintenance*') ? 'open' : '' }}">
-                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary cursor-pointer">
-                                <i class="fas fa-tasks w-5 text-center"></i>
+                        <li class="admin-nav-item {{ request()->is('admin-page/analytics*', 'admin-page/logs*', 'admin-page/system*', 'admin-page/maintenance*') ? 'open' : '' }}">
+                            <a href="javascript:void(0)" class="admin-nav-link admin-nav-dropdown-toggle">
+                                <i class="fas fa-tasks admin-nav-icon"></i>
                                 <span>Operations</span>
                                 <i class="fas fa-chevron-right dropdown-arrow ml-auto text-xs"></i>
                             </a>
-                            <ul class="nav-sub-menu list-none pl-4 pt-1 pb-1 space-y-0.5">
+                            <ul class="admin-nav-submenu">
                                 <li><a href="{{ route('admin.analytics.page') }}"
-                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.analytics.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                    <i class="fas fa-chart-bar w-4 text-center"></i> <span>Analytics</span></a></li>
+                                    class="admin-nav-sublink {{ request()->routeIs('admin.analytics.page') || request()->is('admin.analytics.page') ? 'active' : '' }}">
+                                    <i class="fas fa-chart-bar admin-nav-subicon"></i> <span>Analytics</span></a></li>
                                 <li><a href="{{ route('admin.logs.page') }}"
-                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.logs.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                    <i class="fas fa-clipboard-list w-4 text-center"></i> <span>Activity Logs</span></a></li>
+                                    class="admin-nav-sublink {{ request()->routeIs('admin.logs.page') || request()->is('admin.logs.page') ? 'active' : '' }}">
+                                    <i class="fas fa-clipboard-list admin-nav-subicon"></i> <span>Activity Logs</span></a></li>
                                 <li><a href="{{ route('admin.system.page') }}"
-                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.system.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                    <i class="fas fa-cogs w-4 text-center"></i> <span>System Controls</span></a></li>
+                                    class="admin-nav-sublink {{ request()->routeIs('admin.system.page') || request()->is('admin.system.page') ? 'active' : '' }}">
+                                    <i class="fas fa-cogs admin-nav-subicon"></i> <span>System Controls</span></a></li>
                                 <li><a href="{{ route('admin.maintenance.page') }}"
-                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.maintenance.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                    <i class="fas fa-tools w-4 text-center"></i> <span>Maintenance</span></a></li>
+                                    class="admin-nav-sublink {{ request()->routeIs('admin.maintenance.page') || request()->is('admin.maintenance.page') ? 'active' : '' }}">
+                                    <i class="fas fa-tools admin-nav-subicon"></i> <span>Maintenance</span></a></li>
                             </ul>
                         </li>
 
                         {{-- Settings dropdown --}}
-                        <li class="nav-dropdown {{ request()->is('admin-page/settings*') ? 'open' : '' }}">
-                            <a href="javascript:void(0)" class="sidebar-link dropdown-toggle flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium no-underline text-slate-600 hover:bg-theme-primary/10 hover:text-theme-primary cursor-pointer">
-                                <i class="fas fa-cog w-5 text-center"></i>
+                        <li class="admin-nav-item {{ request()->is('admin-page/settings*') ? 'open' : '' }}">
+                            <a href="javascript:void(0)" class="admin-nav-link admin-nav-dropdown-toggle">
+                                <i class="fas fa-cog admin-nav-icon"></i>
                                 <span>Settings</span>
                                 <i class="fas fa-chevron-right dropdown-arrow ml-auto text-xs"></i>
                             </a>
-                            <ul class="nav-sub-menu list-none pl-4 pt-1 pb-1 space-y-0.5">
+                            <ul class="admin-nav-submenu">
                                 <li><a href="{{ route('admin.settings.message.page') }}"
-                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.settings.message.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
+                                    class="admin-nav-sublink {{ request()->routeIs('admin.settings.message.page') || request()->is('admin.settings.message.page') ? 'active' : '' }}">
                                     <span>Message Settings</span></a></li>
-                                <li><a href="{{ route('admin.settings.page.page') }}"
-                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.settings.page.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
-                                    <span>Page Settings</span></a></li>
                                 <li><a href="{{ route('admin.settings.user.page') }}"
-                                    class="flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium no-underline
-                                        {{ request()->routeIs('admin.settings.user.page') ? 'bg-theme-primary/10 text-theme-primary font-semibold' : 'text-slate-500 hover:bg-theme-primary/10 hover:text-theme-primary' }}">
+                                    class="admin-nav-sublink {{ request()->routeIs('admin.settings.user.page') || request()->is('admin.settings.user.page') ? 'active' : '' }}">
                                     <span>Admin Settings</span></a></li>
                             </ul>
                         </li>
@@ -416,9 +223,8 @@
                     <form method="POST" action="{{ route('auth.logout') }}">
                         @csrf
                         <button type="submit"
-                            class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium
-                                   text-slate-500 hover:bg-red-50 hover:text-red-600 cursor-pointer border-0 bg-transparent font-[inherit] transition-all">
-                            <i class="fas fa-sign-out-alt w-5 text-center"></i>
+                            class="admin-logout-btn">
+                            <i class="fas fa-sign-out-alt admin-nav-icon"></i>
                             <span>Logout</span>
                         </button>
                     </form>
@@ -426,9 +232,28 @@
             </aside>
 
             {{-- ===== MAIN CONTENT ===== --}}
-            <main class="flex-1 min-w-0 p-4 lg:p-6 overflow-auto">
-                <div class="max-w-[1600px] w-full mx-auto">
-                    @yield('content')
+            <main class="admin-main">
+                <div class="admin-container">
+                    <div class="admin-content-wrap">
+                        @yield('content')
+                    </div>
+                    
+                    {{-- Admin Page Footer --}}
+                    <footer class="admin-page-footer">
+                        <div class="admin-footer-content">
+                            <div class="admin-footer-brand">
+                                <img src="{{ asset('img/logo.png') }}" alt="WISP" class="admin-footer-logo">
+                                <span>&copy; {{ date('Y') }} WISP. All rights reserved.</span>
+                            </div>
+                            <div class="admin-footer-links">
+                                <a href="{{ route('help') }}">Documentation</a>
+                                <span class="admin-footer-sep">&bull;</span>
+                                <a href="{{ route('admin.settings.user.page') }}">Help &amp; Support</a>
+                                <span class="admin-footer-sep">&bull;</span>
+                                <a href="{{ route('admin.settings.message.page') }}">Settings</a>
+                            </div>
+                        </div>
+                    </footer>
                 </div>
             </main>
         </div>
@@ -437,39 +262,39 @@
 
 
     {{-- Add User --}}
-    <div id="addUserModal" class="modal fixed inset-0 z-[1000] items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl" style="animation:modalIn .2s ease">
-            <div class="flex items-center justify-between p-5 border-b border-slate-200">
-                <h3 class="text-lg font-bold text-slate-800 m-0">Add New User</h3>
-                <button type="button" id="closeAddUserModal" class="border-0 bg-transparent text-2xl cursor-pointer text-slate-400 hover:text-red-500 leading-none">&times;</button>
+    <div id="addUserModal" class="admin-modal">
+        <div class="admin-modal-content max-w-lg" style="animation:modalIn .2s ease">
+            <div class="admin-modal-header">
+                <h3 class="admin-modal-title">Add New User</h3>
+                <button type="button" id="closeAddUserModal" class="admin-modal-close">&times;</button>
             </div>
-            <form method="POST" action="{{ route('admin.users.store') }}" class="p-5 space-y-4">
+            <form method="POST" action="{{ route('admin.users.store') }}" class="admin-modal-body space-y">
                 @csrf
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Username</label>
+                    <label class="admin-form-label">Username</label>
                     <input type="text" name="username" required minlength="3" pattern="[a-zA-Z0-9_.-]+"
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all">
+                        class="admin-form-input">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Email Address</label>
+                    <label class="admin-form-label">Email Address</label>
                     <input type="email" name="email" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all">
+                        class="admin-form-input">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+                    <label class="admin-form-label">Password</label>
                     <input type="password" name="password" required minlength="8"
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all">
+                        class="admin-form-input">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Role</label>
+                    <label class="admin-form-label">Role</label>
                     <select name="role" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all cursor-pointer">
+                        class="admin-form-input cursor-pointer">
                         <option value="user">User</option>
                         <option value="admin">Administrator</option>
                     </select>
                 </div>
                 <button type="submit" id="createUserBtn"
-                    class="w-full py-2.5 bg-theme-primary hover:bg-indigo-700 text-white font-semibold rounded-xl cursor-pointer border-0 transition-colors">
+                    class="admin-btn admin-btn-primary w-full">
                     Create User
                 </button>
             </form>
@@ -477,18 +302,18 @@
     </div>
 
     {{-- Send Notification --}}
-    <div id="sendNotificationModal" class="modal fixed inset-0 z-[1000] items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div class="flex items-center justify-between p-5 border-b border-slate-200">
-                <h3 class="text-lg font-bold text-slate-800 m-0">Send Notification</h3>
-                <button type="button" id="closeNotificationModal" class="border-0 bg-transparent text-2xl cursor-pointer text-slate-400 hover:text-red-500 leading-none">&times;</button>
+    <div id="sendNotificationModal" class="admin-modal">
+        <div class="admin-modal-content max-w-lg">
+            <div class="admin-modal-header">
+                <h3 class="admin-modal-title">Send Notification</h3>
+                <button type="button" id="closeNotificationModal" class="admin-modal-close">&times;</button>
             </div>
-            <form method="POST" action="{{ route('admin.sendNotification') }}" class="p-5 space-y-4">
+            <form method="POST" action="{{ route('admin.sendNotification') }}" class="admin-modal-body space-y">
                 @csrf
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Type</label>
+                    <label class="admin-form-label">Type</label>
                     <select name="type" id="notificationType" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all cursor-pointer">
+                        class="admin-form-input cursor-pointer">
                         <option value="info">Information</option>
                         <option value="success">Success</option>
                         <option value="warning">Warning</option>
@@ -496,26 +321,26 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Title</label>
+                    <label class="admin-form-label">Title</label>
                     <input type="text" name="title" id="notificationTitle" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all">
+                        class="admin-form-input">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Message</label>
+                    <label class="admin-form-label">Message</label>
                     <textarea name="message" id="notificationMessage" rows="4" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all resize-y"></textarea>
+                        class="admin-form-input resize-y"></textarea>
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Audience</label>
+                    <label class="admin-form-label">Audience</label>
                     <select name="audience" id="notificationAudience" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all cursor-pointer">
+                        class="admin-form-input cursor-pointer">
                         <option value="all">All Users</option>
                         <option value="active">Active Users Only</option>
                         <option value="inactive">Inactive Users Only</option>
                     </select>
                 </div>
                 <button type="submit" id="sendNotificationActionBtn"
-                    class="w-full py-2.5 bg-theme-primary hover:bg-indigo-700 text-white font-semibold rounded-xl cursor-pointer border-0 transition-colors">
+                    class="admin-btn admin-btn-primary w-full">
                     Send Notification
                 </button>
             </form>
@@ -523,204 +348,204 @@
     </div>
 
     {{-- View User --}}
-    <div id="viewUserModal" class="modal fixed inset-0 z-[1000] items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl">
-            <div class="flex items-center justify-between p-5 border-b border-slate-200">
-                <h3 class="text-lg font-bold text-slate-800 m-0">User Details</h3>
-                <button class="modal-close border-0 bg-transparent text-2xl cursor-pointer text-slate-400 hover:text-red-500 leading-none" id="closeViewUserModal">&times;</button>
+    <div id="viewUserModal" class="admin-modal">
+        <div class="admin-modal-content max-w-md">
+            <div class="admin-modal-header">
+                <h3 class="admin-modal-title">User Details</h3>
+                <button class="modal-close admin-modal-close" id="closeViewUserModal">&times;</button>
             </div>
-            <div class="p-6 text-center">
-                <div class="w-16 h-16 bg-theme-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl text-theme-primary">
+            <div class="admin-modal-body text-center">
+                <div class="admin-modal-icon-lg user">
                     <i class="fas fa-user"></i>
                 </div>
-                <h4 id="viewUserName" class="text-xl font-bold text-slate-800 mb-1">User Name</h4>
-                <p id="viewUserDetails" class="text-sm text-slate-500 mb-5">User details</p>
-                <div class="flex gap-2 justify-center">
-                    <button id="editUserFromView" class="px-4 py-2 bg-theme-primary hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl cursor-pointer border-0 transition-colors">Edit User</button>
-                    <button id="closeViewModal" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-semibold rounded-xl cursor-pointer border-0 transition-colors">Close</button>
+                <h4 id="viewUserName" class="admin-modal-subtitle">User Name</h4>
+                <p id="viewUserDetails" class="admin-modal-desc">User details</p>
+                <div class="admin-form-actions justify-center">
+                    <button id="editUserFromView" class="admin-btn admin-btn-primary btn-sm">Edit User</button>
+                    <button id="closeViewModal" class="admin-btn admin-btn-secondary btn-sm">Close</button>
                 </div>
             </div>
         </div>
     </div>
 
     {{-- Edit User --}}
-    <div id="editUserModal" class="modal fixed inset-0 z-[1000] items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl">
-            <div class="flex items-center justify-between p-5 border-b border-slate-200">
-                <h3 class="text-lg font-bold text-slate-800 m-0">Edit User</h3>
-                <button type="button" id="closeEditUserModal" class="border-0 bg-transparent text-2xl cursor-pointer text-slate-400 hover:text-red-500 leading-none">&times;</button>
+    <div id="editUserModal" class="admin-modal">
+        <div class="admin-modal-content max-w-md">
+            <div class="admin-modal-header">
+                <h3 class="admin-modal-title">Edit User</h3>
+                <button type="button" id="closeEditUserModal" class="admin-modal-close">&times;</button>
             </div>
-            <form id="editUserForm" method="POST" action="" class="p-5 space-y-4">
+            <form id="editUserForm" method="POST" action="" class="admin-modal-body space-y">
                 @csrf @method('PUT')
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Username</label>
+                    <label class="admin-form-label">Username</label>
                     <input type="text" id="editUserName" name="username" required pattern="[a-zA-Z0-9_.-]+"
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all">
+                        class="admin-form-input">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Email</label>
+                    <label class="admin-form-label">Email</label>
                     <input type="email" id="editUserEmail" name="email" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all">
+                        class="admin-form-input">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Status</label>
+                    <label class="admin-form-label">Status</label>
                     <select id="editUserStatus" name="status" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all cursor-pointer">
+                        class="admin-form-input cursor-pointer">
                         <option value="active">Active</option>
                         <option value="blocked">Blocked</option>
                         <option value="pending">Pending</option>
                     </select>
                 </div>
-                <div class="flex gap-2 pt-2">
-                    <button type="submit" id="saveUserChanges" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl cursor-pointer border-0 transition-colors">Save Changes</button>
-                    <button type="button" id="cancelEditUser" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-xl cursor-pointer border-0 transition-colors">Cancel</button>
+                <div class="admin-form-actions pt-2">
+                    <button type="submit" id="saveUserChanges" class="admin-btn admin-btn-primary flex-1">Save Changes</button>
+                    <button type="button" id="cancelEditUser" class="admin-btn admin-btn-secondary flex-1">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
 
     {{-- Block User --}}
-    <div id="blockUserModal" class="modal fixed inset-0 z-[1000] items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl">
-            <div class="flex items-center justify-between p-5 border-b border-slate-200">
-                <h3 class="text-lg font-bold text-slate-800 m-0">Block User</h3>
-                <button type="button" id="closeBlockUserModal" class="border-0 bg-transparent text-2xl cursor-pointer text-slate-400 hover:text-red-500 leading-none">&times;</button>
+    <div id="blockUserModal" class="admin-modal">
+        <div class="admin-modal-content max-w-sm">
+            <div class="admin-modal-header">
+                <h3 class="admin-modal-title">Block User</h3>
+                <button type="button" id="closeBlockUserModal" class="admin-modal-close">&times;</button>
             </div>
-            <form id="blockUserForm" method="POST" action="" class="p-6 text-center space-y-4">
+            <form id="blockUserForm" method="POST" action="" class="admin-modal-body space-y text-center">
                 @csrf
-                <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto text-3xl text-amber-600">
+                <div class="admin-modal-icon-lg warning">
                     <i class="fas fa-user-slash"></i>
                 </div>
-                <h4 id="blockUserName" class="text-xl font-bold text-slate-800 m-0">User Name</h4>
-                <p class="text-sm text-slate-500">Are you sure you want to block this user? They will not be able to access the system.</p>
-                <div class="flex gap-2 justify-center">
-                    <button type="submit" id="confirmBlockUser" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl cursor-pointer border-0 transition-colors">Block User</button>
-                    <button type="button" id="cancelBlockUser" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-xl cursor-pointer border-0 transition-colors">Cancel</button>
+                <h4 id="blockUserName" class="admin-modal-subtitle">User Name</h4>
+                <p class="admin-modal-desc">Are you sure you want to block this user? They will not be able to access the system.</p>
+                <div class="admin-form-actions justify-center">
+                    <button type="submit" id="confirmBlockUser" class="admin-btn admin-btn-primary">Block User</button>
+                    <button type="button" id="cancelBlockUser" class="admin-btn admin-btn-secondary">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
 
     {{-- Delete User --}}
-    <div id="deleteUserModal" class="modal fixed inset-0 z-[1000] items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl">
-            <div class="flex items-center justify-between p-5 border-b border-slate-200">
-                <h3 class="text-lg font-bold text-slate-800 m-0">Delete User</h3>
-                <button type="button" id="closeDeleteUserModal" class="border-0 bg-transparent text-2xl cursor-pointer text-slate-400 hover:text-red-500 leading-none">&times;</button>
+    <div id="deleteUserModal" class="admin-modal">
+        <div class="admin-modal-content max-w-sm">
+            <div class="admin-modal-header">
+                <h3 class="admin-modal-title">Delete User</h3>
+                <button type="button" id="closeDeleteUserModal" class="admin-modal-close">&times;</button>
             </div>
-            <form id="deleteUserForm" method="POST" action="" class="p-6 text-center space-y-4">
+            <form id="deleteUserForm" method="POST" action="" class="admin-modal-body space-y text-center">
                 @csrf @method('DELETE')
-                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto text-3xl text-red-600">
+                <div class="admin-modal-icon-lg danger">
                     <i class="fas fa-trash"></i>
                 </div>
-                <h4 id="deleteUserName" class="text-xl font-bold text-slate-800 m-0">User Name</h4>
-                <p class="text-sm text-slate-500">Are you sure you want to permanently delete this user? This action cannot be undone.</p>
-                <div class="flex gap-2 justify-center">
-                    <button type="submit" id="confirmDeleteUser" class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl cursor-pointer border-0 transition-colors">Delete</button>
-                    <button type="button" id="cancelDeleteUser" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-xl cursor-pointer border-0 transition-colors">Cancel</button>
+                <h4 id="deleteUserName" class="admin-modal-subtitle">User Name</h4>
+                <p class="admin-modal-desc">Are you sure you want to permanently delete this user? This action cannot be undone.</p>
+                <div class="admin-form-actions justify-center">
+                    <button type="submit" id="confirmDeleteUser" class="admin-btn admin-btn-primary">Delete</button>
+                    <button type="button" id="cancelDeleteUser" class="admin-btn admin-btn-secondary">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
 
     {{-- Edit Message --}}
-    <div id="editMessageModal" class="modal fixed inset-0 z-[1000] items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div class="flex items-center justify-between p-5 border-b border-slate-200">
-                <h3 class="text-lg font-bold text-slate-800 m-0">Edit Message</h3>
-                <button type="button" id="closeEditMessageModal" class="border-0 bg-transparent text-2xl cursor-pointer text-slate-400 hover:text-red-500 leading-none">&times;</button>
+    <div id="editMessageModal" class="admin-modal">
+        <div class="admin-modal-content max-w-lg">
+            <div class="admin-modal-header">
+                <h3 class="admin-modal-title">Edit Message</h3>
+                <button type="button" id="closeEditMessageModal" class="admin-modal-close">&times;</button>
             </div>
-            <form id="editMessageForm" method="POST" action="" class="p-5 space-y-4">
+            <form id="editMessageForm" method="POST" action="" class="admin-modal-body space-y">
                 @csrf @method('PUT')
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Title</label>
+                    <label class="admin-form-label">Title</label>
                     <input type="text" id="editMessageTitle" name="title" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all">
+                        class="admin-form-input">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Content</label>
+                    <label class="admin-form-label">Content</label>
                     <textarea id="editMessageContent" name="message" rows="5" required
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all resize-y"></textarea>
+                        class="admin-form-input resize-y"></textarea>
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Status</label>
+                    <label class="admin-form-label">Status</label>
                     <select id="editMessageStatus" name="is_published"
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-theme-primary/60 focus:ring-2 focus:ring-theme-primary/20 transition-all cursor-pointer">
+                        class="admin-form-input cursor-pointer">
                         <option value="0">Draft</option>
                         <option value="1">Published</option>
                     </select>
                 </div>
-                <div class="flex gap-2 pt-2">
-                    <button type="submit" id="saveMessageChanges" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl cursor-pointer border-0 transition-colors">Save Changes</button>
-                    <button type="button" id="cancelEditMessage" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-xl cursor-pointer border-0 transition-colors">Cancel</button>
+                <div class="admin-form-actions pt-2">
+                    <button type="submit" id="saveMessageChanges" class="admin-btn admin-btn-primary flex-1">Save Changes</button>
+                    <button type="button" id="cancelEditMessage" class="admin-btn admin-btn-secondary flex-1">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
 
     {{-- Delete Message --}}
-    <div id="deleteMessageModal" class="modal fixed inset-0 z-[1000] items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl">
-            <div class="flex items-center justify-between p-5 border-b border-slate-200">
-                <h3 class="text-lg font-bold text-slate-800 m-0">Delete Message</h3>
-                <button type="button" id="closeDeleteMessageModal" class="border-0 bg-transparent text-2xl cursor-pointer text-slate-400 hover:text-red-500 leading-none">&times;</button>
+    <div id="deleteMessageModal" class="admin-modal">
+        <div class="admin-modal-content max-w-sm">
+            <div class="admin-modal-header">
+                <h3 class="admin-modal-title">Delete Message</h3>
+                <button type="button" id="closeDeleteMessageModal" class="admin-modal-close">&times;</button>
             </div>
-            <form id="deleteMessageForm" method="POST" action="" class="p-6 text-center space-y-4">
+            <form id="deleteMessageForm" method="POST" action="" class="admin-modal-body space-y text-center">
                 @csrf @method('DELETE')
-                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto text-3xl text-red-600">
+                <div class="admin-modal-icon-lg danger">
                     <i class="fas fa-trash"></i>
                 </div>
-                <h4 id="deleteMessageTitle" class="text-xl font-bold text-slate-800 m-0">Message Title</h4>
-                <p class="text-sm text-slate-500">Are you sure you want to delete this message? This action cannot be undone.</p>
-                <div class="flex gap-2 justify-center">
-                    <button type="submit" id="confirmDeleteMessage" class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl cursor-pointer border-0 transition-colors">Delete</button>
-                    <button type="button" id="cancelDeleteMessage" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-xl cursor-pointer border-0 transition-colors">Cancel</button>
+                <h4 id="deleteMessageTitle" class="admin-modal-subtitle">Message Title</h4>
+                <p class="admin-modal-desc">Are you sure you want to delete this message? This action cannot be undone.</p>
+                <div class="admin-form-actions justify-center">
+                    <button type="submit" id="confirmDeleteMessage" class="admin-btn admin-btn-primary">Delete</button>
+                    <button type="button" id="cancelDeleteMessage" class="admin-btn admin-btn-secondary">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
 
     {{-- Message Preview Popup --}}
-    <div id="preview-popup" class="preview-popup fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/55 backdrop-blur-sm">
-        <div class="rounded-2xl overflow-hidden flex flex-col shadow-2xl" style="background: #f5f4f0; width: 95vw; height: 95vh; max-width: 100%; max-height: 100%;">
-            <div class="flex items-center justify-between flex-shrink-0" style="padding: 6px 14px; background: #f5f4f0; border-bottom: 1px solid rgba(0, 0, 0, 0.08);">
+    <div id="preview-popup" class="preview-popup admin-modal">
+        <div class="admin-modal-content preview-popup-content">
+            <div class="preview-popup-header">
                 <div style="width: 28px;"></div>
-                <h3 class="m-0 text-center" style="font-size: 0.875rem; font-weight: 600; color: #374151; flex: 1;">Preview</h3>
-                <button type="button" id="close-popup" class="flex items-center justify-center border-0 bg-transparent cursor-pointer transition-colors" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px; color: #6b7280; font-size: 0.95rem; border-radius: 6px;" onmouseover="this.style.background='rgba(0,0,0,0.06)'; this.style.color='#374151';" onmouseout="this.style.background='transparent'; this.style.color='#6b7280';" onclick="document.getElementById('preview-popup').classList.remove('active'); document.getElementById('preview-popup').style.display=''; document.body.style.overflow='';">
+                <h3 class="preview-popup-title">Preview</h3>
+                <button type="button" id="close-popup" class="preview-popup-close" onclick="document.getElementById('preview-popup').classList.remove('active'); document.getElementById('preview-popup').style.display=''; document.body.style.overflow='';">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="flex-1 overflow-hidden flex flex-col min-h-0" style="padding: 0 0 10px 0; background: #f5f4f0;">
-                <iframe id="admin-message-preview-iframe" style="width:100%;height:100%;min-height:60vh;border:0;" title="Message preview"></iframe>
+            <div class="preview-popup-body">
+                <iframe id="admin-message-preview-iframe" class="preview-iframe" title="Message preview"></iframe>
             </div>
         </div>
     </div>
 
     {{-- Global Admin Confirm Modal --}}
-    <div id="adminGlobalConfirmModal" class="modal fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden" style="display: none;">
-        <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-6 text-center transform transition-all scale-95 opacity-0 duration-200">
-            <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto text-3xl text-blue-600 mb-4">
+    <div id="adminGlobalConfirmModal" class="admin-modal" style="display: none;">
+        <div class="admin-modal-content max-w-sm p-6 text-center">
+            <div class="admin-modal-icon-lg user mb-4">
                 <i class="fas fa-question-circle"></i>
             </div>
-            <h4 class="text-xl font-bold text-slate-800 m-0 mb-2">Confirm Action</h4>
-            <p id="adminGlobalConfirmMessage" class="text-sm text-slate-500 mb-6">Are you sure?</p>
+            <h4 class="admin-modal-subtitle">Confirm Action</h4>
+            <p id="adminGlobalConfirmMessage" class="admin-modal-desc">Are you sure?</p>
             <div class="flex gap-3 justify-center">
-                <button type="button" id="adminGlobalConfirmBtn" class="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl cursor-pointer border-0 transition-colors">Confirm</button>
-                <button type="button" id="adminGlobalConfirmCancelBtn" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold rounded-xl cursor-pointer border-0 transition-colors">Cancel</button>
+                <button type="button" id="adminGlobalConfirmBtn" class="admin-btn admin-btn-primary flex-1">Confirm</button>
+                <button type="button" id="adminGlobalConfirmCancelBtn" class="admin-btn admin-btn-secondary flex-1">Cancel</button>
             </div>
         </div>
     </div>
 
     {{-- Global Admin Alert Modal --}}
-    <div id="adminGlobalAlertModal" class="modal fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden" style="display: none;">
-        <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-6 text-center transform transition-all scale-95 opacity-0 duration-200">
-            <div class="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center mx-auto text-3xl text-amber-500 mb-4">
+    <div id="adminGlobalAlertModal" class="admin-modal" style="display: none;">
+        <div class="admin-modal-content max-w-sm p-6 text-center">
+            <div class="admin-modal-icon-lg user mb-4">
                 <i class="fas fa-exclamation-triangle"></i>
             </div>
-            <h4 class="text-xl font-bold text-slate-800 m-0 mb-2">Alert</h4>
-            <p id="adminGlobalAlertMessage" class="text-sm text-slate-500 mb-6">Notice.</p>
+            <h4 class="admin-modal-subtitle">Alert</h4>
+            <p id="adminGlobalAlertMessage" class="admin-modal-desc">Notice.</p>
             <div class="flex justify-center">
-                <button type="button" id="adminGlobalAlertBtn" class="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl cursor-pointer border-0 transition-colors">OK</button>
+                <button type="button" id="adminGlobalAlertBtn" class="admin-btn admin-btn-primary w-full">OK</button>
             </div>
         </div>
     </div>
@@ -733,24 +558,15 @@
             var msgEl = document.getElementById('adminGlobalConfirmMessage');
             var confirmBtn = document.getElementById('adminGlobalConfirmBtn');
             var cancelBtn = document.getElementById('adminGlobalConfirmCancelBtn');
-            var box = modal.querySelector('div.bg-white');
+            var box = modal.querySelector('.admin-modal-content');
 
             msgEl.textContent = message;
             modal.style.display = 'flex';
-            modal.classList.remove('hidden');
-            
-            setTimeout(() => {
-                box.classList.remove('scale-95', 'opacity-0');
-                box.classList.add('scale-100', 'opacity-100');
-            }, 10);
+            modal.classList.add('active');
 
             var cleanup = function() {
-                box.classList.remove('scale-100', 'opacity-100');
-                box.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => {
-                    modal.style.display = 'none';
-                    modal.classList.add('hidden');
-                }, 200);
+                modal.style.display = 'none';
+                modal.classList.remove('active');
                 confirmBtn.onclick = null;
                 cancelBtn.onclick = null;
             };
@@ -769,24 +585,14 @@
             var modal = document.getElementById('adminGlobalAlertModal');
             var msgEl = document.getElementById('adminGlobalAlertMessage');
             var okBtn = document.getElementById('adminGlobalAlertBtn');
-            var box = modal.querySelector('div.bg-white');
 
             msgEl.textContent = message;
             modal.style.display = 'flex';
-            modal.classList.remove('hidden');
-
-            setTimeout(() => {
-                box.classList.remove('scale-95', 'opacity-0');
-                box.classList.add('scale-100', 'opacity-100');
-            }, 10);
+            modal.classList.add('active');
 
             var cleanup = function() {
-                box.classList.remove('scale-100', 'opacity-100');
-                box.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => {
-                    modal.style.display = 'none';
-                    modal.classList.add('hidden');
-                }, 200);
+                modal.style.display = 'none';
+                modal.classList.remove('active');
                 okBtn.onclick = null;
             };
 
@@ -818,21 +624,25 @@
         // Sidebar dropdown toggle
         (function () {
             function initDropdowns() {
-                document.querySelectorAll('.nav-dropdown').forEach(function (dropdown) {
-                    var toggle = dropdown.querySelector('.dropdown-toggle');
-                    var submenu = dropdown.querySelector('.nav-sub-menu');
-                    if (!toggle || !submenu) return;
-                    submenu.style.display = dropdown.classList.contains('open') ? 'block' : 'none';
-                    toggle.addEventListener('click', function (e) {
-                        e.preventDefault(); e.stopPropagation();
-                        var isOpen = dropdown.classList.contains('open');
-                        document.querySelectorAll('.nav-dropdown').forEach(function (other) {
-                            other.classList.remove('open');
-                            var sm = other.querySelector('.nav-sub-menu');
-                            if (sm) sm.style.display = 'none';
+                document.querySelectorAll('.admin-nav-item').forEach(function (dropdown) {
+                    var toggle = dropdown.querySelector('.admin-nav-dropdown-toggle');
+                    
+                    if (toggle) {
+                        toggle.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            var isOpen = dropdown.classList.contains('open');
+                            
+                            // Close other dropdowns
+                            document.querySelectorAll('.admin-nav-item').forEach(function (other) {
+                                other.classList.remove('open');
+                            });
+                            
+                            // Toggle current dropdown
+                            if (!isOpen) { 
+                                dropdown.classList.add('open'); 
+                            }
                         });
-                        if (!isOpen) { dropdown.classList.add('open'); submenu.style.display = 'block'; }
-                    });
+                    }
                 });
             }
             document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', initDropdowns) : initDropdowns();
@@ -865,6 +675,8 @@
                         var query = this.value.trim();
                         if (query.length > 0) {
                             window.location.href = "{{ route('admin.search.page') }}?q=" + encodeURIComponent(query);
+                        } else {
+                            window.location.href = "{{ route('admin.search.page') }}";
                         }
                     }
                 });
@@ -890,10 +702,6 @@
         })();
     </script>
     @yield('scripts')
-    
-    <style>
-        @keyframes modalIn { from { opacity:0; transform:scale(.96) translateY(8px); } to { opacity:1; transform:scale(1) translateY(0); } }
-    </style>
 </body>
 
 </html>

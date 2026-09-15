@@ -164,7 +164,7 @@
     @if(in_array($activeSection, ['my-messages', 'create', 'edit']))
         <a href="{{ route('user.ai.page') }}" class="btn-ai-float"
             title="AI Assistant - get help writing your message" aria-label="Open AI Assistant">
-            <img src="{{ asset('img/logo.png') }}" alt="AI">
+            <img src="{{ asset('img/gil.png') }}" alt="AI">
             <i class="fas fa-robot ai-float-fallback" aria-hidden="true"></i>
         </a>
     @endif
@@ -258,24 +258,6 @@
                                 class="nav-link {{ request()->routeIs('user.notifications.page') ? 'active' : '' }}"
                                 data-section="notifications"><i class="fas fa-inbox"></i> <span>Notifications</span></a>
                         </li>
-                        @php
-                            $paymentEnabled = \Illuminate\Support\Facades\DB::table('system_settings')->where('key', 'payment_system_enabled')->value('value') === '1';
-                            $hasActiveSubscription = false;
-                            if ($paymentEnabled) {
-                                $hasActiveSubscription = \App\Models\Subscription::where('user_id', auth()->id())
-                                    ->where('status', 'active')
-                                    ->where('expires_at', '>', now())
-                                    ->exists();
-                            }
-                        @endphp
-                        <!-- @if($paymentEnabled && !$hasActiveSubscription)
-                        {{-- 
-                        <li><a href="{{ route('user.billing.index') }}"
-                                class="nav-link {{ request()->routeIs('user.billing.*') ? 'active' : '' }}"
-                                data-section="billing"><i class="fas fa-credit-card"></i> <span>Billing</span></a>
-                        </li>
-                        --}}
-                        @endif -->
 
                         <li class="has-dropdown {{ $isUserSettingsNav ? 'open' : '' }}">
                             <a href="#" class="dropdown-toggle {{ $isUserSettingsNav ? 'active' : '' }}">

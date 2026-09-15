@@ -128,9 +128,7 @@
                                         }
                                     @endphp
                                     <div class="chat-message {{ $isMyMessage ? 'chat-sent' : 'chat-received' }}">
-                                        <div class="chat-bubble">
-                                            {!! nl2br(e($n->message)) !!}
-                                        </div>
+                                        <div class="chat-bubble">{!! nl2br(e(trim($n->message))) !!}</div>
                                         <div class="chat-time">{{ $n->created_at->format('g:i A') }}</div>
                                     </div>
 
@@ -143,9 +141,7 @@
                                             }
                                         @endphp
                                         <div class="chat-message {{ $isMyReply ? 'chat-sent' : 'chat-received' }}">
-                                            <div class="chat-bubble">
-                                                {!! nl2br(e($reply->message)) !!}
-                                            </div>
+                                            <div class="chat-bubble">{!! nl2br(e(trim($reply->message))) !!}</div>
                                             <div class="chat-time">{{ $reply->created_at->format('g:i A') }}</div>
                                         </div>
                                     @endforeach

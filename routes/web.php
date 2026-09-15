@@ -74,6 +74,7 @@ Route::middleware(['auth', 'admin', 'require.passcode'])->group(function () {
     Route::get('/admin-page/analytics', [AdminController::class, 'analyticsPage'])->name('admin.analytics.page');
     Route::get('/admin-page/notifications', [AdminController::class, 'notificationsPage'])->name('admin.notifications.page');
     Route::get('/admin-page/ai-usage', [AdminController::class, 'aiUsagePage'])->name('admin.ai-usage.page');
+    Route::get('/admin-page/database-manager', [DatabaseManagerController::class, 'databaseManagerPage'])->name('admin.database-manager.page');
     Route::get('/admin-page/system', [AdminController::class, 'systemPage'])->name('admin.system.page');
     Route::get('/admin-page/settings/messages', [AdminController::class, 'settingsMessagePage'])->name('admin.settings.message.page');
     Route::get('/admin-page/settings/page', [AdminController::class, 'settingsPagePage'])->name('admin.settings.page.page');
@@ -89,10 +90,9 @@ Route::middleware(['auth', 'admin', 'require.passcode'])->group(function () {
     Route::post('/admin/send-notification', [AdminController::class, 'sendNotification'])->name('admin.sendNotification');
     Route::post('/admin/account', [AdminController::class, 'updateAdminAccount'])->name('admin.account');
     Route::post('/admin/security', [AdminController::class, 'saveSecuritySettings'])->name('admin.security');
-    Route::post('/admin/preferences', [AdminController::class, 'savePreferences'])->name('admin.preferences');
     Route::post('/admin/privacy-theme', [AdminController::class, 'updatePrivacyAndTheme'])->name('admin.privacy_theme');
     Route::post('/admin/passcode', [AdminController::class, 'updateAdminPasscode'])->name('admin.settings.passcode');
-    Route::post('/admin/lifecycle', [AdminController::class, 'updateGlobalLifecycle'])->name('admin.lifecycle');
+    Route::post('/admin/settings/save-all', [AdminController::class, 'saveAllSettings'])->name('admin.settings.saveAll');
     Route::post('/admin/notification-settings', [AdminController::class, 'saveNotificationSettings'])->name('admin.notificationSettings');
     Route::post('/admin/contact-settings', [AdminController::class, 'saveContactSettings'])->name('admin.contactSettings');
     Route::post('/admin/optimize-database', [AdminController::class, 'optimizeDatabase'])->name('admin.optimizeDatabase');
@@ -111,6 +111,7 @@ Route::middleware(['auth', 'admin', 'require.passcode'])->group(function () {
     Route::match(['put', 'patch'], '/admin/messages/{id}', [AdminController::class, 'updateMessage'])->name('admin.messages.update');
     Route::delete('/admin/messages/{id}', [AdminController::class, 'deleteMessage'])->name('admin.messages.destroy');
     Route::get('/admin/api/messages-by-date', [AdminController::class, 'getMessagesByDate'])->name('admin.api.messages_by_date');
+    Route::get('/admin/api/month-message-dates', [AdminController::class, 'getMonthMessageDates'])->name('admin.api.month_message_dates');
     Route::get('/admin/api/views-chart-data', [AdminController::class, 'viewsChartData'])->name('admin.api.views-chart-data');
     // Maintenance
     Route::post('/admin/maintenance/clean-expired', [AdminController::class, 'cleanExpiredMessages'])->name('admin.maintenance.cleanExpired');
@@ -120,23 +121,6 @@ Route::middleware(['auth', 'admin', 'require.passcode'])->group(function () {
     Route::post('/admin/system/ai-logs/delete', [AdminController::class, 'deleteAiLogs'])->name('admin.aiLogs.delete');
     Route::post('/admin/notifications/{id}/reply', [AdminController::class, 'replyToInquiry'])->name('admin.notifications.reply');
     Route::delete('/admin/notifications/broadcast/{id}', [AdminController::class, 'deleteBroadcast'])->name('admin.notifications.deleteBroadcast');
-
-    // Billing
-    Route::get('/admin-page/billing', [\App\Http\Controllers\AdminBillingController::class, 'index'])->name('admin.billing.index');
-    Route::get('/admin-page/billing/users', [\App\Http\Controllers\AdminBillingController::class, 'users'])->name('admin.billing.users');
-    Route::post('/admin/billing/approve/{id}', [\App\Http\Controllers\AdminBillingController::class, 'approve'])->name('admin.billing.approve');
-    Route::post('/admin/billing/reject/{id}', [\App\Http\Controllers\AdminBillingController::class, 'reject'])->name('admin.billing.reject');
-    Route::get('/admin-page/billing/settings', [\App\Http\Controllers\AdminBillingController::class, 'settings'])->name('admin.billing.settings');
-    Route::post('/admin/billing/settings', [\App\Http\Controllers\AdminBillingController::class, 'updateSettings'])->name('admin.billing.settings.update');
-
-    Route::post('/admin/billing/grant/{userId}', [\App\Http\Controllers\AdminBillingController::class, 'grantAccess'])->name('admin.billing.grant');
-    Route::post('/admin/billing/revoke/{userId}', [\App\Http\Controllers\AdminBillingController::class, 'revokeAccess'])->name('admin.billing.revoke');
-
-    // Finances
-    Route::get('/admin-page/finances/transactions', [\App\Http\Controllers\AdminFinanceController::class, 'transactions'])->name('admin.finances.transactions');
-    Route::get('/admin-page/finances/overview', [\App\Http\Controllers\AdminFinanceController::class, 'overview'])->name('admin.finances.overview');
-    
-    Route::post('/admin/finances/expenses', [\App\Http\Controllers\AdminFinanceController::class, 'storeExpense'])->name('admin.finances.expenses.store');
 });
 
 // ===================== DATABASE MANAGER =====================
@@ -190,7 +174,7 @@ Route::post('/user-page/settings/delete-account', [UserController::class, 'delet
     ->name('user.settings.delete-account')
     ->middleware('auth');
 
-Route::middleware(['auth', 'user.role', 'require.passcode', 'billing'])->group(function () {
+Route::middleware(['auth', 'user.role', 'require.passcode'])->group(function () {
     Route::get('/user-page', [UserController::class, 'index'])->name('user.page');
     Route::get('/user-page/views-chart-data', [UserController::class, 'viewsChartData'])->name('user.views-chart-data');
     Route::get('/user-page/create', [UserController::class, 'createPage'])->name('user.create.page');
@@ -249,23 +233,17 @@ Route::middleware(['auth', 'user.role', 'require.passcode', 'billing'])->group(f
     Route::post('/settings/account', [UserSettingsController::class, 'updateAccount'])->name('settings.account');
     Route::post('/settings/page', [UserSettingsController::class, 'updatePageSettings'])->name('settings.page');
     Route::post('/settings/notifications', [UserSettingsController::class, 'updateNotificationSettings'])->name('settings.notifications');
+    Route::post('/settings/messages/update-all', [UserSettingsController::class, 'updateAllMessageSettings'])->name('settings.messages.update_all');
     Route::post('/settings/reset', [UserSettingsController::class, 'resetSettings'])->name('settings.reset');
     Route::post('/settings/hub/privacy-theme', [UserSettingsController::class, 'updatePrivacyAndTheme'])->name('settings.hub.privacy_theme');
     Route::post('/links/generate', [GeneratedLinksController::class, 'store'])->name('links.generate');
+    Route::post('/links/{id}/toggle', [GeneratedLinksController::class, 'toggleLinkStatus'])->name('links.toggle');
     Route::post('/share-messages/load', [ShareMessagesController::class, 'loadMessage'])->name('share-messages.load');
     Route::get('/share-messages/recent-sends', [ShareMessagesController::class, 'recentSends'])->name('share-messages.recentSends');
     Route::post('/share-messages/send-email', [ShareMessagesController::class, 'sendEmail'])->name('share-messages.sendEmail');
     Route::post('/share-messages/send-sms', [ShareMessagesController::class, 'sendSms'])->name('share-messages.sendSms');
     Route::get('/user-page/share-messages/schedule', [ShareMessagesController::class, 'schedulePage'])->name('share-messages.schedule.page');
     Route::post('/user-page/share-messages/schedule', [ShareMessagesController::class, 'schedule'])->name('share-messages.schedule');
-
-    // Billing (Disabled per user request)
-    // Route::get('/billing', [App\Http\Controllers\UserBillingController::class, 'index'])->name('user.billing.index');
-    // Route::get('/billing/method', [App\Http\Controllers\UserBillingController::class, 'methodSelection'])->name('user.billing.method');
-    // Route::get('/billing/checkout', [App\Http\Controllers\UserBillingController::class, 'checkout'])->name('user.billing.checkout');
-    // Route::get('/billing/verify', [App\Http\Controllers\UserBillingController::class, 'verifyPaystack'])->name('user.billing.verify');
-    // Route::post('/billing/charge', [App\Http\Controllers\UserBillingController::class, 'charge'])->name('user.billing.charge');
-    // Route::post('/billing/otp', [App\Http\Controllers\UserBillingController::class, 'submitOtp'])->name('user.billing.otp');
 
     Route::get('/ai-assistant', [AiAssistantController::class, 'page'])->name('user.ai.page');
 });

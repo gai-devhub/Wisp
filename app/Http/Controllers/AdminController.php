@@ -19,6 +19,7 @@ use App\Jobs\SendNotificationEmailJob;
 use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -69,6 +70,11 @@ class AdminController extends Controller
         return $this->renderSection($request, 'ai-usage');
     }
 
+    public function databaseManagerPage(Request $request): View
+    {
+        return $this->renderSection($request, 'database-manager');
+    }
+
     public function systemPage(Request $request): View
     {
         return $this->renderSection($request, 'system');
@@ -101,7 +107,7 @@ class AdminController extends Controller
 
     public function settingsPagePage(Request $request): View
     {
-        return $this->renderSection($request, 'settings-page');
+        return $this->settingsMessagePage($request);
     }
 
     public function settingsUserPage(Request $request): View
@@ -154,7 +160,7 @@ class AdminController extends Controller
         ));
     }
 
-    public function searchPage(Request $request): View
+    public function searchPage(Request $request): View|JsonResponse
     {
         $query = trim($request->input('q', ''));
         
@@ -164,7 +170,127 @@ class AdminController extends Controller
         $users = [];
         $messages = [];
         
+        $systemPages = [
+            [
+                'title' => 'Dashboard',
+                'url' => route('admin.page'),
+                'icon' => 'fas fa-tachometer-alt',
+                'description' => 'View high-level system metrics, counts, and summaries.',
+                'keywords' => ['dashboard', 'home', 'stats', 'metrics', 'overview', 'summary']
+            ],
+            [
+                'title' => 'Users',
+                'url' => route('admin.users.page'),
+                'icon' => 'fas fa-users',
+                'description' => 'Manage registered users, roles, accounts, and status.',
+                'keywords' => ['users', 'members', 'accounts', 'role', 'block', 'active', 'user management']
+            ],
+            [
+                'title' => 'Subscribers',
+                'url' => route('admin.subscribers.page'),
+                'icon' => 'fas fa-envelope-open-text',
+                'description' => 'Manage newsletter and platform email subscribers.',
+                'keywords' => ['subscribers', 'newsletter', 'email', 'mailing list', 'subscriptions']
+            ],
+            [
+                'title' => 'Messages',
+                'url' => route('admin.messages.page'),
+                'icon' => 'fas fa-envelope',
+                'description' => 'Monitor and moderate user wish messages and content.',
+                'keywords' => ['messages', 'wish messages', 'content', 'cards', 'letters']
+            ],
+            [
+                'title' => 'View Activity',
+                'url' => route('admin.view-activity.page'),
+                'icon' => 'fas fa-eye',
+                'description' => 'Track message open events, IP addresses, and reader logs.',
+                'keywords' => ['view activity', 'opens', 'clicks', 'reads', 'track', 'ip', 'geo', 'message views']
+            ],
+            [
+                'title' => 'AI Usage',
+                'url' => route('admin.ai-usage.page'),
+                'icon' => 'fas fa-robot',
+                'description' => 'Monitor Gemini API prompts, tokens, and model metrics.',
+                'keywords' => ['ai usage', 'gemini', 'tokens', 'api', 'artificial intelligence', 'prompts']
+            ],
+            [
+                'title' => 'Database Manager',
+                'url' => route('database.manager'),
+                'icon' => 'fas fa-database',
+                'description' => 'Inspect database tables, run queries, and optimize storage.',
+                'keywords' => ['database', 'db', 'tables', 'sql', 'records', 'schema', 'manager', 'database manager']
+            ],
+            [
+                'title' => 'Notifications',
+                'url' => route('admin.notifications.page'),
+                'icon' => 'fas fa-bell',
+                'description' => 'View admin alerts, contact submissions, and direct messages.',
+                'keywords' => ['notifications', 'alerts', 'inbox', 'bell', 'contact', 'messages']
+            ],
+            [
+                'title' => 'Analytics',
+                'url' => route('admin.analytics.page'),
+                'icon' => 'fas fa-chart-bar',
+                'description' => 'Explore user growth, activity charts, and traffic metrics.',
+                'keywords' => ['analytics', 'charts', 'traffic', 'growth', 'trends', 'reports', 'stats']
+            ],
+            [
+                'title' => 'Activity Logs',
+                'url' => route('admin.logs.page'),
+                'icon' => 'fas fa-clipboard-list',
+                'description' => 'Audit administrator actions and security activity history.',
+                'keywords' => ['logs', 'audit', 'activity logs', 'security', 'events', 'history']
+            ],
+            [
+                'title' => 'System Controls',
+                'url' => route('admin.system.page'),
+                'icon' => 'fas fa-cogs',
+                'description' => 'Configure environment settings, GitHub updates, and system health.',
+                'keywords' => ['system controls', 'system', 'github', 'env', 'config', 'health', 'settings']
+            ],
+            [
+                'title' => 'Maintenance',
+                'url' => route('admin.maintenance.page'),
+                'icon' => 'fas fa-tools',
+                'description' => 'Clear cache, optimize application, and manage backups.',
+                'keywords' => ['maintenance', 'cache', 'optimize', 'clear cache', 'backup', 'tools']
+            ],
+            [
+                'title' => 'Message Settings',
+                'url' => route('admin.settings.message.page'),
+                'icon' => 'fas fa-comment-dots',
+                'description' => 'Configure message delivery, media, and encryption defaults.',
+                'keywords' => ['message settings', 'delivery', 'encryption', 'media', 'audio']
+            ],
+            [
+                'title' => 'Admin Settings',
+                'url' => route('admin.settings.user.page'),
+                'icon' => 'fas fa-user-shield',
+                'description' => 'Update admin security, credentials, passcode, and theme.',
+                'keywords' => ['admin settings', 'password', 'credentials', 'security', 'theme', 'profile']
+            ]
+        ];
+
+        $matchedSystemPages = [];
         if (!empty($query)) {
+            $queryLower = strtolower($query);
+            foreach ($systemPages as $page) {
+                $match = false;
+                if (str_contains(strtolower($page['title']), $queryLower) || str_contains(strtolower($page['description']), $queryLower)) {
+                    $match = true;
+                } else {
+                    foreach ($page['keywords'] as $keyword) {
+                        if (str_contains($keyword, $queryLower)) {
+                            $match = true;
+                            break;
+                        }
+                    }
+                }
+                if ($match) {
+                    $matchedSystemPages[] = $page;
+                }
+            }
+
             $users = User::where('username', 'like', '%' . $query . '%')
                 ->orWhere('email', 'like', '%' . $query . '%')
                 ->limit(50)
@@ -174,11 +300,21 @@ class AdminController extends Controller
                 ->where('title', 'like', '%' . $query . '%')
                 ->orWhere('recipient_name', 'like', '%' . $query . '%')
                 ->orWhere('recipient_special_name', 'like', '%' . $query . '%')
+                ->orWhere('message', 'like', '%' . $query . '%')
                 ->limit(50)
                 ->get();
+        } else {
+            // Default 12 quick navigation cards
+            $matchedSystemPages = array_slice($systemPages, 0, 12);
         }
 
-        return view('admin.pages.search', compact('stats', 'systemSettings', 'query', 'users', 'messages'));
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('admin.pages.general.search-results', compact('stats', 'systemSettings', 'query', 'users', 'messages', 'matchedSystemPages'))->render()
+            ]);
+        }
+
+        return view('admin.pages.general.search', compact('stats', 'systemSettings', 'query', 'users', 'messages', 'matchedSystemPages'));
     }
 
     private function renderSection(Request $request, string $section, array $additionalData = []): View
@@ -202,13 +338,23 @@ class AdminController extends Controller
             $data['recentMessagesList'] = WishMessages::with('user')->orderBy('created_at', 'desc')->paginate(10, ['*'], 'messages_page', $messagesPage);
         } elseif ($section === 'view-activity') {
             $data['viewActivityList'] = \App\Models\MessageViews::with(['wishMessage', 'user'])
+                ->select(
+                    'ip_address',
+                    'wish_message_id',
+                    'user_id',
+                    \DB::raw('MAX(id) as id'),
+                    \DB::raw('MAX(created_at) as created_at'),
+                    \DB::raw('MAX(viewed_at) as viewed_at'),
+                    \DB::raw('COUNT(*) as views_count')
+                )
+                ->groupBy('ip_address', 'wish_message_id', 'user_id')
                 ->orderBy('created_at', 'desc')
                 ->paginate(15, ['*'], 'view_activity_page', $viewActivityPage);
         } elseif ($section === 'ai-usage') {
             $aiUsagePage = max(1, (int) $request->input('ai_usage_page', 1));
             $data['aiUsageList'] = \App\Models\AiChatMessage::with('user')
                 ->orderBy('created_at', 'desc')
-                ->paginate(5, ['*'], 'ai_usage_page', $aiUsagePage);
+                ->paginate(9, ['*'], 'ai_usage_page', $aiUsagePage);
         }
         
         $notificationsPage = max(1, (int) $request->input('notifications_page', 1));
@@ -245,7 +391,7 @@ class AdminController extends Controller
         } catch (\Throwable $e) { report($e); $links = $emptyPaginator('links_page'); }
 
         try {
-            $aiUsage = AiChatMessage::with('user')->orderByDesc('created_at')->paginate(5, ['*'], 'ai_page')->withPath(route('admin.ai-usage.page'));
+            $aiUsage = AiChatMessage::with('user')->orderByDesc('created_at')->paginate(9, ['*'], 'ai_page')->withPath(route('admin.ai-usage.page'));
         } catch (\Throwable $e) { report($e); $aiUsage = $emptyPaginator('ai_page'); }
 
         try {
@@ -267,11 +413,17 @@ class AdminController extends Controller
         $folderMap = [
             'dashboard' => 'general',
             'analytics' => 'general',
+            'subscribers' => 'general',
+            'ai-usage' => 'general',
+            'database-manager' => 'general',
+            'search' => 'general',
             'users' => 'management',
             'messages' => 'management',
             'view-activity' => 'management',
             'system' => 'system',
             'notifications' => 'system',
+            'logs' => 'system',
+            'maintenance' => 'system',
             'settings-admin' => 'settings',
             'settings-message' => 'settings',
             'settings-page' => 'settings',
@@ -365,6 +517,16 @@ class AdminController extends Controller
                 return new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10, $page, ['pageName' => 'view_activity_page']);
             }
             return MessageViews::with(['user', 'wishMessage'])
+                ->select(
+                    'ip_address',
+                    'wish_message_id',
+                    'user_id',
+                    \DB::raw('MAX(id) as id'),
+                    \DB::raw('MAX(created_at) as created_at'),
+                    \DB::raw('MAX(viewed_at) as viewed_at'),
+                    \DB::raw('COUNT(*) as views_count')
+                )
+                ->groupBy('ip_address', 'wish_message_id', 'user_id')
                 ->orderByDesc('created_at')
                 ->paginate(10, ['*'], 'view_activity_page', $page);
         } catch (\Throwable $e) {
@@ -749,7 +911,7 @@ class AdminController extends Controller
         $settings->save();
 
         ActivityLog::log($request->user()->id, 'Admin appearance settings updated', null);
-        return $this->redirectToAdminSection('settings-page', 'success', 'Security & Appearance settings updated.');
+        return $this->redirectToAdminSection('settings-message', 'success', 'Security & Appearance settings updated.');
     }
 
     public function updateGlobalLifecycle(Request $request)
@@ -766,20 +928,6 @@ class AdminController extends Controller
         return $this->redirectToAdminSection('settings-message', 'success', 'Global Message Lifecycle rules saved.');
     }
 
-    public function savePreferences(Request $request)
-    {
-        $request->validate([
-            'timezone' => 'required|string|max:64',
-            'date_format' => 'required|string|max:32',
-            'items_per_page' => 'required|integer|in:10,25,50,100',
-        ]);
-        $this->setSystemSetting('timezone', $request->input('timezone'));
-        $this->setSystemSetting('date_format', $request->input('date_format'));
-        $this->setSystemSetting('items_per_page', (string) $request->input('items_per_page'));
-        ActivityLog::log($request->user()->id, 'Preferences updated', null);
-        return $this->redirectToAdminSection('settings-page', 'success', 'Preferences saved.');
-    }
-
     public function saveNotificationSettings(Request $request)
     {
         $this->setSystemSetting('notify_email_alerts', $request->has('notify_email_alerts') ? '1' : '0');
@@ -789,18 +937,46 @@ class AdminController extends Controller
         return $this->redirectToAdminSection('settings-message', 'success', 'Notification settings saved.');
     }
 
-    public function saveContactSettings(Request $request)
+    public function saveAllSettings(Request $request)
     {
         $request->validate([
             'contact_email' => 'nullable|email|max:255',
             'contact_phone' => 'nullable|string|max:50',
             'contact_whatsapp' => 'nullable|string|max:50',
+            'global_vault_lock' => 'nullable|integer|min:1|max:1440',
+            'global_auto_archive' => 'nullable|integer|min:1|max:365',
         ]);
+
+        // Notifications
+        $this->setSystemSetting('notify_email_alerts', $request->has('notify_email_alerts') ? '1' : '0');
+        $this->setSystemSetting('notify_push_critical', $request->has('notify_push_critical') ? '1' : '0');
+        $this->setSystemSetting('notify_daily_summary', $request->has('notify_daily_summary') ? '1' : '0');
+
+        // Contact Settings
         $this->setSystemSetting('contact_email', (string) $request->input('contact_email', ''));
         $this->setSystemSetting('contact_phone', (string) $request->input('contact_phone', ''));
         $this->setSystemSetting('contact_whatsapp', (string) $request->input('contact_whatsapp', ''));
-        ActivityLog::log($request->user()->id, 'Contact settings updated', null);
-        return $this->redirectToAdminSection('settings-page', 'success', 'Contact information saved. Blocked users will see these options.');
+
+        // Lifecycle Rules
+        if ($request->filled('global_vault_lock')) {
+            $this->setSystemSetting('global_vault_lock', (string) $request->input('global_vault_lock'));
+        }
+        if ($request->filled('global_auto_archive')) {
+            $this->setSystemSetting('global_auto_archive', (string) $request->input('global_auto_archive'));
+        }
+
+        // Privacy Mode
+        if (\Illuminate\Support\Facades\Auth::check()) {
+            $settings = \App\Models\UserSettings::firstOrCreate(
+                ['user_id' => \Illuminate\Support\Facades\Auth::id()],
+                ['page_expiry' => 24, 'page_view_alerts' => true, 'whatsapp_notifications' => true, 'auto_delete_expired' => true]
+            );
+            $settings->privacy_blur_enabled = $request->boolean('privacy_blur_enabled');
+            $settings->save();
+        }
+
+        ActivityLog::log($request->user()->id, 'All admin settings updated', null);
+        return $this->redirectToAdminSection('settings-message', 'success', 'All settings saved successfully.');
     }
 
     public function optimizeDatabase(Request $request)
@@ -982,7 +1158,10 @@ class AdminController extends Controller
         }
         try {
             if (Schema::hasTable('message_views')) {
-                $totalViews = MessageViews::count();
+                $totalViews = MessageViews::select('ip_address', 'wish_message_id')
+                    ->groupBy('ip_address', 'wish_message_id')
+                    ->get()
+                    ->count();
             }
         } catch (\Throwable $e) {
             report($e);
@@ -1649,6 +1828,20 @@ class AdminController extends Controller
         return response()->json($formatted);
     }
 
+    public function getMonthMessageDates(Request $request)
+    {
+        $year = (int)$request->input('year', date('Y'));
+        $month = (int)$request->input('month', date('m'));
+
+        $daysReceiving = \App\Models\WishMessages::whereYear('receiving_date', $year)
+            ->whereMonth('receiving_date', $month)
+            ->selectRaw('DAY(receiving_date) as day')
+            ->pluck('day')
+            ->toArray();
+
+        return response()->json(array_values(array_unique($daysReceiving)));
+    }
+
     public function viewsChartData(Request $request)
     {
         $period = $request->query('period', 'week');
@@ -1686,10 +1879,12 @@ class AdminController extends Controller
                 }
                 break;
             default:
-                for ($i = 6; $i >= 0; $i--) {
-                    $date = \Carbon\Carbon::today()->subDays($i)->toDateString();
+                $startOfWeek = \Carbon\Carbon::now()->startOfWeek(\Carbon\Carbon::SUNDAY);
+                for ($i = 0; $i < 7; $i++) {
+                    $dateObj = $startOfWeek->copy()->addDays($i);
+                    $date = $dateObj->toDateString();
                     $data[] = [
-                        'label' => \Carbon\Carbon::parse($date)->format('D'),
+                        'label' => $dateObj->format('D'),
                         'count' => \App\Models\MessageViews::whereDate('viewed_at', $date)->count(),
                     ];
                 }

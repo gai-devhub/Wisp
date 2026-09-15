@@ -257,7 +257,7 @@
 }
 .event-modal-icon {
     width: 42px; height: 42px; border-radius: 12px;
-    background: linear-gradient(135deg, #6366f1, #818cf8);
+    background: var(--primary, #6366f1);
     display: flex; align-items: center; justify-content: center;
     color: #fff; font-size: 1rem; flex-shrink: 0;
 }

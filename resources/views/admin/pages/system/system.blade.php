@@ -4,89 +4,108 @@
 
 @section('content')
 <div class="content-section active" id="system">
-    <div class="flex items-center gap-4 mb-6">
-        <h2 class="flex items-center gap-3 text-2xl font-bold text-slate-800 m-0">
-            <span class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center">
-                <i class="fas fa-cogs opacity-90"></i>
+    {{-- Page Header --}}
+    <div class="admin-card-header-bar">
+        <h2 class="admin-page-title">
+            <span class="admin-title-icon-box">
+                <i class="fas fa-cogs"></i>
             </span>
             System Controls
         </h2>
     </div>
 
-    <div style="display: flex; flex-wrap: wrap; gap: 24px; margin-bottom: 24px;">
+    {{-- Grid Row 1 --}}
+    <div class="admin-system-grid-2">
         {{-- System Lock --}}
-        <div class="db-card overflow-hidden flex flex-col" style="flex: 1 1 300px;">
-            <div class="px-6 py-5 border-b border-slate-200 flex items-center gap-2">
-                <i class="fas fa-lock text-amber-500"></i>
-                <h3 class="text-lg font-bold text-slate-800 m-0">System Lock</h3>
+        <div class="db-card admin-system-card">
+            <div class="admin-card-header">
+                <div class="admin-card-header-left">
+                    <i class="fas fa-lock admin-card-header-icon"></i>
+                    <h3 class="admin-card-header-title">System Lock</h3>
+                </div>
             </div>
-            <div class="p-6 flex-1 flex flex-col">
-                <p class="text-sm font-medium text-slate-500 mb-6">Lock the entire system to prevent user access during maintenance.</p>
-                <form method="POST" action="{{ route('admin.toggleLock') }}" class="mt-auto m-0">
+            <div class="admin-card-inner-body">
+                <p class="admin-card-text">Lock the entire system to prevent user access during maintenance.</p>
+                <form method="POST" action="{{ route('admin.toggleLock') }}">
                     @csrf
                     @if($systemSettings['app_locked'] ?? false)
-                        <div class="mb-4 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 text-sm font-medium">
-                            <i class="fas fa-exclamation-triangle mr-1.5"></i> System is currently <strong>LOCKED</strong>.
+                        <div class="admin-alert-box-danger">
+                            <i class="fas fa-exclamation-triangle"></i> System is currently <strong>LOCKED</strong>.
                         </div>
-                        <button type="submit" class="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl cursor-pointer border-0 transition-all shadow-sm shadow-amber-200">Unlock System</button>
+                        <button type="submit" class="admin-btn-action-primary">
+                            <i class="fas fa-lock-open"></i> Unlock System
+                        </button>
                     @else
-                        <div class="mb-4 px-4 py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-medium">
-                            <i class="fas fa-check-circle mr-1.5"></i> System is currently <strong>OPEN</strong>.
+                        <div class="admin-alert-box-success">
+                            <i class="fas fa-check-circle"></i> System is currently <strong>OPEN</strong>.
                         </div>
-                        <button type="submit" class="w-full py-2.5 bg-white border border-amber-200 text-amber-600 hover:bg-amber-50 font-bold rounded-xl cursor-pointer transition-colors shadow-sm">Lock System</button>
+                        <button type="submit" class="admin-btn-action-primary">
+                            <i class="fas fa-lock"></i> Lock System
+                        </button>
                     @endif
                 </form>
             </div>
         </div>
 
         {{-- User Registration Control --}}
-        <div class="db-card overflow-hidden flex flex-col" style="flex: 1 1 300px;">
-            <div class="px-6 py-5 border-b border-slate-200 flex items-center gap-2">
-                <i class="fas fa-user-plus text-indigo-500"></i>
-                <h3 class="text-lg font-bold text-slate-800 m-0">Registration Control</h3>
+        <div class="db-card admin-system-card">
+            <div class="admin-card-header">
+                <div class="admin-card-header-left">
+                    <i class="fas fa-user-plus admin-card-header-icon"></i>
+                    <h3 class="admin-card-header-title">Registration Control</h3>
+                </div>
             </div>
-            <div class="p-6 flex-1 flex flex-col">
-                <p class="text-sm font-medium text-slate-500 mb-6">Enable or disable new user registrations.</p>
-                <form method="POST" action="{{ route('admin.toggleRegistration') }}" class="mt-auto m-0">
+            <div class="admin-card-inner-body">
+                <p class="admin-card-text">Enable or disable new user registrations.</p>
+                <form method="POST" action="{{ route('admin.toggleRegistration') }}">
                     @csrf
                     @if($systemSettings['registration_disabled'] ?? false)
-                        <div class="mb-4 px-4 py-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-sm font-medium">
-                            <i class="fas fa-times-circle mr-1.5"></i> Registration is <strong>DISABLED</strong>.
+                        <div class="admin-alert-box-danger">
+                            <i class="fas fa-times-circle"></i> Registration is <strong>DISABLED</strong>.
                         </div>
-                        <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl cursor-pointer border-0 transition-colors shadow-sm shadow-indigo-200">Enable Registration</button>
+                        <button type="submit" class="admin-btn-action-primary">
+                            <i class="fas fa-user-check"></i> Enable Registration
+                        </button>
                     @else
-                        <div class="mb-4 px-4 py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-medium">
-                            <i class="fas fa-check-circle mr-1.5"></i> Registration is <strong>OPEN</strong>.
+                        <div class="admin-alert-box-success">
+                            <i class="fas fa-check-circle"></i> Registration is <strong>OPEN</strong>.
                         </div>
-                        <button type="submit" class="w-full py-2.5 bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 font-bold rounded-xl cursor-pointer transition-colors shadow-sm">Disable Registration</button>
+                        <button type="submit" class="admin-btn-action-secondary">
+                            <i class="fas fa-user-slash"></i> Disable Registration
+                        </button>
                     @endif
                 </form>
             </div>
         </div>
     </div>
 
-    <div style="display: flex; flex-wrap: wrap; gap: 24px; margin-bottom: 24px;">
+    {{-- Grid Row 2 --}}
+    <div class="admin-system-grid-3">
         {{-- AI Logs Management --}}
-        <div class="db-card overflow-hidden flex flex-col" style="flex: 1 1 300px;">
-            <div class="px-6 py-5 border-b border-slate-200 flex items-center gap-2">
-                <i class="fas fa-robot text-purple-500"></i>
-                <h3 class="text-lg font-bold text-slate-800 m-0">AI Logs Management</h3>
+        <div class="db-card admin-system-card">
+            <div class="admin-card-header">
+                <div class="admin-card-header-left">
+                    <i class="fas fa-robot admin-card-header-icon"></i>
+                    <h3 class="admin-card-header-title">AI Logs Management</h3>
+                </div>
             </div>
-            <div class="p-6 flex-1 flex flex-col">
-                <p class="text-sm font-medium text-slate-500 mb-6">Bulk delete old AI usage logs to save database space.</p>
-                <div class="flex flex-col gap-3 mt-auto">
-                    <form method="POST" action="{{ route('admin.aiLogs.delete') }}" class="w-full m-0">
+            <div class="admin-card-inner-body">
+                <p class="admin-card-text">Bulk delete old AI usage logs to save database space.</p>
+                <div class="admin-card-actions-col">
+                    <form method="POST" action="{{ route('admin.aiLogs.delete') }}">
                         @csrf
                         <input type="hidden" name="duration" value="week">
-                        <button type="button" onclick="var form = this.closest('form'); showAdminConfirm('Are you sure you want to delete AI usage logs older than 1 week?', function() { form.submit(); });" class="w-full py-2.5 bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 font-bold rounded-xl cursor-pointer transition-colors shadow-sm">
-                            <i class="fas fa-trash-alt mr-1.5"></i> Delete > 1 Week Old
+                        <button type="button" onclick="var form = this.closest('form'); showAdminConfirm('Are you sure you want to delete AI usage logs older than 1 week?', function() { form.submit(); });" 
+                                class="admin-btn-action-secondary">
+                            <i class="fas fa-trash-alt"></i> Delete > 1 Week Old
                         </button>
                     </form>
-                    <form method="POST" action="{{ route('admin.aiLogs.delete') }}" class="w-full m-0">
+                    <form method="POST" action="{{ route('admin.aiLogs.delete') }}">
                         @csrf
                         <input type="hidden" name="duration" value="month">
-                        <button type="button" onclick="var form = this.closest('form'); showAdminConfirm('Are you sure you want to delete AI usage logs older than 1 month?', function() { form.submit(); });" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl cursor-pointer border-0 transition-colors shadow-sm shadow-rose-200">
-                            <i class="fas fa-trash-alt mr-1.5"></i> Delete > 1 Month Old
+                        <button type="button" onclick="var form = this.closest('form'); showAdminConfirm('Are you sure you want to delete AI usage logs older than 1 month?', function() { form.submit(); });" 
+                                class="admin-btn-action-primary">
+                            <i class="fas fa-trash-alt"></i> Delete > 1 Month Old
                         </button>
                     </form>
                 </div>
@@ -94,28 +113,30 @@
         </div>
 
         {{-- Database Management --}}
-        <div class="db-card overflow-hidden flex flex-col" style="flex: 1 1 300px;">
-            <div class="px-6 py-5 border-b border-slate-200 flex items-center gap-2">
-                <i class="fas fa-database text-sky-500"></i>
-                <h3 class="text-lg font-bold text-slate-800 m-0">Database</h3>
+        <div class="db-card admin-system-card">
+            <div class="admin-card-header">
+                <div class="admin-card-header-left">
+                    <i class="fas fa-database admin-card-header-icon"></i>
+                    <h3 class="admin-card-header-title">Database</h3>
+                </div>
             </div>
-            <div class="p-6 flex-1 flex flex-col">
-                <p class="text-sm font-medium text-slate-500 mb-6">Perform database operations and maintenance.</p>
-                <div class="text-xs font-semibold text-slate-500 bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 mb-4">
-                    <span class="text-slate-700">Last Backup:</span> 
+            <div class="admin-card-inner-body">
+                <p class="admin-card-text">Perform database operations and maintenance.</p>
+                <div class="admin-github-badge">
+                    <span><strong>Last Backup:</strong></span> 
                     {{ $systemSettings['last_backup_at'] ? \Carbon\Carbon::parse($systemSettings['last_backup_at'])->format('M j, Y g:i A') : 'Never' }}
                 </div>
-                <div class="flex gap-3 mt-auto">
-                    <form method="POST" action="{{ route('admin.backup') }}" class="flex-1 m-0">
+                <div class="admin-card-actions-row">
+                    <form method="POST" action="{{ route('admin.backup') }}" class="flex-1">
                         @csrf
-                        <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl cursor-pointer border-0 transition-colors shadow-sm shadow-indigo-200">
-                            <i class="fas fa-download mr-1.5"></i> Backup
+                        <button type="submit" class="admin-btn-action-secondary">
+                            <i class="fas fa-download"></i> Backup
                         </button>
                     </form>
-                    <form method="POST" action="{{ route('admin.optimizeDatabase') }}" class="flex-1 m-0">
+                    <form method="POST" action="{{ route('admin.optimizeDatabase') }}" class="flex-1">
                         @csrf
-                        <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl cursor-pointer border-0 transition-colors shadow-sm shadow-emerald-200">
-                            <i class="fas fa-rocket mr-1.5"></i> Optimize
+                        <button type="submit" class="admin-btn-action-primary">
+                            <i class="fas fa-rocket"></i> Optimize
                         </button>
                     </form>
                 </div>
@@ -130,160 +151,112 @@
             $ghHasPat   = (bool)(\Illuminate\Support\Facades\DB::table('system_settings')->where('key','github_pat')->value('value'));
             $ghConfigured = !empty($ghRepoUrl) && !empty($ghCloneUrl);
         @endphp
-        <div class="db-card overflow-hidden flex flex-col" style="flex: 1 1 300px;">
-            <div class="px-6 py-5 border-b border-slate-200 flex items-center justify-between gap-2">
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-sync-alt text-emerald-500"></i>
-                    <h3 class="text-lg font-bold text-slate-800 m-0">System Updates</h3>
+        <div class="db-card admin-system-card">
+            <div class="admin-card-header">
+                <div class="admin-card-header-left">
+                    <i class="fas fa-sync-alt admin-card-header-icon"></i>
+                    <h3 class="admin-card-header-title">System Updates</h3>
                 </div>
-                {{-- + / Pencil button --}}
                 <button type="button" id="ghSettingsBtn" onclick="openGithubModal()"
                     title="{{ $ghConfigured ? 'Edit GitHub Settings' : 'Add GitHub Repository' }}"
-                    class="w-8 h-8 flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-300 transition-all cursor-pointer">
-                    <i class="fas {{ $ghConfigured ? 'fa-pen' : 'fa-plus' }} text-sm"></i>
+                    class="admin-btn-icon-soft">
+                    <i class="fas {{ $ghConfigured ? 'fa-pen' : 'fa-plus' }}"></i>
                 </button>
             </div>
-            <div class="p-6 flex-1 flex flex-col gap-4">
-                <p class="text-sm font-medium text-slate-500 m-0">Check for and install system updates from GitHub.</p>
+            <div class="admin-card-inner-body">
+                <p class="admin-card-text">Check for and install system updates from GitHub.</p>
 
-                {{-- Repo info badge --}}
                 @if($ghConfigured)
-                    <div class="px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-600 flex items-center gap-2">
-                        <i class="fab fa-github text-slate-400"></i>
+                    <div class="admin-github-badge">
+                        <i class="fab fa-github admin-card-header-icon"></i>
                         <span id="ghRepoDisplay">{{ parse_url($ghRepoUrl, PHP_URL_PATH) }}</span>
-                        <span class="ml-auto text-slate-400">{{ $ghBranch }}</span>
+                        <span class="ml-auto text-muted">{{ $ghBranch }}</span>
                     </div>
                 @else
-                    <div class="px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 text-sm font-medium">
-                        <i class="fas fa-exclamation-triangle mr-1.5"></i> No GitHub repository configured yet.
+                    <div class="admin-alert-box-success">
+                        <i class="fas fa-exclamation-triangle"></i> No GitHub repository configured yet.
                     </div>
                 @endif
 
-                {{-- Status result area (shown after Check) --}}
-                <div id="ghCheckResult" class="hidden px-4 py-3 rounded-xl text-sm font-medium border"></div>
+                <div id="ghCheckResult" class="hidden admin-alert-box-success"></div>
 
-                {{-- Live log area (shown during/after Update) --}}
-                <div id="ghLogArea" class="hidden mt-2 rounded-xl bg-slate-900 text-emerald-400 text-xs font-mono p-4 overflow-y-auto" style="max-height:200px; min-height:80px;"></div>
+                <div id="ghLogArea" class="hidden admin-github-log"></div>
 
-                <div class="flex gap-3 mt-auto flex-wrap">
-                    <button type="button" id="ghCheckBtn" onclick="githubCheck()"
-                        class="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl cursor-pointer border-0 transition-colors shadow-sm shadow-blue-200 flex items-center justify-center gap-2">
+                <div class="admin-card-actions-row">
+                    <button type="button" id="ghCheckBtn" onclick="githubCheck()" class="admin-btn-action-secondary">
                         <i class="fas fa-search" id="ghCheckIcon"></i> Check
                     </button>
-                    <button type="button" id="ghUpdateBtn" onclick="githubUpdate()"
-                        class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl cursor-pointer border-0 transition-colors shadow-sm shadow-indigo-200 flex items-center justify-center gap-2">
+                    <button type="button" id="ghUpdateBtn" onclick="githubUpdate()" class="admin-btn-action-secondary">
                         <i class="fas fa-sync-alt" id="ghUpdateIcon"></i> Update
                     </button>
-                    <form method="POST" action="{{ route('admin.toggleUpdates') }}" class="flex-1 m-0">
+                    <form method="POST" action="{{ route('admin.toggleUpdates') }}" class="flex-1">
                         @csrf
                         @if($systemSettings['enable_system_updates'] ?? false)
-                            <button type="submit" class="w-full py-2.5 bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 font-bold rounded-xl cursor-pointer transition-colors shadow-sm">Disable</button>
+                            <button type="submit" class="admin-btn-action-secondary">Disable</button>
                         @else
-                            <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl cursor-pointer border-0 transition-colors shadow-sm shadow-emerald-200">Enable</button>
+                            <button type="submit" class="admin-btn-action-primary">Enable</button>
                         @endif
                     </form>
                 </div>
             </div>
         </div>
 
-        {{-- Security Settings --}}
-        <div class="db-card overflow-hidden flex flex-col" style="flex: 1 1 300px;">
-        <div class="px-6 py-5 border-b border-slate-200 flex items-center gap-2">
-            <i class="fas fa-shield-alt text-rose-500"></i>
-            <h3 class="text-lg font-bold text-slate-800 m-0">Security Settings</h3>
-        </div>
-        <div class="p-6 flex-1 flex flex-col">
-            <form method="POST" action="{{ route('admin.security') }}" class="m-0 space-y-6 flex-1 flex flex-col">
-                @csrf
-                <div class="grid md:grid-cols-2 gap-8 mb-8">
-                    <div>
-                        <label for="sessionTimeout" class="block text-sm font-bold text-slate-700 mb-1.5">Session Timeout (minutes)</label>
-                        <p class="text-xs font-medium text-slate-500 mb-3">Automatically log out inactive administrators.</p>
-                        <input type="number" name="session_timeout" id="sessionTimeout" value="{{ $systemSettings['session_timeout'] ?? 30 }}" min="5" max="120"
-                            class="w-full max-w-[200px] px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all font-mono bg-white">
-                    </div>
-                    <div>
-                        <label for="maxLoginAttempts" class="block text-sm font-bold text-slate-700 mb-1.5">Max Login Attempts (User)</label>
-                        <p class="text-xs font-medium text-slate-500 mb-3">Number of failed logins before locking out.</p>
-                        <input type="number" name="max_login_attempts" id="maxLoginAttempts" value="{{ $systemSettings['max_login_attempts'] ?? 5 }}" min="1" max="10"
-                            class="w-full max-w-[200px] px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all font-mono bg-white">
-                    </div>
-                </div>
-                <div class="pt-6 border-t border-slate-200 mt-auto">
-                    <button type="submit" class="w-full flex justify-center items-center gap-2 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl cursor-pointer border-0 transition-colors shadow-sm shadow-indigo-200">
-                        <i class="fas fa-save"></i> Save Security Settings
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
     </div>
 </div>
 
 {{-- ===================== GITHUB SETTINGS MODAL ===================== --}}
-<div id="githubModal" style="display:none; position:fixed; inset:0; z-index:9999; align-items:center; justify-content:center; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px);">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
+<div id="githubModal" class="github-modal-backdrop">
+    <div class="github-modal-box">
         {{-- Modal Header --}}
-        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 bg-slate-900 rounded-xl flex items-center justify-center">
-                    <i class="fab fa-github text-white"></i>
+        <div class="github-modal-header">
+            <div class="admin-card-header-left">
+                <div class="github-modal-icon">
+                    <i class="fab fa-github"></i>
                 </div>
                 <div>
-                    <h3 class="text-base font-bold text-slate-800 m-0">GitHub Repository Settings</h3>
-                    <p class="text-xs text-slate-500 m-0">Connect your private repository for live updates</p>
+                    <h3 class="admin-card-header-title">GitHub Repository Settings</h3>
+                    <p class="admin-card-text margin-0">Connect your private repository for live updates</p>
                 </div>
             </div>
-            <button onclick="closeGithubModal()" class="w-8 h-8 flex items-center justify-center rounded-lg border-0 bg-transparent text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer transition-colors">
+            <button onclick="closeGithubModal()" class="github-modal-close">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         {{-- Modal Body --}}
-        <div class="p-6 space-y-5">
+        <div class="github-modal-body">
             <div>
-                <label class="block text-sm font-bold text-slate-700 mb-1.5">Repository URL <span class="text-rose-500">*</span></label>
-                <p class="text-xs text-slate-500 mb-2">The GitHub page URL of your repo.</p>
+                <label class="github-modal-label">Repository URL <span class="text-danger">*</span></label>
                 <input type="url" id="ghInputRepoUrl" placeholder="https://github.com/your-org/wisp"
-                    class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all"
+                    class="github-modal-input"
                     value="{{ $ghRepoUrl }}">
             </div>
             <div>
-                <label class="block text-sm font-bold text-slate-700 mb-1.5">Clone URL <span class="text-rose-500">*</span></label>
-                <p class="text-xs text-slate-500 mb-2">The HTTPS clone URL (used for <code class="bg-slate-100 px-1 rounded">git pull</code>).</p>
+                <label class="github-modal-label">Clone URL <span class="text-danger">*</span></label>
                 <input type="url" id="ghInputCloneUrl" placeholder="https://github.com/your-org/wisp.git"
-                    class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all"
+                    class="github-modal-input"
                     value="{{ $ghCloneUrl }}">
             </div>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="admin-grid-2col">
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-1.5">Branch</label>
+                    <label class="github-modal-label">Branch</label>
                     <input type="text" id="ghInputBranch" placeholder="main"
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all"
+                        class="github-modal-input"
                         value="{{ $ghBranch }}">
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-1.5">
-                        Personal Access Token
-                        @if($ghHasPat) <span class="text-emerald-500 font-normal">(saved)</span> @endif
-                    </label>
-                    <input type="password" id="ghInputPat" placeholder="{{ $ghHasPat ? '••••••••••• (leave blank to keep)' : 'ghp_xxxxxxxxxxxx' }}"
-                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all">
+                    <label class="github-modal-label">Access Token</label>
+                    <input type="password" id="ghInputPat" placeholder="{{ $ghHasPat ? '•••••••••••' : 'ghp_xxxxxxxxxxxx' }}"
+                        class="github-modal-input">
                 </div>
             </div>
-            <div class="px-4 py-3 bg-blue-50 border border-blue-200 rounded-xl text-xs text-blue-700">
-                <i class="fas fa-info-circle mr-1"></i>
-                <strong>Token tip:</strong> Create a token at <a href="https://github.com/settings/tokens" target="_blank" class="underline">github.com/settings/tokens</a> with <code class="bg-blue-100 px-1 rounded">repo</code> scope for private repos.
-            </div>
-            <div id="ghSaveError" class="hidden px-4 py-3 bg-rose-50 border border-rose-200 rounded-xl text-sm text-rose-700"></div>
+            <div id="ghSaveError" class="hidden admin-alert-box-danger"></div>
         </div>
         {{-- Modal Footer --}}
-        <div class="px-6 py-4 border-t border-slate-100 flex justify-end gap-3">
-            <button onclick="closeGithubModal()" type="button"
-                class="px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-600 font-semibold text-sm hover:bg-slate-50 cursor-pointer transition-colors">
+        <div class="github-modal-footer">
+            <button onclick="closeGithubModal()" type="button" class="admin-btn-secondary">
                 Cancel
             </button>
-            <button onclick="saveGithubSettings()" type="button" id="ghSaveBtn"
-                class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-700 text-white font-semibold text-sm cursor-pointer border-0 transition-colors flex items-center gap-2">
+            <button onclick="saveGithubSettings()" type="button" id="ghSaveBtn" class="admin-btn-primary">
                 <i class="fas fa-save"></i> Save Settings
             </button>
         </div>

@@ -188,7 +188,7 @@
     function initModals() {
         // Close modal when clicking the backdrop
         document.addEventListener('click', function (e) {
-            if (e.target.classList.contains('modal') && e.target.classList.contains('active')) {
+            if (e.target.classList.contains('admin-modal') && e.target.classList.contains('active')) {
                 closeModal(e.target);
             }
         });
@@ -196,7 +196,7 @@
         // Close with Escape key
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
-                document.querySelectorAll('.modal.active').forEach(closeModal);
+                document.querySelectorAll('.admin-modal.active').forEach(closeModal);
                 // Also close preview popup
                 var pp = document.getElementById('preview-popup');
                 if (pp && pp.classList.contains('active')) {
@@ -208,10 +208,10 @@
             }
         });
 
-        // Wire up all .modal-close buttons
-        document.querySelectorAll('.modal-close').forEach(function (btn) {
+        // Wire up all .admin-modal-close buttons
+        document.querySelectorAll('.admin-modal-close').forEach(function (btn) {
             btn.addEventListener('click', function () {
-                var modal = btn.closest('.modal');
+                var modal = btn.closest('.admin-modal');
                 if (modal) closeModal(modal);
             });
         });

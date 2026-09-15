@@ -48,10 +48,6 @@
                         'a' => 'Birthdays, anniversaries, weddings, condolences, thank-yous, and any moment where a quick text just wouldn\'t feel like enough.'],
                     ['category' => 'Billing', 'q' => 'Is WISP free to use?',
                         'a' => 'Yes, WISP is free to start. Free users can write messages, use basic templates, and send links. Premium plans are available to unlock special templates, remove watermarks, and use audio attachments.'],
-                    ['category' => 'Billing', 'q' => 'What do I get with a Premium plan?',
-                        'a' => 'Premium removes watermarks, unlocks custom fonts and audio uploads, and gives you access to our full library of premium layouts as they\'re released.'],
-                    ['category' => 'Billing', 'q' => 'Can I cancel my subscription anytime?',
-                        'a' => 'Yes. You can cancel from your account settings at any time, and you\'ll keep Premium access until the end of your current billing period.'],
                     ['category' => 'Delivery', 'q' => 'How does scheduled delivery work?',
                         'a' => 'When creating a card, you can set a target delivery date. WISP will lock the card and automatically deliver or notify the recipient via the chosen channel (Email or WhatsApp link) exactly on that day.'],
                     ['category' => 'Delivery', 'q' => 'Can I edit a message after it\'s scheduled?',
@@ -106,7 +102,7 @@
                         <div class="feature-icon" style="margin: 0 auto 18px;"><i class="fas fa-route"></i></div>
                         <h3 style="font-size: 1.15rem; margin-bottom: 10px;">See What's Coming</h3>
                         <p style="color: var(--text-muted); line-height: 1.6; margin: 0 0 18px; font-size: 0.92rem;">Curious what we're building next? Check the full feature roadmap.</p>
-                        <a href="{{ url('/features') }}" class="btn btn-outline" style="padding: 10px 22px; font-size: 0.88rem;"><i class="fas fa-magic"></i> View Roadmap</a>
+                        <a href="{ route('welcome.features') }}" class="btn btn-outline" style="padding: 10px 22px; font-size: 0.88rem;"><i class="fas fa-magic"></i> View Roadmap</a>
                     </div>
                 </div>
             </div>

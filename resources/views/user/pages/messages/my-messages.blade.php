@@ -69,7 +69,7 @@
                                         <div class="msg-title-desk">{{ $msg->title }}</div>
                                         <div class="msg-title-mob">{{ \Illuminate\Support\Str::limit($msg->title, 10, '...') }}</div>
                                     </td>
-                                    <td data-label="Recipient" class="blur-sensitive">{{ $msg->recipient_name }}</td>
+                                    <td data-label="Recipient" class="blur-sensitive">{{ \Illuminate\Support\Str::limit($msg->recipient_name, 15) }}</td>
                                     <td data-label="Status"><span
                                             class="status-badge status-{{ $msg->is_published ? 'saved' : 'draft' }}">{{ $msg->is_published ? 'Saved' : 'Draft' }}</span>
                                     </td>

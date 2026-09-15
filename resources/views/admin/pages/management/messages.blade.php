@@ -5,20 +5,18 @@
 @section('content')
 <div class="content-section active" id="messages">
     <!-- Header Section -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
-        <h2 style="font-weight: 700; color: var(--text-main); font-size: 1.6rem; margin: 0; display: flex; align-items: center; gap: 12px;">
-            <i class="fas fa-envelope text-primary" style="opacity: 0.9;"></i>
+    <div class="admin-card-header-bar">
+        <h2 class="admin-page-title">
+            <i class="fas fa-envelope text-primary"></i>
             Message Management
         </h2>
     </div>
 
     <div class="db-card overflow-hidden">
         {{-- Filter bar --}}
-        <div class="flex flex-wrap gap-4 p-5 border-b border-slate-100 bg-slate-50" id="messageSearchFilter">
-            <div class="flex-1 min-w-[140px]">
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Status</label>
-                <select id="messageFilterStatus"
-                    class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm text-slate-700 bg-white outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 cursor-pointer transition-all">
+        <div class="message-filter-box" id="messageSearchFilter">
+            <div class="w-160">
+                <select id="messageFilterStatus" class="message-filter-select">
                     <option value="">All statuses</option>
                     <option value="published">Published</option>
                     <option value="draft">Draft</option>
@@ -49,7 +47,7 @@
                                 $msgContent = $msg->message ?? $msg->wish_message ?? $msg->greeting ?? '';
                                 $msgRowNum = method_exists($messages ?? null, 'currentPage') ? (($messages->currentPage() - 1) * $messages->perPage() + $loop->iteration) : $loop->iteration;
                             @endphp
-                            <tr class="message-data-row" style="cursor: pointer;" onclick="toggleMessageDetails('{{ $msg->id }}')" data-status="{{ $msgStatus }}" data-title="{{ strtolower(e($msg->title ?? '')) }}" data-recipient="{{ strtolower(e($msg->recipient_name ?? $msg->recipient_special_name ?? '')) }}" data-creator="{{ strtolower(e($msg->user->username ?? '')) }}" data-msg-id="{{ $msg->id }}">
+                            <tr class="message-data-row cursor-pointer" onclick="toggleMessageDetails(event, '{{ $msg->id }}')" data-status="{{ $msgStatus }}" data-title="{{ strtolower(e($msg->title ?? '')) }}" data-recipient="{{ strtolower(e($msg->recipient_name ?? $msg->recipient_special_name ?? '')) }}" data-creator="{{ strtolower(e($msg->user->username ?? '')) }}" data-msg-id="{{ $msg->id }}">
                                 <td>{{ $msgRowNum }}</td>
                                 <td>{{ $msg->title ?? '-' }}</td>
                                 <td class="blur-sensitive">{{ $msg->recipient_name ?? $msg->recipient_special_name ?? '-' }}</td>
@@ -94,132 +92,132 @@
                                 $link = isset($msg->generatedLinks) ? $msg->generatedLinks->where('is_active', true)->sortByDesc('created_at')->first() : null;
                             @endphp
                             
-                            <tr id="details-row-{{ $msg->id }}" class="message-detail-dropdown-row" style="display: none;">
-                                <td colspan="8" style="padding: 0; border-bottom: 2px solid var(--primary);">
-                                    <div style="background: var(--bg-body); padding: 20px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
-                                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                            <tr id="details-row-{{ $msg->id }}" class="message-detail-dropdown-row">
+                                <td colspan="8" class="message-detail-dropdown-cell">
+                                    <div class="message-detail-dropdown-wrapper">
+                                        <div class="message-detail-grid">
                                             
                                             <!-- Template & Link Info -->
-                                            <div class="db-card" style="padding: 16px;">
-                                                <h5 style="margin-top: 0; margin-bottom: 12px; color: var(--text-main); font-size: 0.95rem;">
+                                            <div class="db-card user-detail-card">
+                                                <h5>
                                                     <i class="fas fa-info-circle text-primary"></i> General Info
                                                 </h5>
-                                                <div style="margin-bottom: 8px; font-size: 0.9rem;">
-                                                    <strong style="color: var(--text-muted);">Template:</strong> 
-                                                    <span style="color: var(--text-main); font-weight: 500;">{{ $msg->template ? $msg->template->template_name : 'None' }}</span>
+                                                <div class="message-detail-item">
+                                                    <strong>Template:</strong> 
+                                                    <span>{{ $msg->template ? $msg->template->template_name : 'None' }}</span>
                                                 </div>
-                                                <div style="margin-bottom: 8px; font-size: 0.9rem;">
-                                                    <strong style="color: var(--text-muted);">Sharing Stats:</strong> 
+                                                <div class="message-detail-item">
+                                                    <strong>Sharing Stats:</strong> 
                                                     @php
                                                         $sharingStatus = 'Not sent';
                                                         $sharingStatusColor = 'var(--text-muted)';
                                                         if (($msg->views_count ?? 0) > 0) {
                                                             $sharingStatus = 'Viewed';
-                                                            $sharingStatusColor = '#10b981'; // success
+                                                            $sharingStatusColor = 'var(--primary, #E8674A)';
                                                         } elseif (isset($msg->shareSends) && $msg->shareSends->count() > 0) {
                                                             if ($msg->shareSends->where('status', 'sent')->count() > 0) {
                                                                 $sharingStatus = 'Sent';
-                                                                $sharingStatusColor = '#3b82f6'; // primary
+                                                                $sharingStatusColor = 'var(--primary, #E8674A)';
                                                             } elseif ($msg->shareSends->where('status', 'scheduled')->count() > 0) {
                                                                 $sharingStatus = 'Scheduled';
-                                                                $sharingStatusColor = '#f59e0b'; // warning
+                                                                $sharingStatusColor = 'var(--secondary, #F28C76)';
                                                             }
                                                         }
                                                     @endphp
-                                                    <span style="color: {{ $sharingStatusColor }}; font-weight: 500;">{{ $sharingStatus }}</span>
+                                                    <span style="color: {{ $sharingStatusColor }};">{{ $sharingStatus }}</span>
                                                 </div>
-                                                <div style="font-size: 0.9rem;">
-                                                    <strong style="color: var(--text-muted);">Generated Link:</strong> 
-                                                    <span style="color: var(--text-main); font-weight: 500;">
+                                                <div class="message-detail-item">
+                                                    <strong>Generated Link:</strong> 
+                                                    <span>
                                                         @if($link)
-                                                            <a href="{{ $link->generated_url }}" target="_blank" style="color: var(--primary); text-decoration: none;">{{ $link->generated_url }}</a>
+                                                             <a href="{{ $link->generated_url }}" target="_blank" class="text-primary" title="{{ $link->generated_url }}">{{ $link->generated_url }}</a>
                                                         @else
                                                             No active link
                                                         @endif
                                                     </span>
                                                 </div>
-                                                <div style="font-size: 0.9rem; margin-top: 8px;">
-                                                    <strong style="color: var(--text-muted);">Vault Status:</strong> 
+                                                <div class="message-detail-item margin-top-8">
+                                                    <strong>Vault Status:</strong> 
                                                     @if($msg->is_vaulted)
-                                                        <span style="color: var(--primary); font-weight: 500;">Vaulted</span>
-                                                        <span style="color: var(--text-muted); font-size: 0.8rem; margin-left: 4px;">
+                                                        <span class="text-primary">Vaulted</span>
+                                                        <span class="text-muted text-xs">
                                                             ({{ $msg->specific_vault_pin ? 'Specific' : 'General' }})
                                                         </span>
                                                     @else
-                                                        <span style="color: var(--text-muted); font-weight: 500;">Not Vaulted</span>
+                                                        <span class="text-muted">Not Vaulted</span>
                                                     @endif
                                                 </div>
                                             </div>
                         
                                             <!-- Media Files Info -->
-                                            <div class="db-card" style="padding: 16px;">
-                                                <h5 style="margin-top: 0; margin-bottom: 12px; color: var(--text-main); font-size: 0.95rem;">
-                                                    <i class="fas fa-photo-video text-secondary"></i> Media Files
+                                            <div class="db-card user-detail-card">
+                                                <h5>
+                                                    <i class="fas fa-photo-video text-primary"></i> Media Files
                                                 </h5>
-                                                <div style="max-height: 200px; overflow-y: auto; font-size: 0.85rem; padding-right: 5px;">
+                                                <div class="max-h-200 overflow-y-auto text-xs pr-1">
                                                     @if($media)
-                                                        <ul style="margin: 0; padding-left: 20px; color: var(--text-muted); list-style-type: none; padding-left: 0;">
+                                                        <ul class="list-none p-0 m-0">
                                                             @if($media->recipient_image)
-                                                                <li style="margin-bottom: 12px; background: var(--bg-body); padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                                                                <li class="admin-github-badge mb-2">
                                                                     <div>
-                                                                        <i class="fas fa-image text-primary" style="color: #3b82f6;"></i> <strong style="color: var(--text-main);">Recipient Image</strong> <span style="color: var(--text-muted); font-size: 0.8rem;">({{ $formatBytes($imagesSize) }})</span>
+                                                                        <i class="fas fa-image text-primary"></i> <strong class="text-dark">Recipient Image</strong> <span class="text-muted text-xs">({{ $formatBytes($imagesSize) }})</span>
                                                                     </div>
-                                                                    <a href="{{ s3_url($media->recipient_image) }}" target="_blank" class="btn btn-sm" style="background-color: #3b82f6; color: white; padding: 4px 10px; border-radius: 4px; text-decoration: none; border: none;">
-                                                                        View <i class="fas fa-external-link-alt" style="font-size: 0.75rem; margin-left: 4px;"></i>
+                                                                    <a href="{{ s3_url($media->recipient_image) }}" target="_blank" class="admin-btn admin-btn-primary btn-sm">
+                                                                        View <i class="fas fa-external-link-alt text-xs"></i>
                                                                     </a>
                                                                 </li>
                                                             @else
-                                                                <li style="margin-bottom: 12px; background: var(--bg-body); padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; opacity: 0.7;">
+                                                                <li class="admin-github-badge mb-2 opacity-70">
                                                                     <div>
-                                                                        <i class="fas fa-image" style="color: #9ca3af;"></i> <strong style="color: var(--text-main);">Recipient Image</strong> <span style="color: var(--text-muted); font-size: 0.8rem;">(Not uploaded)</span>
+                                                                        <i class="fas fa-image text-muted"></i> <strong class="text-dark">Recipient Image</strong> <span class="text-muted text-xs">(Not uploaded)</span>
                                                                     </div>
                                                                 </li>
                                                             @endif
                                                             
                                                             @if($media->background_music)
-                                                                <li style="margin-bottom: 0; background: var(--bg-body); padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                                                                <li class="admin-github-badge">
                                                                     <div>
-                                                                        <i class="fas fa-music text-secondary" style="color: #6366f1;"></i> <strong style="color: var(--text-main);">Background Audio</strong> 
+                                                                        <i class="fas fa-music text-primary"></i> <strong class="text-dark">Background Audio</strong> 
                                                                         @if(!str_starts_with($media->background_music, 'http'))
-                                                                            <span style="color: var(--text-muted); font-size: 0.8rem;">({{ $formatBytes($audioSize) }})</span>
+                                                                            <span class="text-muted text-xs">({{ $formatBytes($audioSize) }})</span>
                                                                         @else
-                                                                            <span style="color: var(--text-muted); font-size: 0.8rem;">(Spotify Link)</span>
+                                                                            <span class="text-muted text-xs">(Spotify Link)</span>
                                                                         @endif
                                                                     </div>
-                                                                    <a href="{{ str_starts_with($media->background_music, 'http') ? $media->background_music : s3_url($media->background_music) }}" target="_blank" class="btn btn-sm" style="background-color: #6366f1; color: white; padding: 4px 10px; border-radius: 4px; text-decoration: none; border: none;">
-                                                                        Listen <i class="fas fa-headphones" style="font-size: 0.75rem; margin-left: 4px;"></i>
+                                                                    <a href="{{ str_starts_with($media->background_music, 'http') ? $media->background_music : s3_url($media->background_music) }}" target="_blank" class="admin-btn admin-btn-primary btn-sm">
+                                                                        Listen <i class="fas fa-headphones text-xs"></i>
                                                                     </a>
                                                                 </li>
                                                             @else
-                                                                <li style="margin-bottom: 0; background: var(--bg-body); padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; opacity: 0.7;">
+                                                                <li class="admin-github-badge opacity-70">
                                                                     <div>
-                                                                        <i class="fas fa-music" style="color: #9ca3af;"></i> <strong style="color: var(--text-main);">Background Audio</strong> <span style="color: var(--text-muted); font-size: 0.8rem;">(Not uploaded)</span>
+                                                                        <i class="fas fa-music text-muted"></i> <strong class="text-dark">Background Audio</strong> <span class="text-muted text-xs">(Not uploaded)</span>
                                                                     </div>
                                                                 </li>
                                                             @endif
                                                         </ul>
                                                     @else
-                                                        <span style="color: var(--text-muted);">No media attached.</span>
+                                                        <span class="text-muted">No media attached.</span>
                                                     @endif
                                                 </div>
                                             </div>
                         
                                             <!-- Storage Info -->
-                                            <div class="db-card" style="padding: 16px;">
-                                                <h5 style="margin-top: 0; margin-bottom: 12px; color: var(--text-main); font-size: 0.95rem;">
-                                                    <i class="fas fa-hdd text-success"></i> Storage Usage
+                                            <div class="db-card user-detail-card">
+                                                <h5>
+                                                    <i class="fas fa-hdd text-primary"></i> Storage Usage
                                                 </h5>
-                                                <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem;">
-                                                    <span style="color: var(--text-muted);">Images:</span>
-                                                    <strong style="color: var(--text-main);">{{ $formatBytes($imagesSize) }}</strong>
+                                                <div class="message-detail-item flex-between">
+                                                    <span class="text-muted">Images:</span>
+                                                    <strong class="text-dark">{{ $formatBytes($imagesSize) }}</strong>
                                                 </div>
-                                                <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem;">
-                                                    <span style="color: var(--text-muted);">Audio:</span>
-                                                    <strong style="color: var(--text-main);">{{ $formatBytes($audioSize) }}</strong>
+                                                <div class="message-detail-item flex-between">
+                                                    <span class="text-muted">Audio:</span>
+                                                    <strong class="text-dark">{{ $formatBytes($audioSize) }}</strong>
                                                 </div>
-                                                <hr style="border-color: var(--border-color); margin: 8px 0;">
-                                                <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 0.95rem;">
-                                                    <span style="color: var(--text-main);">Total:</span>
+                                                <hr class="border-t my-2">
+                                                <div class="message-detail-item flex-between font-700">
+                                                    <span class="text-dark">Total:</span>
                                                     <strong class="text-danger">{{ $formatBytes($totalStorage) }}</strong>
                                                 </div>
                                             </div>
@@ -230,16 +228,16 @@
                             </tr>
                         @empty
                             <tr class="message-row-empty">
-                                <td colspan="8" class="px-6 py-12 text-center">
-                                    <div class="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+                                <td colspan="8" class="admin-table-empty">
+                                    <div class="ai-icon-avatar margin-0-auto mb-4 text-2xl">
                                         <i class="fas fa-envelope"></i>
                                     </div>
-                                    <h4 class="text-base font-bold text-slate-700 m-0 mb-1">No Messages Found</h4>
+                                    <h4 class="admin-table-empty-title">No Messages Found</h4>
                                     <p class="text-sm font-medium text-slate-500 m-0">No messages have been created yet.</p>
                                 </td>
                             </tr>
                         @endforelse
-                        <tr class="message-row-no-results" style="display:none;"><td colspan="8" class="text-center text-muted">No messages match your search or filters.</td></tr>
+                        <tr class="message-row-no-results hidden"><td colspan="8" class="admin-table-empty">No messages match your search or filters.</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -259,21 +257,25 @@
 </div>
 
 <script>
-    function toggleMessageDetails(id) {
-        if (event.target.closest('.action-btn') || event.target.closest('form')) {
+    function toggleMessageDetails(event, id) {
+        if (event && (event.target.closest('.action-buttons') || event.target.closest('.action-btn') || event.target.closest('form') || event.target.closest('button') || event.target.closest('a'))) {
             return;
         }
 
         const targetRow = document.getElementById(`details-row-${id}`);
-        const isCurrentlyVisible = targetRow.style.display !== 'none';
+        if (!targetRow) return;
 
-        // Hide all others
+        const isCurrentlyVisible = targetRow.classList.contains('show') || targetRow.style.display === 'table-row';
+
+        // Hide all other message detail rows
         document.querySelectorAll('.message-detail-dropdown-row').forEach(row => {
+            row.classList.remove('show');
             row.style.display = 'none';
         });
 
         // Toggle clicked one
         if (!isCurrentlyVisible) {
+            targetRow.classList.add('show');
             targetRow.style.display = 'table-row';
         }
     }

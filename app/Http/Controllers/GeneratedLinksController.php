@@ -56,8 +56,17 @@ class GeneratedLinksController extends Controller
      */
     public function toggleLinkStatus(Request $request, $id)
     {
-        $message = WishMessages::where('user_id', Auth::id())->findOrFail($id);
-        $link = $message->generatedLinks()->latest()->first();
+        $link = GeneratedLinks::where('id', $id)
+            ->whereHas('wishMessage', function ($q) {
+                $q->where('user_id', Auth::id());
+            })->first();
+
+        if (!$link) {
+            $message = WishMessages::where('user_id', Auth::id())->find($id);
+            if ($message) {
+                $link = $message->generatedLinks()->latest()->first();
+            }
+        }
 
         if (!$link) {
             return response()->json(['success' => false, 'message' => 'No generated link found for this message.'], 404);

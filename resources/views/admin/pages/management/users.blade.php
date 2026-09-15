@@ -5,38 +5,33 @@
 <div class="content-section active" id="users">
 
     {{-- Page Header --}}
-    <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
-        <h2 class="flex items-center gap-3 text-2xl font-bold text-slate-800 m-0">
-            <span class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center">
+    <div class="admin-card-header-bar">
+        <h2 class="admin-page-title">
+            <span class="admin-title-icon-box">
                 <i class="fas fa-users"></i>
             </span>
             User Management
         </h2>
-        <button class="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl cursor-pointer border-0 transition-colors shadow-sm shadow-indigo-200"
-                id="addUserBtn">
+        <button class="admin-btn admin-btn-primary" id="addUserBtn">
             <i class="fas fa-plus"></i> Add New User
         </button>
     </div>
 
     {{-- Card --}}
-    <div class="db-card overflow-hidden">
+    <div class="db-card">
 
         {{-- Filter bar --}}
-        <div class="flex flex-wrap gap-4 p-5 border-b border-slate-100 bg-slate-50">
-            <div class="flex-1 min-w-[140px]">
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Status</label>
-                <select id="userFilterStatus"
-                    class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm text-slate-700 bg-white outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 cursor-pointer transition-all">
+        <div class="message-filter-box">
+            <div class="w-140">
+                <select id="userFilterStatus" class="message-filter-select">
                     <option value="">All statuses</option>
                     <option value="active">Active</option>
                     <option value="blocked">Blocked</option>
                     <option value="pending">Pending</option>
                 </select>
             </div>
-            <div class="flex-1 min-w-[140px]">
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Role</label>
-                <select id="userFilterRole"
-                    class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm text-slate-700 bg-white outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 cursor-pointer transition-all">
+            <div class="w-140">
+                <select id="userFilterRole" class="message-filter-select">
                     <option value="">All roles</option>
                     <option value="admin">Admin</option>
                     <option value="user">User</option>
@@ -84,165 +79,183 @@
                             data-status="{{ $user->status }}"
                             data-role="{{ $user->role }}"
                             data-user-id="{{ $user->id }}"
-                            style="cursor: pointer;"
-                            onclick="toggleUserDetails('{{ $user->id }}')">
+                            class="cursor-pointer"
+                            onclick="toggleUserDetails(event, '{{ $user->id }}')">
 
                             <td>{{ $userRowNum }}</td>
                             <td>
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #e0e7ff; color: #4f46e5; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;">
+                                <div class="admin-card-header-left">
+                                    <div class="user-avatar-circle">
                                         {{ strtoupper(substr($user->username, 0, 1)) }}
                                     </div>
-                                    <span style="font-weight: 600;">{{ $user->username }}</span>
+                                    <span class="font-600">{{ $user->username }}</span>
                                 </div>
                             </td>
                             <td class="blur-sensitive">{{ $user->email }}</td>
                             <td>
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-lg text-xs font-bold
-                                    {{ $user->role === 'admin' ? 'bg-violet-100 text-violet-700' : 'bg-slate-100 text-slate-600' }}">
+                                <span class="admin-badge {{ $user->role === 'admin' ? 'admin-badge-primary' : 'admin-badge-neutral' }}">
                                     {{ ucfirst($user->role ?? 'user') }}
                                 </span>
                             </td>
                             <td>
                                 @if($lastLogin)
-                                    <div style="font-size: 0.8rem; color: #64748b;">
-                                        <div style="font-weight: 500; color: #334155;">{{ $lastLogin->format('Y-m-d') }}</div>
+                                    <div class="text-xs text-muted">
+                                        <div class="font-500 text-dark">{{ $lastLogin->format('Y-m-d') }}</div>
                                         <div>{{ $lastLogin->format('H:i:s') }}</div>
                                     </div>
                                 @else
-                                    <span style="color: #94a3b8;">—</span>
+                                    <span class="text-muted">—</span>
                                 @endif
                             </td>
                             <td>
                                 @if($lastLogout)
-                                    <div style="font-size: 0.8rem; color: #64748b;">
-                                        <div style="font-weight: 500; color: #334155;">{{ $lastLogout->format('Y-m-d') }}</div>
+                                    <div class="text-xs text-muted">
+                                        <div class="font-500 text-dark">{{ $lastLogout->format('Y-m-d') }}</div>
                                         <div>{{ $lastLogout->format('H:i:s') }}</div>
                                     </div>
                                 @else
-                                    <span style="color: #94a3b8;">—</span>
+                                    <span class="text-muted">—</span>
                                 @endif
                             </td>
                             <td>
                                 @if($timeSpent)
-                                    <span style="font-family: monospace; background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem;">{{ $timeSpent }}</span>
+                                    <span class="storage-code-badge">{{ $timeSpent }}</span>
                                 @else
-                                    <span style="color: #94a3b8;">—</span>
+                                    <span class="text-muted">—</span>
                                 @endif
                             </td>
                             <td>
-                                <span style="font-weight: 600; color: #4f46e5;">{{ $user->wish_messages_count ?? 0 }}</span>
+                                <span class="font-600 text-primary">{{ $user->wish_messages_count ?? 0 }}</span>
                             </td>
                             <td>
-                                <div class="action-buttons">
-                                    <button type="button" class="action-btn view"
-                                        data-user-id="{{ $user->id }}" data-username="{{ $user->username }}"
-                                        data-email="{{ $user->email }}" data-status="{{ $user->status }}"
-                                        data-role="{{ $user->role }}"
-                                        data-edit-action="{{ route('admin.users.update', $user->id) }}">View</button>
+                                <div class="admin-action-dropdown">
+                                    <button type="button" class="admin-action-trigger" onclick="toggleActionDropdown(event, {{ $user->id }})">
+                                        Action <i class="fas fa-chevron-down dropdown-arrow"></i>
+                                    </button>
+                                    <div class="admin-action-menu" id="action-menu-{{ $user->id }}">
+                                        <button type="button" class="admin-action-item"
+                                            data-user-id="{{ $user->id }}" data-username="{{ $user->username }}"
+                                            data-email="{{ $user->email }}" data-status="{{ $user->status }}"
+                                            data-role="{{ $user->role }}"
+                                            data-edit-action="{{ route('admin.users.update', $user->id) }}">
+                                            <div class="icon-wrap"><i class="fas fa-eye"></i></div> View
+                                            <i class="fas fa-chevron-right ml-auto text-xs opacity-50"></i>
+                                        </button>
 
-                                    @if($user->role !== 'admin' || $user->id !== auth()->id())
-                                        <button type="button" class="action-btn edit"
-                                            onclick="openUserModal(this)"
-                                            data-action="{{ route('admin.users.update', $user->id) }}"
-                                            data-status="{{ $user->status }}"
-                                            data-role="{{ $user->role }}">Edit</button>
-                                        
-                                        @if($user->status === 'blocked')
-                                            <form method="POST" action="{{ route('admin.users.unblock', $user->id) }}"
-                                                class="inline" style="display: inline-block; margin: 0;" onsubmit="event.preventDefault(); showAdminConfirm('Unblock this user?', () => this.submit());">
-                                                @csrf
-                                                <button type="submit" class="action-btn edit" style="background-color: var(--warning, #f59e0b); color: white;">Unblock</button>
-                                            </form>
-                                        @else
-                                            <button type="button" class="action-btn edit" style="background-color: var(--warning, #f59e0b); color: white;"
-                                                onclick="openBlockModal(this)"
-                                                data-action="{{ route('admin.users.block', $user->id) }}">Block</button>
+                                        @if($user->role !== 'admin' || $user->id !== auth()->id())
+                                            <button type="button" class="admin-action-item"
+                                                onclick="openUserModal(this)"
+                                                data-action="{{ route('admin.users.update', $user->id) }}"
+                                                data-status="{{ $user->status }}"
+                                                data-role="{{ $user->role }}">
+                                                <div class="icon-wrap"><i class="fas fa-edit"></i></div> Edit
+                                                <i class="fas fa-chevron-right ml-auto text-xs opacity-50"></i>
+                                            </button>
+                                            
+                                            @if($user->status === 'blocked')
+                                                <form method="POST" action="{{ route('admin.users.unblock', $user->id) }}" class="m-0 w-full" onsubmit="event.preventDefault(); showAdminConfirm('Unblock this user?', () => this.submit());">
+                                                    @csrf
+                                                    <button type="submit" class="admin-action-item">
+                                                        <div class="icon-wrap"><i class="fas fa-unlock"></i></div> Unblock
+                                                        <i class="fas fa-chevron-right ml-auto text-xs opacity-50"></i>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <button type="button" class="admin-action-item"
+                                                    onclick="openBlockModal(this)"
+                                                    data-action="{{ route('admin.users.block', $user->id) }}">
+                                                    <div class="icon-wrap"><i class="fas fa-ban"></i></div> Block
+                                                    <i class="fas fa-chevron-right ml-auto text-xs opacity-50"></i>
+                                                </button>
+                                            @endif
+                                            
+                                            <div class="admin-action-divider"></div>
+                                            
+                                            <button type="button" class="admin-action-item delete"
+                                                onclick="openDeleteModal(this)"
+                                                data-username="{{ e($user->username) }}"
+                                                data-action="{{ route('admin.users.destroy', $user->id) }}">
+                                                <div class="icon-wrap"><i class="fas fa-trash"></i></div> Delete
+                                                <i class="fas fa-chevron-right ml-auto text-xs opacity-50"></i>
+                                            </button>
                                         @endif
-                                        
-                                        <button type="button" class="action-btn delete"
-                                            onclick="openDeleteModal(this)"
-                                            data-username="{{ e($user->username) }}"
-                                            data-action="{{ route('admin.users.destroy', $user->id) }}">Delete</button>
-                                    @else
-                                        <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">—</span>
-                                    @endif
+                                    </div>
                                 </div>
                             </td>
                         </tr>
 
                         {{-- User Details Dropdown Row --}}
-                        <tr id="user-details-row-{{ $user->id }}" class="user-detail-dropdown-row" style="display: none;">
-                            <td colspan="9" style="padding: 0; border-bottom: 2px solid var(--primary, #4f46e5);">
-                                <div style="background: var(--bg-body, #f8fafc); padding: 20px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
-                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                        <tr id="user-details-row-{{ $user->id }}" class="user-detail-dropdown-row">
+                            <td colspan="9" class="message-detail-dropdown-cell">
+                                <div class="message-detail-dropdown-wrapper">
+                                    <div class="message-detail-grid">
                                         
                                         {{-- Account Info Card --}}
-                                        <div class="db-card" style="padding: 16px; background: white; border-radius: 12px; border: 1px solid #e2e8f0;">
-                                            <h5 style="margin-top: 0; margin-bottom: 12px; color: #1e293b; font-size: 0.95rem;">
-                                                <i class="fas fa-user-circle text-primary" style="color: #4f46e5;"></i> Account Info
+                                        <div class="db-card user-detail-card">
+                                            <h5>
+                                                <i class="fas fa-user-circle text-primary"></i> Account Info
                                             </h5>
-                                            <div style="margin-bottom: 8px; font-size: 0.9rem;">
-                                                <strong style="color: #64748b;">Joined Date:</strong> 
-                                                <span style="color: #334155; font-weight: 500;">{{ $user->created_at ? $user->created_at->format('M j, Y g:i A') : 'Unknown' }}</span>
+                                            <div class="user-detail-item">
+                                                <strong>Joined Date:</strong> 
+                                                <span>{{ $user->created_at ? $user->created_at->format('M j, Y g:i A') : 'Unknown' }}</span>
                                             </div>
-                                            <div style="margin-bottom: 8px; font-size: 0.9rem;">
-                                                <strong style="color: #64748b;">Email Status:</strong> 
+                                            <div class="user-detail-item">
+                                                <strong>Email Status:</strong> 
                                                 @if(isset($user->email_verified_at) && $user->email_verified_at)
-                                                    <span style="color: #10b981; font-weight: 500;"><i class="fas fa-check"></i> Verified</span>
+                                                    <span class="text-primary font-500"><i class="fas fa-check"></i> Verified</span>
                                                 @else
-                                                    <span style="color: #f59e0b; font-weight: 500;"><i class="fas fa-exclamation-triangle"></i> Pending</span>
+                                                    <span class="text-muted font-500"><i class="fas fa-exclamation-triangle"></i> Pending</span>
                                                 @endif
                                             </div>
-                                            <div style="font-size: 0.9rem;">
-                                                <strong style="color: #64748b;">Account Status:</strong> 
-                                                <span style="color: #334155; font-weight: 500;">{{ ucfirst($user->status ?? 'active') }}</span>
+                                            <div class="user-detail-item">
+                                                <strong>Account Status:</strong> 
+                                                <span>{{ ucfirst($user->status ?? 'active') }}</span>
                                             </div>
                                         </div>
                     
                                         {{-- Security & Features Card --}}
-                                        <div class="db-card" style="padding: 16px; background: white; border-radius: 12px; border: 1px solid #e2e8f0;">
-                                            <h5 style="margin-top: 0; margin-bottom: 12px; color: #1e293b; font-size: 0.95rem;">
-                                                <i class="fas fa-shield-alt" style="color: #10b981;"></i> Security & Role
+                                        <div class="db-card user-detail-card">
+                                            <h5>
+                                                <i class="fas fa-shield-alt text-primary"></i> Security & Role
                                             </h5>
-                                            <div style="margin-bottom: 8px; font-size: 0.9rem; display: flex; align-items: center; justify-content: space-between;">
-                                                <strong style="color: #64748b;">2FA Status:</strong> 
+                                            <div class="user-detail-item flex-between">
+                                                <strong>2FA Status:</strong> 
                                                 @if(!empty($user->settings->login_passcode))
-                                                    <span style="color: #10b981; font-weight: 600;"><i class="fas fa-check-circle"></i> Enabled</span>
+                                                    <span class="text-primary font-600"><i class="fas fa-check-circle"></i> Enabled</span>
                                                 @else
-                                                    <span style="color: #f43f5e; font-weight: 600;"><i class="fas fa-times-circle"></i> Disabled</span>
+                                                    <span class="text-muted font-600"><i class="fas fa-times-circle"></i> Disabled</span>
                                                 @endif
                                             </div>
-                                            <div style="margin-bottom: 8px; font-size: 0.9rem; display: flex; align-items: center; justify-content: space-between;">
-                                                <strong style="color: #64748b;">User Role:</strong> 
-                                                <span style="color: #334155; font-weight: 500;">{{ ucfirst($user->role ?? 'user') }}</span>
+                                            <div class="user-detail-item flex-between">
+                                                <strong>User Role:</strong> 
+                                                <span>{{ ucfirst($user->role ?? 'user') }}</span>
                                             </div>
-                                            <div style="font-size: 0.9rem; display: flex; align-items: center; justify-content: space-between;">
-                                                <strong style="color: #64748b;">Premium Account:</strong> 
+                                            <div class="user-detail-item flex-between">
+                                                <strong>Premium Account:</strong> 
                                                 @if(isset($user->is_premium) && $user->is_premium)
-                                                    <span style="color: #f59e0b; font-weight: 600;"><i class="fas fa-star"></i> Yes</span>
+                                                    <span class="text-primary font-600"><i class="fas fa-star"></i> Yes</span>
                                                 @else
-                                                    <span style="color: #64748b; font-weight: 500;">No</span>
+                                                    <span class="text-muted font-500">No</span>
                                                 @endif
                                             </div>
                                         </div>
                                         
                                         {{-- Account Usage Card --}}
-                                        <div class="db-card" style="padding: 16px; background: white; border-radius: 12px; border: 1px solid #e2e8f0;">
-                                            <h5 style="margin-top: 0; margin-bottom: 12px; color: #1e293b; font-size: 0.95rem;">
-                                                <i class="fas fa-chart-pie text-info" style="color: #06b6d4;"></i> Account Usage
+                                        <div class="db-card user-detail-card">
+                                            <h5>
+                                                <i class="fas fa-chart-pie text-primary"></i> Account Usage
                                             </h5>
-                                            <div style="margin-bottom: 8px; font-size: 0.9rem;">
-                                                <strong style="color: #64748b;">Total Messages:</strong> 
-                                                <span style="color: #334155; font-weight: 500;">{{ $user->wishMessages()->count() }}</span>
+                                            <div class="user-detail-item">
+                                                <strong>Total Messages:</strong> 
+                                                <span>{{ $user->wishMessages()->count() }}</span>
                                             </div>
-                                            <div style="margin-bottom: 8px; font-size: 0.9rem;">
-                                                <strong style="color: #64748b;">Media Files Uploaded:</strong> 
-                                                <span style="color: #334155; font-weight: 500;">{{ $user->mediaFiles()->count() }}</span>
+                                            <div class="user-detail-item">
+                                                <strong>Media Files Uploaded:</strong> 
+                                                <span>{{ $user->mediaFiles()->count() }}</span>
                                             </div>
-                                            <div style="font-size: 0.9rem;">
-                                                <strong style="color: #64748b;">Storage Used:</strong> 
-                                                <span style="color: #334155; font-weight: 500; font-family: monospace; background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">{{ number_format($user->totalStorageUsage() / 1048576, 2) }} MB</span>
+                                            <div class="user-detail-item">
+                                                <strong>Storage Used:</strong> 
+                                                <span class="storage-code-badge">{{ number_format($user->totalStorageUsage() / 1048576, 2) }} MB</span>
                                             </div>
                                         </div>
                     
@@ -252,14 +265,14 @@
                         </tr>
                     @empty
                         <tr class="user-row-empty">
-                            <td colspan="9" class="px-4 py-12 text-center text-slate-400">
+                            <td colspan="9" class="admin-table-empty">
                                 <i class="fas fa-users text-4xl mb-3 block opacity-30"></i>
                                 No users yet.
                             </td>
                         </tr>
                     @endforelse
                     <tr class="user-row-no-results hidden">
-                        <td colspan="9" class="px-4 py-10 text-center text-slate-400">
+                        <td colspan="9" class="admin-table-empty">
                             No users match your search or filters.
                         </td>
                     </tr>
@@ -283,24 +296,88 @@
 </div>
 
 <script>
-    function toggleUserDetails(id) {
-        if (event.target.closest('.action-btn') || event.target.closest('form')) {
+    function toggleUserDetails(event, id) {
+        if (event && (event.target.closest('.admin-action-dropdown') || event.target.closest('.admin-action-trigger') || event.target.closest('form') || event.target.closest('button') || event.target.closest('a'))) {
             return;
         }
 
         const targetRow = document.getElementById(`user-details-row-${id}`);
-        const isCurrentlyVisible = targetRow.style.display !== 'none';
+        if (!targetRow) return;
+
+        const isCurrentlyVisible = targetRow.classList.contains('show') || targetRow.style.display === 'table-row';
 
         // Hide all others
         document.querySelectorAll('.user-detail-dropdown-row').forEach(row => {
+            row.classList.remove('show');
             row.style.display = 'none';
         });
 
         // Toggle clicked one
         if (!isCurrentlyVisible) {
+            targetRow.classList.add('show');
             targetRow.style.display = 'table-row';
         }
     }
+</script>
+
+<script>
+    function toggleActionDropdown(e, id) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const menu = document.getElementById(`action-menu-${id}`);
+        const trigger = e.currentTarget;
+        const isCurrentlyShown = menu.classList.contains('show');
+
+        // Close all other dropdowns first
+        closeAllActionMenus();
+
+        if (isCurrentlyShown) {
+            return;
+        }
+
+        const rect = trigger.getBoundingClientRect();
+        const menuWidth = 200;
+        
+        // Use fixed positioning to escape all table & card overflow clipping
+        menu.style.position = 'fixed';
+        menu.style.zIndex = '999999';
+        menu.style.left = `${Math.max(10, rect.right - menuWidth)}px`;
+
+        const spaceBelow = window.innerHeight - rect.bottom;
+        const menuHeight = 220;
+
+        if (spaceBelow < menuHeight) {
+            // Open upwards above the action button
+            menu.style.top = 'auto';
+            menu.style.bottom = `${window.innerHeight - rect.top + 6}px`;
+        } else {
+            // Open downwards below the action button
+            menu.style.top = `${rect.bottom + 6}px`;
+            menu.style.bottom = 'auto';
+        }
+
+        menu.classList.add('show');
+        trigger.classList.add('active');
+    }
+
+    function closeAllActionMenus() {
+        document.querySelectorAll('.admin-action-menu').forEach(menu => {
+            menu.classList.remove('show');
+            if (menu.previousElementSibling) {
+                menu.previousElementSibling.classList.remove('active');
+            }
+        });
+    }
+
+    // Close dropdowns when scrolling, resizing, or clicking outside
+    document.addEventListener('scroll', closeAllActionMenus, true);
+    window.addEventListener('resize', closeAllActionMenus);
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.admin-action-dropdown')) {
+            closeAllActionMenus();
+        }
+    });
 </script>
 
 @endsection
